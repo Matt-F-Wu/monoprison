@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - geometry - cube</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="./css/main.css" />
+		<style>
+			html {
+				height: 100%;
+			}
+			body {
+				margin: 0px;
+				background-color: #000000;
+				overflow: hidden;
+				height: 100%;
+			}
+			.full{
+				min-height: 100%;
+				width: 100%;
+				height: 100%;
+			}
+			.row{
+				display: flex;
+				flex-direction: row;
+			}
+			.column{
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="full row">
+			<div class="column" style="height: 100%; width: 60%;">
+				<div id="board" style="position: absolute; height: 100%; width: 100%; margin-top: 2%">
+					<div class="circle">Start</div>
+					<div class="circle">Chance</div>
+					<div class="circle">Chance</div>
+					<div class="circle">Payday</div>
+					<div class="circle">Event</div>
+					<div class="circle">Chance</div>
+					<div class="circle">Event</div>
+					<div class="circle">Payday</div>
+					<div class="circle"></div>
+					<div class="circle">Chance</div>
+					<div class="circle">Chance</div>
+					<div class="circle">Chance</div>
+					<div class="circle">Event</div>
+					<div class="circle">Payday</div>
+					<div class="circle">Chance</div>
+					<div class="circle">Chance</div>
+					<div class="circle">Event</div>
+				</div>
+			</div>
+			<div class="column" style="height: 100%; width: 40%">
+				<div id="info" style="height: 50%">
+
+				</div>
+				<div id="threejscanvas" style="height: 30%"></div>
+				<div id="control" style="height: 20%" class="column">
+					<div style="font-family: Arial; color: white; font-style: bold; margin-bottom: 5%; font-size: 18pt;">move <u id="num_step">x</u> steps</div>
+					<div class="btnpure" onclick="tossDice()">TOSS</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="./js/main.js" type="text/javascript"></script>
+		<script src="./js/three.min.js"></script>
+
+		<script>
+			// Hao: The dice starts with a resting state
+			var rest = true;
+			// Hao: dice rotation speed-multiple when tossed
+			var speed = 15;
+			// Hao: frames is the number of frames the spinning animation lasts
+			var frames = 160;
+			var toss = 0;
+			// This records how many step you can take
+			var steps = 0;
+			// This record the current state you are in
+			var state = 0;
+			var circs;
+			var num_state;
+
+			var leftPanel = 0.4;
+			var diceHeight = 0.3;
+			var boardAdjust = 0.75;
+
+			// three.js vars
+			var camera, scene, renderer;
+			var mesh;
+
+			init();
+			animate();
+			createBoard();
+
+			function createBoard(){
+				circs = document.getElementsByClassName("circle");
+				num_state = circs.length;
+				let board = document.getElementById("board");
+				let c_x = board.clientWidth / 2.0;
+				let c_y = board.clientHeight / 2.0;
+				// The smallest one is used as radius
+				let r = Math.min(c_x, c_y) * boardAdjust;
+				c_y *= boardAdjust;
+				let angleStep = Math.PI * 2 / circs.length;
+				for(let i = 0; i < circs.length; i++){
+					circs[i].style.left = Math.floor(c_x + Math.cos(angleStep * i) * r) + 'px';
+					circs[i].style.top = Math.floor(c_y - Math.sin(angleStep * i) * r) + 'px';
+				}
+				circs[state].style.backgroundColor = "orange";
+			}
+
+			function tossDice(){
+				rest = false;
+				toss = frames;
+				document.getElementById('num_step').innerHTML = 'x';
+			}
+
+			function init() {
+
+				camera = new THREE.PerspectiveCamera( 70, window.innerWidth * leftPanel / (window.innerHeight * diceHeight), 1, 1000 );
+				camera.position.z = 400;
+
+				scene = new THREE.Scene();
+
+				var light = new THREE.DirectionalLight( 0xffffff );
+				light.position.set( 0, 1, 1 ).normalize();
+				var lightAmb = new THREE.AmbientLight( 0x606060 ); // soft white light
+				scene.add(light);
+				scene.add(lightAmb);
+
+				var textureLoader = new THREE.TextureLoader();
+				var texture1 = textureLoader.load( './textures/f1.jpg' );
+				var texture2 = textureLoader.load( './textures/f2.jpg' );
+				var texture3 = textureLoader.load( './textures/f3.jpg' );
+				var texture4 = textureLoader.load( './textures/f4.jpg' );
+				var texture5 = textureLoader.load( './textures/f5.jpg' );
+				var texture6 = textureLoader.load( './textures/f6.jpg' );
+
+				var materials = [
+				    new THREE.MeshPhongMaterial( { map: texture1 } ),
+				    new THREE.MeshPhongMaterial( { map: texture2 } ),
+				    new THREE.MeshPhongMaterial( { map: texture3 } ),
+				    new THREE.MeshPhongMaterial( { map: texture4 } ),
+				    new THREE.MeshPhongMaterial( { map: texture5 } ),
+				    new THREE.MeshPhongMaterial( { map: texture6 } )
+				];
+
+				var geometry = new THREE.BoxBufferGeometry( 150, 150, 150 );
+
+				mesh = new THREE.Mesh( geometry, materials );
+				scene.add( mesh );
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth * leftPanel, window.innerHeight * diceHeight);
+				document.getElementById('threejscanvas').appendChild( renderer.domElement );
+
+				//
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function onWindowResize() {
+				createBoard();
+
+				camera.aspect = (window.innerWidth * leftPanel) / (window.innerHeight * diceHeight);
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth * leftPanel, window.innerHeight * diceHeight );
+
+			}
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+				if(rest){
+					mesh.rotation.x += 0.005;
+					mesh.rotation.y += 0.01;
+				}else{
+					if(toss > frames / 2){
+						mesh.rotation.x += 0.005 * speed;
+						mesh.rotation.y += 0.01 * speed;
+						toss--;
+					}else if(toss === frames / 2){
+						let x_r = Math.floor(mesh.rotation.x / (Math.PI/2.0)) % 4;
+						let y_r = Math.floor(mesh.rotation.y / (Math.PI/2.0)) % 4;
+						if(x_r === 0){
+							if(y_r === 0){
+								steps = 5;
+							}else if(y_r === 1){
+								steps = 2;
+							}else if(y_r === 2){
+								steps = 6;
+							}
+							else if(y_r === 3){
+								steps = 1;
+							}
+						}else if(x_r === 1){
+							steps = 3;
+						}else if(x_r === 2){
+							if(y_r === 0){
+								steps = 6;
+							}else if(y_r === 1){
+								steps = 1;
+							}else if(y_r === 2){
+								steps = 5;
+							}
+							else if(y_r === 3){
+								steps = 2;
+							}
+						}else if(x_r === 3){
+							steps = 4;
+						}
+						document.getElementById("num_step").innerHTML = steps;
+						// Reset old state color to normal
+						circs[state].style.backgroundColor = "#3cb0fd";
+						state = (state + steps) % num_state;
+						// Set new state color to orange
+						circs[state].style.backgroundColor = "orange";
+						mesh.rotation.x = x_r * Math.PI / 2.0;
+						mesh.rotation.y = y_r * Math.PI / 2.0;
+						toss--;
+					}
+					else if(toss > 0){
+						toss--;
+					}else{
+						rest = true;
+					}
+				}
+				
+				renderer.render( scene, camera );
+
+			}
+		</script>
+
+	</body>
+</html>

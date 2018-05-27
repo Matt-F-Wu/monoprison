@@ -1,0 +1,48 @@
+.btnpure {
+  height: 20px;
+  cursor: pointer;
+  -webkit-border-radius: 8;
+  -moz-border-radius: 8;
+  border-radius: 8px;
+  -webkit-box-shadow: 2px 3px 8px #ffffff;
+  -moz-box-shadow: 2px 3px 8px #ffffff;
+  box-shadow: 2px 3px 8px #ffffff;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  background: #3498db;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+}
+
+.btnpure:hover {
+  background: #3cb0fd;
+  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+  text-decoration: none;
+}
+
+.circle{
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  background-color: #3cb0fd;
+  color: white;
+  font-family: Arial;
+  font-size: 18pt;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 100px;
+}
+
+.circle:hover{
+  background-color: lightblue;
+}
+
+#start{
+  background-color: orange;
+}
