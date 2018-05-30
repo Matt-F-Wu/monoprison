@@ -36,6 +36,8 @@
 		<div class="full row">
 			<div class="column" style="height: 100%; width: 60%;">
 				<div id="board" style="position: absolute; height: 100%; width: 100%; margin-top: 2%">
+					<div class="player" id="character1">C1</div>
+					<div class="player" id="character2">C2</div>
 					<div class="circle">Start</div>
 					<div class="circle">Chance</div>
 					<div class="circle">Chance</div>
@@ -67,9 +69,8 @@
 			</div>
 		</div>
 
-		<script src="./js/main.js" type="text/javascript"></script>
 		<script src="./js/three.min.js"></script>
-
+		<script src="./js/main.js"></script>
 		<script>
 			// Hao: The dice starts with a resting state
 			var rest = true;
@@ -83,6 +84,8 @@
 			// This record the current state you are in
 			var state = 0;
 			var circs;
+			var character1
+			var character2;
 			var num_state;
 
 			var leftPanel = 0.4;
@@ -99,6 +102,8 @@
 
 			function createBoard(){
 				circs = document.getElementsByClassName("circle");
+				character1 = document.getElementById("character1");
+				character2 = document.getElementById("character2");
 				num_state = circs.length;
 				let board = document.getElementById("board");
 				let c_x = board.clientWidth / 2.0;
@@ -110,6 +115,18 @@
 				for(let i = 0; i < circs.length; i++){
 					circs[i].style.left = Math.floor(c_x + Math.cos(angleStep * i) * r) + 'px';
 					circs[i].style.top = Math.floor(c_y - Math.sin(angleStep * i) * r) + 'px';
+					
+					if(i === 0){
+						// Set up character positions
+						character1.style.left = circs[i].style.left;
+						character1.style.top = circs[i].style.top;
+
+						console.log(character1.style.left);
+
+						character2.style.left = Math.floor(50 + c_x + Math.cos(angleStep * i) * r) + 'px';
+						character2.style.top = Math.floor(50 + c_y - Math.sin(angleStep * i) * r) + 'px';
+					}
+					
 				}
 				circs[state].style.backgroundColor = "orange";
 			}
@@ -219,10 +236,17 @@
 						}
 						document.getElementById("num_step").innerHTML = steps;
 						// Reset old state color to normal
-						circs[state].style.backgroundColor = "#3cb0fd";
+						//circs[state].style.backgroundColor = "#3cb0fd";
+						for(let s = 0; s <= steps; s++){
+							let s_color = colorLint(orange, blue, 1.0 - s/steps);
+							// Fade from some mix of blue & orange to just blue
+							fade(circs[(state + s) % num_state], 'background-color', s_color, blue, 1000);
+						}
 						state = (state + steps) % num_state;
+						character1.style.left = circs[state].style.left;
+						character1.style.top = circs[state].style.top;
 						// Set new state color to orange
-						circs[state].style.backgroundColor = "orange";
+						//circs[state].style.backgroundColor = "orange";
 						mesh.rotation.x = x_r * Math.PI / 2.0;
 						mesh.rotation.y = y_r * Math.PI / 2.0;
 						toss--;
@@ -237,6 +261,41 @@
 				renderer.render( scene, camera );
 
 			}
+
+			var orange = {r: 255, g: 165, b: 0};
+			var blue = {r: 60, g: 176, b: 253};
+
+			function getRandomInt(max) {
+			  return Math.floor(Math.random() * Math.floor(max));
+			}
+
+			lerp = function(a, b, u) {
+			    return (1 - u) * a + u * b;
+			};
+
+			colorLint = function(start, end, p){
+				var r = Math.round(lerp(start.r, end.r, p));
+			    var g = Math.round(lerp(start.g, end.g, p));
+			    var b = Math.round(lerp(start.b, end.b, p));
+			    return {r: r, g: g, b: b};
+			}
+
+			fade = function(element, property, start, end, duration) {
+			    var interval = 10;
+			    var steps = duration / interval;
+			    var step_u = 1.0 / steps;
+			    var u = 0.0;
+			    var theInterval = setInterval(function() {
+			        if (u >= 1.0) {
+			            clearInterval(theInterval);
+			        }
+			        let c_res = colorLint(start, end, u);
+			        var colorname = 'rgb(' + c_res.r + ',' + c_res.g + ',' + c_res.b + ')';
+			        //console.log("fading...");
+			        element.style.setProperty(property, colorname);
+			        u += step_u;
+			    }, interval);
+			};
 		</script>
 
 	</body>
