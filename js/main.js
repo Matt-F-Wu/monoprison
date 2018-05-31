@@ -1,6 +1,6 @@
 /*Additional JS to assist none threejs component*/
 const { styler, easing, tween} = popmotion;
-var overrides = {'chance': 0}
+var overrides = {'chance': 1};
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
@@ -13,7 +13,7 @@ class Player {
     this.money = salary;
     this.strike = 0;
     // if in_trial is set to 2, that means the player is on trial, have to miss 2 turns
-    this.in_trail = 0;
+    this.in_trial = 0;
     // if in_prison is set to a positive integer, then the player must server turns in prison
     this.in_prison = 0;
     this.sentence_length = 0;
@@ -55,23 +55,24 @@ class Player {
   	return (Math.random() <= p + this.p_increment);
   }
 
-  jailDecisionHelper(want_trial, turns){
+  jailDecisionHelper(want_trial, turns, self){
+  	console.log(self);
   	if(want_trial){
 		// go on trail
-		this.in_trail = 2;
-		if(Math.random() <= this.innocent){
+		self.in_trial = 2;
+		if(Math.random() <= self.innocent){
 			// 1/6 chance go free, not in prison
-			this.in_prison = 0;
-			this.activity.decision += 'Decided to go on trial, and found innocent.';
+			self.in_prison = 0;
+			self.activity.decision += 'Decided to go on trial, and found innocent.';
 		}else{
-			this.in_prison = turns;
-			this.activity.decision += ('Decided to go on trial, and found guilty, go to prison for ' + turns + ' turns');
-			this.strike++;
+			self.in_prison = turns;
+			self.activity.decision += ('Decided to go on trial, and found guilty, go to prison for ' + turns + ' turns');
+			self.strike++;
 		}
 	}else{
-		this.in_prison = turns;
-		this.activity.decision += ('Decided to NOT go on trail, go to prison for ' + turns + ' turns');
-		this.strike++;
+		self.in_prison = turns;
+		self.activity.decision += ('Decided to NOT go on trail, go to prison for ' + turns + ' turns');
+		self.strike++;
 	}
   }
 
@@ -79,16 +80,23 @@ class Player {
   	if(this.human){
   		// If this is a human player, show some graphics
   		decisionUI.show();
+  		console.log("Show button...");
   		decisionUI.showDecisionButton();
-  		decisionUI.yesButton.onclick = () => {
-  			this.jailDecisionHelper(true, turns); 
-  			// show all player's decisions and their status
-  			decisionUI.info();
-  		};
-  		decisionUI.noButton.onclick = () => {
-  			this.jailDecisionHelper(false, turns);
-  			decisionUI.info();
-		};
+  		var self = this;
+  		decisionUI.yesButton.onclick = (() => { 
+  			return function(){
+	  			self.jailDecisionHelper(true, turns, self); 
+	  			// show all player's decisions and their status
+	  			decisionUI.info();
+  			}
+  		})();
+  		decisionUI.noButton.onclick = (() => { 
+  			return function(){
+	  			self.jailDecisionHelper(false, turns, self); 
+	  			// show all player's decisions and their status
+	  			decisionUI.info();
+  			}
+  		})();
   	}else{
   		// this is just our computer program, just do things
   		this.jailDecisionHelper(Math.random() <= 0.5, turns);
@@ -97,10 +105,26 @@ class Player {
 
   /*Roll a payday*/
   payday(ps){
+  	if(this.in_trial > 0){
+  		this.in_trial--;
+  		return;
+  	}
+
+  	if(this.in_prison > 0){
+  		this.in_prison--;
+  		return;
+  	}
+
+  	if(this.override === overrides.chance){
+  		// If chance card must be picked up, pick up chance
+  		this.override = undefined;
+  		this.chance();
+  	}
+
   	ps.forEach((p) => {
   		p.activity = {};
 	  	p.activity.type = 'payday';
-	  	if(p.in_prison > 0 || p.in_trail > 0){
+	  	if(p.in_prison > 0 || p.in_trial > 0){
 	  		//nothing, you don't get paid, rather, you lose $5
 	  		p.money -= 5;
 	  	}else{
@@ -114,6 +138,22 @@ class Player {
 
   /*Roll a event*/
   event(){
+  	if(this.in_trial > 0){
+  		this.in_trial--;
+  		return;
+  	}
+
+  	if(this.in_prison > 0){
+  		this.in_prison--;
+  		return;
+  	}
+
+  	if(this.override === overrides.chance){
+  		// If chance card must be picked up, pick up chance
+  		this.override = undefined;
+  		this.chance();
+  	}
+
   	let event = gevent.getRandomEvent();
   	if(!event){
   		// No event left
@@ -125,6 +165,15 @@ class Player {
 
   /*Roll a chance*/
   chance(){
+  	if(this.in_trial > 0){
+  		this.in_trial--;
+  		return;
+  	}
+
+  	if(this.in_prison > 0){
+  		this.in_prison--;
+  		return;
+  	}
   	let c = chance.getRandomChance();
   	c.effect(this);
   }
@@ -193,10 +242,11 @@ class Chance{
 					
 					// store what activity this player is experiencing
 					p.activity = self.chances[0];
+					decisionUI.show();
 					if(p.minority){
 						if(p.jailProbability(2.0/6.0)){
 							// arrested by police, decision time
-							p.activity.decision = 'Got arrected => ';
+							p.activity.decision = 'Got arrected => Go on Trial?';
 							p.jailDecision(1);
 						}else{
 							p.spendMoney(20);
@@ -207,8 +257,7 @@ class Chance{
 						p.activity.decision = 'Got a $20 fine';
 					}
 					
-					decisionUI.show();
-					decisionUI.info();
+					decisionUI.info(p);
 				}})(),
 			},
 		];
@@ -246,48 +295,58 @@ class DecisionUI{
 		this.scoreBoard = scoreBoard;
 	}
 
-	info(){
+	info(ext_p){
 		//loop through all players and display their status
 		this.players.forEach((p, idx, arr) => {
-			if(p.activity){
-				if(p.activity.type === 'event'){
-					this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Event: ' + p.activity.name;
-					//TODO: Event detail is really long, how to display it so it doesn't look ugly?
-					this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = p.activity.action;// + '<br>' + p.activity.detail;
-					this.context_board.innerHTML = p.activity.detail;
-					this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = p.activity.decision;
-				}else if(p.activity.type === 'chance'){
-					this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Chance: ';
-					this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = p.activity.detail;
-					this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = "Result: " + p.activity.decision;
-				}else if(p.activity.type === 'payday'){
-					// We are at a payday
-					this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Payday: ';
-					this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = 'Getting paid!';
-					this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
-				}else{
-					this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Nothing happened';
-					this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = '';
-					this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
-				}
-			}
-			let sta = '$' + p.money + ' strike: ' + p.strike;
-			var p_sta = document.getElementById(this.scoreBoard).children[idx];
-			if(p.human){
-				sta += ' (you)';
-				p_sta.style.backgroundColor= "white";
+			if(ext_p && ext_p != p){
+				//Do nothing
 			}else{
-				p_sta.style.backgroundColor= "transparent";
+				if(p.activity){
+					if(p.activity.type === 'event'){
+						this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Event: ' + p.activity.name;
+						//TODO: Event detail is really long, how to display it so it doesn't look ugly?
+						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = p.activity.action;// + '<br>' + p.activity.detail;
+						this.context_board.innerHTML = p.activity.detail;
+						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = p.activity.decision;
+					}else if(p.activity.type === 'chance'){
+						this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Chance: ';
+						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = p.activity.detail;
+						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = "Result: " + p.activity.decision;
+					}else if(p.activity.type === 'payday'){
+						// We are at a payday
+						this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Payday: ';
+						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = 'Getting paid!';
+						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
+					}else{
+						this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Nothing happened';
+						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = '';
+						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
+					}
+				}
+				let sta = '$' + p.money + ' strike: ' + p.strike;
+				var p_sta = document.getElementById(this.scoreBoard).children[idx];
+				if(p.human){
+					sta += ' (you)';
+					p_sta.style.backgroundColor= "white";
+				}else{
+					p_sta.style.backgroundColor= "transparent";
+				}
+				p_sta.getElementsByClassName('p_status')[0].innerHTML = sta;
+				// clear the activity for next round
+				//p.activity = {};
 			}
-			p_sta.getElementsByClassName('p_status')[0].innerHTML = sta;
-			// clear the activity for next round
-			p.activity = undefined;
 		});
 	}
 
 	show(){
 		// make element visible
-		console.log("Called...1");
+		if(this.element.style.visibility === "visible"){
+			// Already visible, do nothing but hide buttons
+			//console.log("no change...");
+			this.yesButton.style.visibility = "hidden";
+			this.noButton.style.visibility = "hidden";
+			return;
+		}
 		this.element.style.visibility = "visible";
 		let divStyler = styler(this.element);
 		tween({

@@ -17,7 +17,7 @@ var states = [state, 0, 0, 0];
 var circs;
 
 // The characters
-var character1, character2, character3, character4, human;
+var character1, character2, character3, character4, human, human_idx = 0;
 var players;
 var cur_player = 0;
 
@@ -39,7 +39,7 @@ animate();
 initBoard();
 createBoard();
 decisionUI.setupDOM(players, document.getElementById('info'), 
-	document.getElementById('yb'), document.getElementById('nb'),
+	document.getElementsByClassName('yes')[0], document.getElementsByClassName('no')[0],
 	'quad', 'q_header', 'q_content', 'q_decision', 'resource');
 
 function initBoard(){
@@ -90,7 +90,7 @@ function createBoard(){
 
 
 function tossDice(){
-	if(cur_player != 0){
+	if(cur_player != human_idx){
 		// the player is not human, should be handled by moveOthers()
 		openModal('Wait!', "It's the other players' turn, click next to see how they play!");
 		return;
@@ -107,7 +107,7 @@ function tossDice(){
 }
 
 function moveOthers(){
-	if(cur_player === 0){
+	if(cur_player === human_idx){
 		// If human, shouldn't be handled by this function
 		openModal('Wait', "It's your turn, please toss the dice!");
 		return;
@@ -155,6 +155,8 @@ function moveOthers(){
 	}else{
 		//blank spot, do nothing
 	}
+
+	fade(decisionUI.quads[cur_player], 'background-color', trans_orange, trans_gray, 1000);
 
 	cur_player = (cur_player + 1) % 4;
 }
@@ -266,17 +268,26 @@ function animate() {
 			}
 			state = (state + steps) % num_state;
 			// Move the character to current location
-			character1.element.style.left = circs[state].style.left;
-			character1.element.style.top = circs[state].style.top;
+			let x_bias=0, y_bias=0;
+			if(human_idx === 1 || human_idx ===3){
+				x_bias=50;
+			}
+
+			if(human_idx === 2 || human_idx === 3){
+				y_bias = 50;
+			}
+
+			human.element.style.left = parseInt(circs[state].style.left.slice(0, -2)) + x_bias + 'px';
+			human.element.style.top = parseInt(circs[state].style.top.slice(0, -2)) + y_bias + 'px';
 
 			//Game logic here:
 			setTimeout(function(){
 				if(circs[state].innerHTML === 'Payday'){
-					character1.payday(players);
+					human.payday(players);
 				}else if(circs[state].innerHTML === 'Chance'){
-					character1.chance();
+					human.chance();
 				}else if(circs[state].innerHTML === 'Event'){
-					let success = character1.event();
+					let success = human.event();
 					if(!success){
 						//TODO: signal Game has ended lead to a new interface
 						// right now that interface is just a white board with text
@@ -285,6 +296,7 @@ function animate() {
 				}else{
 					//blank spot, do nothing
 				}
+				fade(decisionUI.quads[human_idx], 'background-color', trans_orange, trans_gray, 1000);
 			}, 800);
 
 			// Set new state color to orange
@@ -306,6 +318,8 @@ function animate() {
 
 var orange = {r: 255, g: 165, b: 0};
 var blue = {r: 60, g: 176, b: 253};
+var trans_gray = {r: 0, g: 0, b: 0, a: 0.5};
+var trans_orange = {r: 255, g: 165, b: 0, a: 0.5};
 
 lerp = function(a, b, u) {
     return (1 - u) * a + u * b;
@@ -315,7 +329,8 @@ colorLint = function(start, end, p){
 	var r = Math.round(lerp(start.r, end.r, p));
     var g = Math.round(lerp(start.g, end.g, p));
     var b = Math.round(lerp(start.b, end.b, p));
-    return {r: r, g: g, b: b};
+    var a = start.a? Math.round(lerp(start.a, end.a, p)) : 1.0;
+    return {r: r, g: g, b: b, a: a};
 }
 
 fade = function(element, property, start, end, duration) {
@@ -328,7 +343,7 @@ fade = function(element, property, start, end, duration) {
             clearInterval(theInterval);
         }
         let c_res = colorLint(start, end, u);
-        var colorname = 'rgb(' + c_res.r + ',' + c_res.g + ',' + c_res.b + ')';
+        var colorname = 'rgba(' + c_res.r + ',' + c_res.g + ',' + c_res.b + ',' + (c_res.a || 1.0) + ')';
         //console.log("fading...");
         element.style.setProperty(property, colorname);
         u += step_u;
@@ -341,9 +356,13 @@ function gameEnd(){
 }
 
 function selectPlayer(idx){
-	var human = players[idx];
+	human = players[idx];
+	human_idx = idx;
+	cur_player = idx;
 	character1.human = false;
 	human.human = true;
 	openModal("You selected: " + human.pname, "");
+	decisionUI.yesButton = document.getElementsByClassName('yes')[idx];
+	decisionUI.noButton = document.getElementsByClassName('no')[idx];
 	decisionUI.info();
 }
