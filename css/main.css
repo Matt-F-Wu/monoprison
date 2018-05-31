@@ -47,12 +47,11 @@
   background-color: orange;
 }
 
-#character1{
+.player{
   position: absolute;
   border-radius: 50%;
   height: 50px;
   width: 50px;
-  background-color: red;
   color: white;
   z-index: 10;
   text-align: center;
@@ -60,15 +59,56 @@
   line-height: 50px;
 }
 
-#character2{
-  position: absolute;
-  border-radius: 50%;
-  height: 50px;
-  width: 50px;
-  background-color: green;
-  color: white;
-  z-index: 10;
-  text-align: center;
-  vertical-align: middle;
-  line-height: 50px;
+#character1{
+  background-color: red;
 }
+
+#character2{
+  background-color: green;
+}
+
+#character3{
+  background-color: yellow;
+}
+
+#character4{
+  background-color: cyan;
+}
+
+#info{
+  
+}
+
+.quad{
+  flex: 1;
+  color: white;
+  font-family: Arial;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 5px dotted white;
+  padding: 15px;
+  margin: 10px;
+}
+
+.q_header{
+  height: 10%;
+}
+
+.q_content{
+  height: 60%;
+}
+
+.q_decision{
+  height: 10%;
+}
+
+.yes{
+  visibility: hidden;
+  margin-right: 25px;
+}
+
+.no{
+  visibility: hidden;
+  margin-left: 25px;
+}
+
+
