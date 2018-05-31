@@ -17,7 +17,7 @@ var states = [state, 0, 0, 0];
 var circs;
 
 // The characters
-var character1, character2, character3, character4;
+var character1, character2, character3, character4, human;
 var players;
 var cur_player = 0;
 
@@ -31,22 +31,27 @@ var boardAdjust = 0.75;
 var camera, scene, renderer;
 var mesh;
 
+// element handlers
+var tossButton, nextButton;
+
 init();
 animate();
 initBoard();
 createBoard();
 decisionUI.setupDOM(players, document.getElementById('info'), 
 	document.getElementById('yb'), document.getElementById('nb'),
-	'quad', 'q_header', 'q_content', 'q_decision');
+	'quad', 'q_header', 'q_content', 'q_decision', 'resource');
 
 function initBoard(){
 	circs = document.getElementsByClassName("circle");
-	character1 = new Player(document.getElementById("character1"), false, true, 100);
-	character2 = new Player(document.getElementById("character2"), true, false, 80);
-	character3 = new Player(document.getElementById("character3"), true, false, 90);
-	character4 = new Player(document.getElementById("character4"), true, false, 70);
+	character1 = new Player(document.getElementById("character1"), false, true, 100, 'Peter Panda');
+	character2 = new Player(document.getElementById("character2"), true, false, 80, 'Penelope Pig');
+	character3 = new Player(document.getElementById("character3"), true, false, 90, 'Mandy Monkey');
+	character4 = new Player(document.getElementById("character4"), true, false, 70, 'Zachary Zebra');
 	players = [character1, character2, character3, character4];
 	num_state = circs.length;
+	// default player
+	human = character1;
 }
 
 function createBoard(){
@@ -87,19 +92,24 @@ function createBoard(){
 function tossDice(){
 	if(cur_player != 0){
 		// the player is not human, should be handled by moveOthers()
-		window.alert("It's the other players' turn, click next to see how they play!");
+		openModal('Wait!', "It's the other players' turn, click next to see how they play!");
 		return;
 	}
 	cur_player = (cur_player + 1) % 4;
 	rest = false;
 	toss = frames;
 	document.getElementById('num_step').innerHTML = 'x';
+	tossButton.classList.remove("btnpure");
+	tossButton.classList.add("btngray");
+
+	nextButton.classList.remove("btngray");
+	nextButton.classList.add("btnpure");
 }
 
 function moveOthers(){
 	if(cur_player === 0){
 		// If human, shouldn't be handled by this function
-		window.alert("It's your turn, please toss the dice!");
+		openModal('Wait', "It's your turn, please toss the dice!");
 		return;
 	}
 
@@ -119,6 +129,12 @@ function moveOthers(){
 	}else{
 		x += 50;
 		y += 50;
+		// last other player
+		tossButton.classList.remove("btngray");
+		tossButton.classList.add("btnpure");
+
+		nextButton.classList.remove("btnpure");
+		nextButton.classList.add("btngray");
 	}
 
 	players[cur_player].element.style.left = x + 'px';
@@ -126,7 +142,7 @@ function moveOthers(){
 
 	//Game logic here:
 	if(circs[states[cur_player]].innerHTML === 'Payday'){
-		players[cur_player].payday();
+		players[cur_player].payday(players);
 	}else if(circs[states[cur_player]].innerHTML === 'Chance'){
 		players[cur_player].chance();
 	}else if(circs[states[cur_player]].innerHTML === 'Event'){
@@ -254,20 +270,22 @@ function animate() {
 			character1.element.style.top = circs[state].style.top;
 
 			//Game logic here:
-			if(circs[state].innerHTML === 'Payday'){
-				character1.payday();
-			}else if(circs[state].innerHTML === 'Chance'){
-				character1.chance();
-			}else if(circs[state].innerHTML === 'Event'){
-				let success = character1.event();
-				if(!success){
-					//TODO: signal Game has ended lead to a new interface
-					// right now that interface is just a white board with text
-					gameEnd();
+			setTimeout(function(){
+				if(circs[state].innerHTML === 'Payday'){
+					character1.payday(players);
+				}else if(circs[state].innerHTML === 'Chance'){
+					character1.chance();
+				}else if(circs[state].innerHTML === 'Event'){
+					let success = character1.event();
+					if(!success){
+						//TODO: signal Game has ended lead to a new interface
+						// right now that interface is just a white board with text
+						gameEnd();
+					}
+				}else{
+					//blank spot, do nothing
 				}
-			}else{
-				//blank spot, do nothing
-			}
+			}, 800);
 
 			// Set new state color to orange
 			//circs[state].style.backgroundColor = "orange";
@@ -320,4 +338,12 @@ fade = function(element, property, start, end, duration) {
 function gameEnd(){
 	//TODO: maybe need to do something fancy here
 	document.getElementById('postGame').style.display = "flex";
+}
+
+function selectPlayer(idx){
+	var human = players[idx];
+	character1.human = false;
+	human.human = true;
+	openModal("You selected: " + human.pname, "");
+	decisionUI.info();
 }

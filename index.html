@@ -5,6 +5,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<link rel="stylesheet" href="./css/main.css" />
+		<script type="text/javascript" src="./js/popmotion.global.min.js"></script>
 		<style>
 			html {
 				height: 100%;
@@ -56,6 +57,7 @@
 				<div id="info" style="height: 100%; width: 110%; padding: 5%; margin-left: 10%; z-index: 20; visibility: hidden;">
 					<div class="row" style="flex:1; height: 50%">
 						<div class="quad column">
+							<h4>Peter Panda<img width="50" height="50" src="./textures/panda.png" style="display: inline;"></h4>
 							<div class="q_header"></div>
 							<div class="q_content"></div>
 							<div class="q_decision"></div>
@@ -63,9 +65,9 @@
 								<div class="btnpure yes" id="yb">Yes</div>
 								<div class="btnpure no"  id="nb">No</div>
 							</div>
-							<div class="btnpure" onclick="moveOthers()">Next</div>
 						</div>
 						<div class="quad column">
+							<h4>Penelope Pig<img width="50" height="50" src="./textures/pig.png"></h4>
 							<div class="q_header"></div>
 							<div class="q_content"></div>
 							<div class="q_decision"></div>
@@ -73,11 +75,13 @@
 					</div>
 					<div class="row" style="flex:1; height: 50%">
 						<div class="quad column">
+							<h4>Mandy Monkey<img width="50" height="50" src="./textures/monkey.png"></h4>
 							<div class="q_header"></div>
 							<div class="q_content"></div>
 							<div class="q_decision"></div>
 						</div>
 						<div class="quad column">
+							<h4>Zachary Zebra<img width="50" height="50" src="./textures/zebra.png"></h4>
 							<div class="q_header"></div>
 							<div class="q_content"></div>
 							<div class="q_decision"></div>
@@ -109,8 +113,13 @@
 				</div>
 			</div>
 			<div class="column" style="height: 100%; width: 30%">
-				<div id="resource" style="height: 50%">
-
+				<div id="scoreBoard"  style="height: 15%">
+					<div><span>Peter Panda: </span><span class="p_status">init</span></div>
+					<div><span>Penelope Pig: </span><span class="p_status">init</span></div>
+					<div><span>Mandy Monkey: </span><span class="p_status">init</span></div>
+					<div><span>Zachary Zebra: </span><span class="p_status">init</span></div>
+				</div>
+				<div id="resource" style="height: 35%">
 				</div>
 				<div id="threejscanvas" style="height: 30%"></div>
 
@@ -120,7 +129,15 @@
 
 				<div id="control" style="height: 20%" class="column">
 					<div style="font-family: Arial; color: white; font-style: bold; margin-bottom: 5%; font-size: 18pt;">move <u id="num_step">x</u> steps</div>
-					<div class="btnpure" onclick="tossDice()">TOSS</div>
+					<div style="display: flex; flex-direction: row;">
+						<div id="tossBtn" class="btnpure" onclick="tossDice()" style="flex: 1">TOSS</div>
+						<div id="nextBtn" class="btngray" onclick="moveOthers()" style="flex: 1">Next</div>
+						<script>
+							tossButton = document.getElementById('tossBtn');
+							nextButton = document.getElementById('nextBtn');
+							decisionUI.info();
+						</script>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -130,5 +147,26 @@
 			What did you learn?
 			<!--TODO: what should we have here for post-game education-->
 		</div>
+		<!--A very light weight modal inplementation-->
+		<div class="modal-shade"></div>
+		<div class="modal-container">
+			<div class="modal">
+				<h1 id="modalHeader"></h1>
+				<p id="modalMessage"></p>
+				<div class="modal-actions">
+					<button class="image-btn"><img width="80" height="80" src="./textures/panda.png" onclick="selectPlayer(0)"/></button>
+					<button class="image-btn"><img width="80" height="80" src="./textures/pig.png" onclick="selectPlayer(1)"/></button>
+					<button class="image-btn"><img width="80" height="80" src="./textures/monkey.png" onclick="selectPlayer(2)"/></button>
+					<button class="image-btn"><img width="80" height="80" src="./textures/zebra.png" onclick="selectPlayer(3)"/></button>
+					<button class="modal-cancel">Cancel</button>
+					<button class="modal-ok">Ok!</button>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="./js/modal.js"></script>
+		<script>
+			console.log("Select stuff please");
+			openModal("Please select your character", "", false, "exit", "", true);
+		</script>
 	</body>
 </html>

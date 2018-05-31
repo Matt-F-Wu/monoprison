@@ -1,4 +1,5 @@
 /*Additional JS to assist none threejs component*/
+const { styler, easing, tween} = popmotion;
 var overrides = {'chance': 0}
 
 function getRandomInt(max) {
@@ -6,10 +7,10 @@ function getRandomInt(max) {
 }
 
 class Player {
-  constructor(element, minority, human, salary) {
+  constructor(element, minority, human, salary, name) {
     this.element = element;
     this.salary = salary;
-    this.money = 0;
+    this.money = salary;
     this.strike = 0;
     // if in_trial is set to 2, that means the player is on trial, have to miss 2 turns
     this.in_trail = 0;
@@ -28,6 +29,7 @@ class Player {
 
     // game event/chance this player experienced most recently
     this.activity = {};
+    this.pname = name;
   }
 
   element(){
@@ -64,10 +66,12 @@ class Player {
 		}else{
 			this.in_prison = turns;
 			this.activity.decision += ('Decided to go on trial, and found guilty, go to prison for ' + turns + ' turns');
+			this.strike++;
 		}
 	}else{
 		this.in_prison = turns;
 		this.activity.decision += ('Decided to NOT go on trail, go to prison for ' + turns + ' turns');
+		this.strike++;
 	}
   }
 
@@ -92,15 +96,18 @@ class Player {
   }
 
   /*Roll a payday*/
-  payday(){
-  	this.activity = {};
-  	this.activity.type = 'payday';
-  	if(this.in_prison > 0 || this.in_trail > 0){
-  		//nothing, you don't get paid, rather, you lose $5
-  		this.money -= 5;
-  	}else{
-  		this.money += this.salary;
-  	}
+  payday(ps){
+  	ps.forEach((p) => {
+  		p.activity = {};
+	  	p.activity.type = 'payday';
+	  	if(p.in_prison > 0 || p.in_trail > 0){
+	  		//nothing, you don't get paid, rather, you lose $5
+	  		p.money -= 5;
+	  	}else{
+	  		p.money += p.salary;
+	  	}
+  	});
+  	
   	decisionUI.show();
 	decisionUI.info();
   }
@@ -224,7 +231,7 @@ class DecisionUI{
 		this.quads = [];
 	}
 
-	setupDOM(players, element, yb, nb, quad_class_name, h_c_n, c_c_n, d_c_n){
+	setupDOM(players, element, yb, nb, quad_class_name, h_c_n, c_c_n, d_c_n, context_board, toggleBtn='toggleBtn', scoreBoard='scoreBoard'){
 		this.players = players;
 		// element is the overall display board
 		this.element = element;
@@ -234,6 +241,9 @@ class DecisionUI{
 		this.header_class_name = h_c_n;
 		this.content_class_name = c_c_n;
 		this.decision_class_name = d_c_n;
+		this.context_board = document.getElementById(context_board);
+		this.toggleBtn = toggleBtn;
+		this.scoreBoard = scoreBoard;
 	}
 
 	info(){
@@ -244,6 +254,7 @@ class DecisionUI{
 					this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Event: ' + p.activity.name;
 					//TODO: Event detail is really long, how to display it so it doesn't look ugly?
 					this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = p.activity.action;// + '<br>' + p.activity.detail;
+					this.context_board.innerHTML = p.activity.detail;
 					this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = p.activity.decision;
 				}else if(p.activity.type === 'chance'){
 					this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Chance: ';
@@ -260,6 +271,15 @@ class DecisionUI{
 					this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
 				}
 			}
+			let sta = '$' + p.money + ' strike: ' + p.strike;
+			var p_sta = document.getElementById(this.scoreBoard).children[idx];
+			if(p.human){
+				sta += ' (you)';
+				p_sta.style.backgroundColor= "white";
+			}else{
+				p_sta.style.backgroundColor= "transparent";
+			}
+			p_sta.getElementsByClassName('p_status')[0].innerHTML = sta;
 			// clear the activity for next round
 			p.activity = undefined;
 		});
@@ -267,10 +287,22 @@ class DecisionUI{
 
 	show(){
 		// make element visible
+		console.log("Called...1");
 		this.element.style.visibility = "visible";
+		let divStyler = styler(this.element);
+		tween({
+		  from: 0.0,
+		  to: { opacity: 1.0 },
+		  duration: 1000,
+		  ease: easing.backOut,
+		  //flip: Infinity,
+		  // elapsed: 500,
+		  // loop: 5,
+		  // yoyo: 5
+		}).start(divStyler.set);
 		this.yesButton.style.visibility = "hidden";
 		this.noButton.style.visibility = "hidden";
-		let btn = document.getElementById('toggleBtn');
+		let btn = document.getElementById(this.toggleBtn);
 		if(btn){
 			btn.innerHTML = 'x';
 		}
@@ -283,7 +315,19 @@ class DecisionUI{
 
 	hide(){
 		// hide element
-		this.element.style.visibility = "hidden";	
+		console.log("Called...2");
+		let divStyler = styler(this.element);
+		tween({
+		  from: 1.0,
+		  to: { opacity: 0.0 },
+		  duration: 1000,
+		  ease: easing.backOut,
+		  //flip: Infinity,
+		  // elapsed: 500,
+		  // loop: 5,
+		  // yoyo: 5
+		}).start({update: divStyler.set, complete: ()=>this.element.style.visibility = "hidden"});
+			
 	}
 
 	toggle(){

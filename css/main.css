@@ -1,27 +1,36 @@
+body{
+  --pink: #FF1C68;
+}
+
 .btnpure {
   height: 20px;
   cursor: pointer;
-  -webkit-border-radius: 8;
-  -moz-border-radius: 8;
-  border-radius: 8px;
-  -webkit-box-shadow: 2px 3px 8px #ffffff;
-  -moz-box-shadow: 2px 3px 8px #ffffff;
-  box-shadow: 2px 3px 8px #ffffff;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0px;
   font-family: Arial;
   color: #ffffff;
   font-size: 20px;
-  background: #3498db;
+  background: #ffa600;
   padding: 10px 20px 10px 20px;
   text-decoration: none;
 }
 
 .btnpure:hover {
-  background: #3cb0fd;
-  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
-  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+  background: #ffd119;
+  text-decoration: none;
+}
+
+.btngray{
+  background: #cccccc;
+  height: 20px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 10px 20px 10px 20px;
   text-decoration: none;
 }
 
@@ -76,7 +85,17 @@
 }
 
 #info{
-  
+
+}
+
+#resource{
+  color: white;
+  font-family: Arial;
+}
+
+#scoreBoard{
+  color: orange;
+  font-family: Arial;
 }
 
 .quad{
@@ -111,4 +130,76 @@
   margin-left: 25px;
 }
 
+h1 {
+  font-size: 32px;
+  line-height: 28px;
+  margin-bottom: 10px;
+}
+
+button {
+  cursor: pointer;
+  color: white;
+  background-color: #3cb0fd;
+  font-size: 24px;
+  border: none;
+  padding: 20px 25px;
+}
+
+.modal-cancel {
+  background-color: white;
+  color: var(--pink);
+}
+
+.modal-ok {
+  background-color: orange;
+}
+
+.modal-shade {
+  display: none;
+  opacity: 0;
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.4) 0, rgba(0,0,0,0.8) 100%);
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  will-change: opacity;
+  z-index: 45;
+}
+
+.modal-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;  
+}
+
+.modal {
+  opacity: 0;
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+  background: white;
+  border-radius: 5px;
+  padding: 30px 45px;
+  min-width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+  
+.modal-actions { 
+  align-self: flex-end;
+  display: flex;
+  flex-direction: row;
+}
+
+.image-btn{
+  display: block;
+  border: 3px solid orange;
+  border-radius: 50%;
+}
 

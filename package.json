@@ -1,0 +1,29 @@
+{
+  "name": "monoprison",
+  "version": "1.0.0",
+  "description": "Explorable Explanations",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Matt-F-Wu/monoprison.git"
+  },
+  "keywords": [
+    "prison",
+    "education",
+    "explorables",
+    "social",
+    "justice"
+  ],
+  "author": "Hao Wu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Matt-F-Wu/monoprison/issues"
+  },
+  "homepage": "https://github.com/Matt-F-Wu/monoprison#readme",
+  "dependencies": {
+    "popmotion": "^8.2.3"
+  }
+}
