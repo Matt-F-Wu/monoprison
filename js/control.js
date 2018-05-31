@@ -362,6 +362,6 @@ function selectPlayer(idx){
 	players[idx].human = true;
 	human.human = true;
 
-	openModal("You selected: " + human.pname, "");
+	openModal("You selected: " + human.pname, "Your salary is: $" + players[idx].salary + " per payday");
 	decisionUI.info();
 }
