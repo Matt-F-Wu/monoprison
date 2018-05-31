@@ -317,7 +317,7 @@ fade = function(element, property, start, end, duration) {
     }, interval);
 };
 
-gameEnd(){
+function gameEnd(){
 	//TODO: maybe need to do something fancy here
 	document.getElementById('postGame').style.display = "flex";
 }
