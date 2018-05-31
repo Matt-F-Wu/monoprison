@@ -132,7 +132,9 @@ function moveOthers(){
 	}else if(circs[states[cur_player]].innerHTML === 'Event'){
 		let success = players[cur_player].event();
 		if(!success){
-			//TODO: signal game has ended
+			//TODO: signal Game has ended lead to a new interface
+			// right now that interface is just a white board with text
+			gameEnd();
 		}
 	}else{
 		//blank spot, do nothing
@@ -259,7 +261,9 @@ function animate() {
 			}else if(circs[state].innerHTML === 'Event'){
 				let success = character1.event();
 				if(!success){
-					//TODO: signal Game has ended
+					//TODO: signal Game has ended lead to a new interface
+					// right now that interface is just a white board with text
+					gameEnd();
 				}
 			}else{
 				//blank spot, do nothing
@@ -312,3 +316,8 @@ fade = function(element, property, start, end, duration) {
         u += step_u;
     }, interval);
 };
+
+gameEnd(){
+	//TODO: maybe need to do something fancy here
+	document.getElementById('postGame').style.display = "flex";
+}

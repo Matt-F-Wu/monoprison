@@ -101,6 +101,8 @@ class Player {
   	}else{
   		this.money += this.salary;
   	}
+  	decisionUI.show();
+	decisionUI.info();
   }
 
   /*Roll a event*/
