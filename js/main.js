@@ -163,7 +163,7 @@ class GEvent{
 					decisionUI.show();
 					decisionUI.info();		
 				};})(),
-				detail: 'The War on Drugs, started in the Nixon era, disproportionately penalized communities of color. Black and Latino people got sent to prison more often and for longer sentences when it comes to drug related crimes. For instance, despite being the same substance, crack cocaine dealers were punished more heavily than powdered cocaine dealers. Crack cocaine is especially prevalent in the poor communities of color due to its cheap price while powdered cocaine is prevalent in black communities.'
+				detail: 'The War on Drugs, started in the Nixon era, disproportionately penalized communities of color. Black and Latino people got sent to prison more often and for longer sentences when it comes to drug related crimes. For instance, despite being the same substance, crack cocaine dealers were punished more heavily than powdered cocaine dealers. Crack cocaine is especially prevalent in poor communities of color due to its cheap price while powdered cocaine is prevalent in black communities.'
 			}, 
 		];
 	}
@@ -188,7 +188,7 @@ class Chance{
 		this.chances = [
 			{
 				type: 'chance',
-				detail: 'You are stopped while driving to grocery store for speeding. If you are Peter Panda, you are charged a $20 ticket. If you are Mandy Monkey, Penelope Pig, or Zachary Zebra there is a 2 in 6 chance that policemen pick a fight and arrest you. You are charged with “resisting arrest” and must serve 1 turn.',
+				detail: 'You are stopped while driving to grocery store for speeding. You are charged a $20 ticket. If you are Mandy Monkey, Penelope Pig, or Zachary Zebra there is a 2 in 6 chance that policemen pick a fight and arrest you. You are charged with “resisting arrest” and must serve 1 turn.',
 				effect: (() => {var self=this; return function(p){
 					
 					// store what activity this player is experiencing
@@ -196,7 +196,7 @@ class Chance{
 					if(p.minority){
 						if(p.jailProbability(2.0/6.0)){
 							// arrested by police, decision time
-							p.activity.decision = 'Got arrected => ';
+							p.activity.decision = 'Got arrested => ';
 							p.jailDecision(1);
 						}else{
 							p.spendMoney(20);
@@ -263,7 +263,7 @@ class DecisionUI{
 				}else if(p.activity.type === 'payday'){
 					// We are at a payday
 					this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Payday: ';
-					this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = 'Getting paid!';
+					this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = 'You get paid!';
 					this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
 				}else{
 					this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Nothing happened';
@@ -271,7 +271,7 @@ class DecisionUI{
 					this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
 				}
 			}
-			let sta = '$' + p.money + ' strike: ' + p.strike;
+			let sta = '$' + p.money + ', strikes: ' + p.strike;
 			var p_sta = document.getElementById(this.scoreBoard).children[idx];
 			if(p.human){
 				sta += ' (you)';

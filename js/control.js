@@ -20,6 +20,7 @@ var circs;
 var character1, character2, character3, character4, human;
 var players;
 var cur_player = 0;
+var human_player = 0;
 
 var num_state;
 
@@ -51,7 +52,7 @@ function initBoard(){
 	players = [character1, character2, character3, character4];
 	num_state = circs.length;
 	// default player
-	human = character1;
+	// human = character1;
 }
 
 function createBoard(){
@@ -90,7 +91,7 @@ function createBoard(){
 
 
 function tossDice(){
-	if(cur_player != 0){
+	if(cur_player != human_player){
 		// the player is not human, should be handled by moveOthers()
 		openModal('Wait!', "It's the other players' turn, click next to see how they play!");
 		return;
@@ -107,7 +108,7 @@ function tossDice(){
 }
 
 function moveOthers(){
-	if(cur_player === 0){
+	if(cur_player === human_player){
 		// If human, shouldn't be handled by this function
 		openModal('Wait', "It's your turn, please toss the dice!");
 		return;
@@ -122,6 +123,7 @@ function moveOthers(){
 	let x = parseInt(circs[states[cur_player]].style.left.slice(0, -2))
 	let y = parseInt(circs[states[cur_player]].style.top.slice(0, -2))
 
+	// TODO: change this logic, logic assumed that human was cur_player 0
 	if(cur_player === 1){
 		x += 50;
 	}else if(cur_player === 2){
@@ -129,12 +131,6 @@ function moveOthers(){
 	}else{
 		x += 50;
 		y += 50;
-		// last other player
-		tossButton.classList.remove("btngray");
-		tossButton.classList.add("btnpure");
-
-		nextButton.classList.remove("btnpure");
-		nextButton.classList.add("btngray");
 	}
 
 	players[cur_player].element.style.left = x + 'px';
@@ -157,6 +153,14 @@ function moveOthers(){
 	}
 
 	cur_player = (cur_player + 1) % 4;
+
+	if(cur_player === human_player){
+		tossButton.classList.remove("btngray");
+		tossButton.classList.add("btnpure");
+
+		nextButton.classList.remove("btnpure");
+		nextButton.classList.add("btngray");
+	}
 }
 
 function init() {
@@ -266,8 +270,10 @@ function animate() {
 			}
 			state = (state + steps) % num_state;
 			// Move the character to current location
-			character1.element.style.left = circs[state].style.left;
-			character1.element.style.top = circs[state].style.top;
+			players[human_player].element.style.left = circs[state].style.left;
+			players[human_player].element.style.top = circs[state].style.top;
+			// character1.element.style.left = circs[state].style.left;
+			// character1.element.style.top = circs[state].style.top;
 
 			//Game logic here:
 			setTimeout(function(){
@@ -342,8 +348,20 @@ function gameEnd(){
 
 function selectPlayer(idx){
 	var human = players[idx];
+	human_player = idx;
+
+	if (human_player != 0){
+		tossButton.classList.remove("btnpure");
+		tossButton.classList.add("btngray");
+
+		nextButton.classList.remove("btngray");
+		nextButton.classList.add("btnpure");
+	}
+
 	character1.human = false;
+	players[idx].human = true;
 	human.human = true;
+
 	openModal("You selected: " + human.pname, "");
 	decisionUI.info();
 }
