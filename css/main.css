@@ -52,6 +52,20 @@ body{
   background-color: lightblue;
 }
 
+.jail{
+  position: absolute;
+  height: 500px;
+  width: 500px;
+  border-radius: 50%;
+  background-color: #3cb0fd;
+  color: white;
+  font-family: Arial;
+  font-size: 18pt;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 100px;
+}
+
 #start{
   background-color: orange;
 }

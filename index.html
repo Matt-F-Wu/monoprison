@@ -55,6 +55,16 @@
 			<div class="btnpure" style="position: absolute; top: 0%; margin-left: 70%; z-index: 30" onclick="toggleInfo()" id="toggleBtn">...</div>
 			<div class="column" style="height: 100%; width: 70%;">
 				<div id="info" style="height: 100%; width: 110%; padding: 5%; margin-left: 10%; z-index: 20; visibility: hidden;">
+					<<!-- div class="quad column">
+						<h4>Player Turn<img width="50" height="50" src="./textures/panda.png" style="display: inline;"></h4>
+						<div class="q_header"></div>
+						<div class="q_content"></div>
+						<div class="q_decision"></div>
+						<div class="rowfit" style="margin-bottom: 2%">
+							<div class="btnpure yes">Yes</div>
+							<div class="btnpure no">No</div>
+						</div>
+					</div> -->
 					<div class="row" style="flex:1; height: 50%">
 						<div class="quad column">
 							<h4>Peter Panda<img width="50" height="50" src="./textures/panda.png" style="display: inline;"></h4>
@@ -122,14 +132,24 @@
 					<div class="circle">Chance</div>
 					<div class="circle">Chance</div>
 					<div class="circle">Event</div>
+					<div class="jail">Jail</div>
 				</div>
 			</div>
 			<div class="column" style="height: 100%; width: 30%">
-				<div id="scoreBoard"  style="height: 15%">
-					<div><span>Peter Panda: </span><span class="p_status">init</span></div>
-					<div><span>Penelope Pig: </span><span class="p_status">init</span></div>
-					<div><span>Mandy Monkey: </span><span class="p_status">init</span></div>
-					<div><span>Zachary Zebra: </span><span class="p_status">init</span></div>
+				<div id="scoreBoard"  style="height: 15%; font-size:16pt">
+					<div align="center" style="font-size:20pt"><span>Peter Panda: </span>
+						<div style="font-size:14pt"><span class="p_status">init</span></div><br>
+					</div>
+					<div align="center" style="font-size:20pt"><span>Penelope Pig: </span>
+						<div style="font-size:14pt"><span class="p_status">init</span></div><br>
+					</div>
+					<div align="center" style="font-size:20pt"><span>Mandy Monkey: </span>
+						<div style="font-size:14pt"><span class="p_status">init</span></div><br>
+					</div>
+					<div align="center" style="font-size:20pt"><span>Zachary Zebra: </span>
+						<div style="font-size:14pt"><span class="p_status">init</span></div><br>
+					</div>
+
 				</div>
 				<div id="resource" style="height: 35%">
 				</div>

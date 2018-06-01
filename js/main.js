@@ -555,10 +555,10 @@ class DecisionUI{
 						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
 					}
 				}
-				let sta = '$' + p.money + ' strike: ' + p.strike;
+				let sta = 'Money: $' + p.money + '<br>' + 'Strikes: ' + p.strike + '<br>';
 				var p_sta = document.getElementById(this.scoreBoard).children[idx];
 				if(p.human){
-					sta += ' (you)';
+					// sta += ' (you)';
 					p_sta.style.backgroundColor= "white";
 				}else{
 					p_sta.style.backgroundColor= "transparent";
