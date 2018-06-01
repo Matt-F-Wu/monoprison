@@ -49,15 +49,19 @@ body{
 }
 
 .chance_circle {
-  background-color: #3cb0fd
+  background-color: #3cb0fd;
 }
 
 .event_circle {
-  background-color: orange;
+  background-color: purple;
 }
 
 .payday_circle {
   background-color: #33ff33;
+}
+
+.start_circle {
+  background-color: white;
 }
 
 .jail{
