@@ -91,7 +91,6 @@ function createBoard(){
 	jail[0].style.height=(2*r-100)+'px';
 	jail[0].style.width=(2*r-100)+'px';
 
-
 	circs[state].style.backgroundColor = "orange";
 }
 
