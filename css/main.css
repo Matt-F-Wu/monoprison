@@ -48,10 +48,6 @@ body{
   line-height: 100px;
 }
 
-.circle:hover{
-  background-color: lightblue;
-}
-
 .chance_circle {
   background-color: #3cb0fd
 }

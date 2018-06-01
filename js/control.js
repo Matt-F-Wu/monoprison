@@ -256,9 +256,10 @@ function animate() {
 			// Reset old state color to normal
 			//circs[state].style.backgroundColor = "#3cb0fd";
 			for(let s = 0; s <= steps; s++){
-				let s_color = colorLint(orange, blue, 1.0 - s/steps);
+				let original_color = circs[(state + s) % num_state].style.backgroundColor;
+				let s_color = colorLint(orange, original_color, 1.0 - s/steps);
 				// Fade from some mix of blue & orange to just blue
-				fade(circs[(state + s) % num_state], 'background-color', s_color, blue, 1000);
+				fade(circs[(state + s) % num_state], 'background-color', s_color, original_color, 1000);
 			}
 			state = (state + steps) % num_state;
 			// Move the character to current location
