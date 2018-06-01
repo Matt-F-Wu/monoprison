@@ -103,23 +103,12 @@ function playTurn(){
 }
 
 function tossDice(){
-	if(cur_player != human_idx){
-		// the player is not human, should be handled by moveOthers()
-		openModal('Wait!', "It's the other players' turn, click next to see how they play!");
-		return;
-	}
 	rest = false;
 	toss = frames;
 	document.getElementById('num_step').innerHTML = 'x';
 }
 
 function moveOthers(){
-	if(cur_player === human_idx){
-		// If human, shouldn't be handled by this function
-		openModal('Wait', "It's your turn, please toss the dice!");
-		return;
-	}
-
 	let step = players[cur_player].randomStep();
 
 	states[cur_player] = (states[cur_player] + step) % num_state;
@@ -129,13 +118,11 @@ function moveOthers(){
 	let x = parseInt(circs[states[cur_player]].style.left.slice(0, -2))
 	let y = parseInt(circs[states[cur_player]].style.top.slice(0, -2))
 
-	// TODO: change this logic, logic assumed that human was cur_player 0
-	if(cur_player === 1){
-		x += 50;
-	}else if(cur_player === 2){
-		y += 50;
-	}else{
-		x += 50;
+	if(cur_player === 1 || cur_player ===3){
+		x +=50;
+	}
+
+	if(cur_player === 2 || cur_player === 3){
 		y += 50;
 	}
 
