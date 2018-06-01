@@ -1,6 +1,9 @@
 /*Additional JS to assist none threejs component*/
 const { styler, easing, tween} = popmotion;
 var overrides = {'chance': 1};
+var three_strike = false;
+var orange_span_s = "<span style='color: orange; font-weight: bold'>";
+var orange_span_e = "</span>";
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
@@ -49,10 +52,6 @@ class Player {
   	this.money -= amount;
   }
 
-  sentenced(t){
-  	this.sentence_length = t;
-  }
-
   // argument p is the raw probability of going to jail
   jailProbability(p){
   	// return true meaning "go to jail"
@@ -60,51 +59,65 @@ class Player {
   }
 
   jailDecisionHelper(want_trial, turns, self){
-  	console.log(self);
+  	//console.log(self);
   	if(want_trial){
-		// go on trail
+		// go on trial
 		self.in_trial = 2;
 		if(Math.random() <= self.innocent){
 			// 1/6 chance go free, not in prison
 			self.in_prison = 0;
-			self.activity.decision += 'Decided to go on trial, and found innocent.';
+			self.activity.decision += (orange_span_s + 'Decided to go on trial, and found innocent.' + orange_span_e);
 		}else{
 			self.in_prison = turns;
-			self.activity.decision += ('Decided to go on trial, and found guilty, go to prison for ' + turns + ' turns');
+			self.activity.decision += (orange_span_s + 'Decided to go on trial, and found guilty, go to prison for ' + turns + ' turns' + orange_span_e);
 			self.strike++;
+			if(three_strike && self.strike === 3){
+				// life sentence, put in prison forever
+				self.in_prison = Number.MAX_SAFE_INTEGER;
+				self.activity.decision += ("<br>" + orange_span_s + "BUT because " + self.pname + " had 3 strikes, he/she is put away forever" + orange_span_e);
+			}
 		}
 	}else{
-		self.in_prison = turns;
-		self.activity.decision += ('Decided to NOT go on trail, go to prison for ' + turns + ' turns');
+		// Took a Plea deal
+		self.in_prison = Math.ceil(turns / 2.0);
+		self.activity.decision += (orange_span_s + 'Decided to NOT go on trial, go to prison for ' + turns + ' turns' + orange_span_e);
 		self.strike++;
+		if(three_strike && self.strike === 3){
+			self.in_prison = Number.MAX_SAFE_INTEGER;
+			self.activity.decision += ("<br>" + orange_span_s + "BUT because " + self.pname + " had 3 strikes, he/she is put away forever" + orange_span_e);
+		}
 	}
   }
 
   jailDecision(turns){
-  	turns = turns + this.sentence_increment
+  	turns = turns + this.sentence_increment;
   	if(this.human){
   		// If this is a human player, show some graphics
   		decisionUI.show();
+  		decisionUI.info(this);
   		console.log("Show button...");
-  		decisionUI.showDecisionButton();
+  		decisionUI.showDecisionButton("Go on trial", "Take plea deal");
   		var self = this;
   		decisionUI.yesButton.onclick = (() => { 
   			return function(){
 	  			self.jailDecisionHelper(true, turns, self); 
 	  			// show all player's decisions and their status
-	  			decisionUI.info();
+	  			decisionUI.info(self);
+	  			decisionUI.hideDecisionButton();
   			}
   		})();
   		decisionUI.noButton.onclick = (() => { 
   			return function(){
 	  			self.jailDecisionHelper(false, turns, self); 
 	  			// show all player's decisions and their status
-	  			decisionUI.info();
+	  			decisionUI.info(self);
+	  			decisionUI.hideDecisionButton();
   			}
   		})();
   	}else{
   		// this is just our computer program, just do things
-  		this.jailDecisionHelper(Math.random() <= 0.5, turns);
+  		this.jailDecisionHelper(Math.random() <= 0.5, turns, this);
+  		decisionUI.info(this);
   	}
   }
 
@@ -227,14 +240,14 @@ class GEvent{
 				effect: (() => {var self=this; return function(ps){
 					ps.forEach((p) => {
 						// store what activity this player is experiencing
-						p.activity = self.events[0];
+						p.activity = self.events[1];
 						// This is no decision to be made for this event
 						p.activity.decision = '';
 						if(p.alec_investor){
 							p.money += 100;
 						}
 						/*TODO: implement three strikes */
-						// p.override = overrides.chance;
+						three_strike = true;
 					});
 					// Don't forget to display the information to screen
 					decisionUI.show();
@@ -250,11 +263,11 @@ class GEvent{
 				effect: (() => {var self=this; return function(ps){
 					ps.forEach((p) => {
 						// store what activity this player is experiencing
-						p.activity = self.events[0];
+						p.activity = self.events[2];
 						// This is no decision to be made for this event
 						p.activity.decision = '';
 						if(p.minority){
-							p.p_increment += 1;
+							p.p_increment += (1.0/6.0);
 						}
 					});
 					// Don't forget to display the information to screen
@@ -267,25 +280,32 @@ class GEvent{
 			{	type: 'event',
 				happened: false,
 				name: 'ALEC Policy', 
-				action: 'The “Mandatory Minimum” law is passed. According to this law, you must serve a minimum amount of time when you are convicted. From now on, if any player goes to jail, they have to miss at least 1 turn.', 
+				action: 'A private prison company wants to build a new prison in your district. Experts predict that this would actually be more costly to taxpayers, but the government agrees to the contract. Each player pays $10 to fund the new prison. All players except for Peter Panda must pick up a Chance card at the beginning of their next turn.', 
 				effect: (() => {var self=this; return function(ps){
 					ps.forEach((p) => {
 						// store what activity this player is experiencing
-						p.activity = self.events[0];
+						p.activity = self.events[3];
 						// This is no decision to be made for this event
 						p.activity.decision = '';
-						if(p.alec_investor){
+
+						if(p.alec_investor) {
 							p.money += 100;
 						}
-						/*TODO: implement manadtory min?? */
-						// p.override = overrides.chance;
+						p.money -= 10;
+						if(p.minority){
+							// at next turn, minority have to pick up a chance card
+							/*TODO: the global variable overrides store a bunch
+							of override types, add more!*/
+							p.override = overrides.chance;
+						}
+
 					});
 					// Don't forget to display the information to screen
 					decisionUI.show();
 					decisionUI.info();		
 				};})(),
-				detail: 'Mandatory minimum sentencing laws force a judge to hand down a minimum, often long, prison sentence based on a prosecutor\'s choice of charges brought against a defendant. Mandatory sentences have the effect of transferring sentencing power from judges to prosecutors. Prosecutors frequently threaten to bring charges carrying long mandatory minimum sentences and longer guidelines sentences to scare a defendant to plead guilty in exchange for a reduced sentence and give up every factual and legal basis for a defense. As a result, at least 95 percent of federal drug defendants plead guilty.'
-			}, 
+				detail: 'Private prisons often stress that they are saving taxpayer dollars, but in truth they are often more costly in many ways. For one, they are costly to build. Furthermore, in order to increase profits, they cut costs by hiring less staff with less experience and cutting medical and other treatments. This often leads to expensive lawsuits due to the lack of medical care, safety incidents, and altercations with staff. In fact, it has been shown that assaults on staff in private prisons are about double those of assaults of staff in public facilities, despite private prisons only selecting to incarcerate inmates they deem “docile.” However, private prisons are still popular alternatives to building state and federal prisons, despite these flaws and findings that private prisons are not actually shown to increase public safety.'
+			},
 
 			{	type: 'event',
 				happened: false,
@@ -294,14 +314,14 @@ class GEvent{
 				effect: (() => {var self=this; return function(ps){
 					ps.forEach((p) => {
 						// store what activity this player is experiencing
-						p.activity = self.events[0];
+						p.activity = self.events[4];
 						// This is no decision to be made for this event
 						p.activity.decision = '';
 						if(p.alec_investor){
 							p.money += 100;
 						}
 						if(p.minority){
-							p.p_increment += 1;
+							p.p_increment += (1.0/6.0);
 						}
 					});
 					// Don't forget to display the information to screen
@@ -318,7 +338,7 @@ class GEvent{
 				effect: (() => {var self=this; return function(ps){
 					ps.forEach((p) => {
 						// store what activity this player is experiencing
-						p.activity = self.events[0];
+						p.activity = self.events[5];
 						// This is no decision to be made for this event
 						p.activity.decision = '';
 						if(p.alec_investor){
@@ -341,19 +361,47 @@ class GEvent{
 				name: 'The American Legislative Exchange Council (ALEC) has started', 
 				action: 'You have a chance to invest! If you want to invest in ALEC you will get $100 for every policy that ALEC passes.', 
 				effect: (() => {var self=this; return function(ps){
+					decisionUI.show();
 					ps.forEach((p) => {
 						// store what activity this player is experiencing
-						p.activity = self.events[0];
+						p.activity = self.events[6];
 						// This is no decision to be made for this event
-						p.activity.decision = '';
+						p.activity.decision = 'Do you want to invest in ALEC?<br>';
 
-						// if invest
-						// p.alec_investor = true
+						if(p.human){
+							decisionUI.showDecisionButton("Yes", "No");
+							decisionUI.info();
+							decisionUI.yesButton.onclick = (() => {
+								var pp = p;
+					  			return function(){
+						  			pp.alec_investor = true;
+						  			pp.activity.decision += ( orange_span_s + 'Yes!' + orange_span_e);
+						  			// show all player's decisions and their status
+						  			decisionUI.info();
+						  			decisionUI.hideDecisionButton();
+					  			}
+					  		})();
+					  		decisionUI.noButton.onclick = (() => {
+					  			var pp = p; 
+					  			return function(){
+						  			pp.activity.decision += ( orange_span_s + 'No!' + orange_span_e);
+						  			// show all player's decisions and their status
+						  			decisionUI.info();
+						  			decisionUI.hideDecisionButton();
+					  			}
+					  		})();
+					  	}else{
+					  		if(getRandomInt(5) < 3){
+					  			p.alec_investor = true;
+					  			p.activity.decision += (orange_span_s + 'Yes!' + orange_span_e);
+					  		}else{
+					  			p.activity.decision += (orange_span_s + 'No!' + orange_span_e);
+					  		}
+					  		decisionUI.info();
+					  	}
 
 					});
-					// Don't forget to display the information to screen
-					decisionUI.show();
-					decisionUI.info();		
+					// Don't forget to display the information to screen	
 				};})(),
 				detail: 'ALEC is an organization that connects companies with politicians to make right-wing policies. Some of their largest backers include CCA (Corrections Corporation of America), who are in the business of private prisons and profit heavily off of keeping people incarcerated. ALEC drafts builds on a variety of conservative topics, making it easier for lawmakers around the country to personalize the exact bill to pass in their respective districts.'
 			},
@@ -365,7 +413,7 @@ class GEvent{
 				effect: (() => {var self=this; return function(ps){
 					ps.forEach((p) => {
 						// store what activity this player is experiencing
-						p.activity = self.events[0];
+						p.activity = self.events[7];
 						// This is no decision to be made for this event
 						p.activity.decision = '';
 
@@ -385,36 +433,6 @@ class GEvent{
 					decisionUI.info();		
 				};})(),
 				detail: 'Beginning in the 1960s, the United States faced a surge in criminal violence: Across the decade, the murder rate rose by 44 percent, and per capita rates of forcible rape and robbery more than doubled. Nixon knew he had to address this problem - in a diary entry from 1969, White House chief of staff H.R. Haldeman paraphrased Nixon’s thinking: “You have to face the fact that the whole problem is really the blacks. The key is to devise a system that recognizes this while not appearing to.” During the campaign Nixon’s team tackled this challenge by adopting a strategy of “law and order”—by playing to racist fears, they could cloak divisive rhetoric in an unobjectionable demand for security during a chaotic era.'
-			},
-
-			{	type: 'event',
-				happened: false,
-				name: 'ALEC Policy', 
-				action: 'A private prison company wants to build a new prison in your district. Experts predict that this would actually be more costly to taxpayers, but the government agrees to the contract. Each payer pays $10 to fund the new prison. All players except for Peter Panda must pick up a Chance card at the beginning of their next turn.', 
-				effect: (() => {var self=this; return function(ps){
-					ps.forEach((p) => {
-						// store what activity this player is experiencing
-						p.activity = self.events[0];
-						// This is no decision to be made for this event
-						p.activity.decision = '';
-
-						if(p.alec_investor) {
-							p.money += 100;
-						}
-						p.money -= 10
-						if(p.minority){
-							// at next turn, minority have to pick up a chance card
-							/*TODO: the global variable overrides store a bunch
-							of override types, add more!*/
-							p.override = overrides.chance;
-						}
-
-					});
-					// Don't forget to display the information to screen
-					decisionUI.show();
-					decisionUI.info();		
-				};})(),
-				detail: 'Private prisons often stress that they are saving taxpayer dollars, but in truth they are often more costly in many ways. For one, they are costly to build. Furthermore, in order to increase profits, they cut costs by hiring less staff with less experience and cutting medical and other treatments. This often leads to expensive lawsuits due to the lack of medical care, safety incidents, and altercations with staff. In fact, it has been shown that assaults on staff in private prisons are about double those of assaults of staff in public facilities, despite private prisons only selecting to incarcerate inmates they deem “docile.” However, private prisons are still popular alternatives to building state and federal prisons, despite these flaws and findings that private prisons are not actually shown to increase public safety.'
 			},
 
 		];
@@ -450,18 +468,19 @@ class Chance{
 					if(p.minority){
 						if(p.jailProbability(2.0/6.0)){
 							// arrested by police, decision time
-							p.activity.decision = 'Got arrected => Go on Trial? ';
+							p.activity.decision = 'Got arrected => Go on trial?<br>';
 							p.jailDecision(1);
 						}else{
 							p.spendMoney(20);
 							p.activity.decision = 'Got a $20 fine';
+							decisionUI.info(p);
 						}
 					}else{
 						p.spendMoney(20);
 						p.activity.decision = 'Got a $20 fine';
+						decisionUI.info(p);
 					}
 					
-					decisionUI.info(p);
 				}})(),
 			},
 			{
@@ -470,26 +489,27 @@ class Chance{
 				effect: (() => {var self=this; return function(p){
 					
 					// store what activity this player is experiencing
-					p.activity = self.chances[0];
+					p.activity = self.chances[1];
+					decisionUI.show();
 					if(p.minority){
 						if(p.jailProbability(3.0/6.0)){
 							// arrested by police, decision time
-							p.activity.decision = 'Got arrested => ';
+							p.activity.decision = 'Got arrested => Go on trial?<br>';
 							p.jailDecision(2);
 						} else {
 							p.activity.decision = 'Lucky you! You did not get caught!'
+							decisionUI.info(p);
 						}
 					}else{
 						if(p.jailProbability(1.0/6.0)){
-							p.activity.decision = 'Got arrested => ';
+							p.activity.decision = 'Got arrested => Go on trial?<br>';
 							p.jailDecision(2);
 						} else {
 							p.activity.decision = 'Lucky you! You did not get caught!'
+							decisionUI.info(p);
 						}
 					}
 					
-					decisionUI.show();
-					decisionUI.info();
 				}})(),
 			},
 		];
@@ -599,9 +619,16 @@ class DecisionUI{
 		}
 	}
 
-	showDecisionButton(){
+	showDecisionButton(y_text='Yes', n_text='No'){
 		this.yesButton.style.visibility = "visible";
+		this.yesButton.innerHTML = y_text;
 		this.noButton.style.visibility = "visible";
+		this.noButton.innerHTML = n_text;
+	}
+
+	hideDecisionButton(){
+		this.yesButton.style.visibility = "hidden";
+		this.noButton.style.visibility = "hidden";	
 	}
 
 	hide(){
