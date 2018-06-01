@@ -72,16 +72,14 @@ body{
   line-height: 100px;
 }
 
-.pop_up_card{
-  position:absolute;
-  height: 200px;
-  width: 400px;
+#pop_up_card{
+  height: 300px;
+  width: 600px;
 }
 
-.pop_up_card_resource{
-  position:absolute;
-  height: 200px;
-  width: 400px;
+#pop_up_card_resource{
+  height: 300px;
+  width: 600px;
 }
 #start{
   background-color: orange;
