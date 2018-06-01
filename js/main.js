@@ -34,6 +34,7 @@ class Player {
     // game event/chance this player experienced most recently
     this.activity = {};
     this.pname = name;
+
   }
 
   element(){
@@ -423,7 +424,6 @@ class GEvent{
 	getRandomEvent(){
 		// Just gets a random event
 		let available_events = this.events.filter(ev => !ev.happened);
-		console.log(available_events)
 		if(available_events.length === 0){
 			// No event left, TODO: end game?
 			return null;
@@ -755,7 +755,6 @@ class Chance{
 	getRandomChance(){
 		// Just gets a random event
 		let idx = getRandomInt(this.chances.length - 1);
-		console.log(idx);
 		return this.chances[idx];
 	}
 }
@@ -785,8 +784,10 @@ class DecisionUI{
 	}
 
 	info(ext_p){
+
 		//loop through all players and display their status
 		this.players.forEach((p, idx, arr) => {
+			console.log("EXT_P: " + ext_p);
 			if(ext_p && ext_p != p){
 				//Do nothing
 			}else{
