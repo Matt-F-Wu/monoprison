@@ -420,6 +420,93 @@ class GEvent{
 	}
 }
 
+class LifeInPrison{
+	constructor(){
+		/*TODO: code up the events details and its effects on different players.
+		this.events is an array of event dictionaries, each following the format below
+		One example of a event dictionary is provided below: */
+		this.prisonCards = [
+			{	type: 'prison',
+				name: 'The prison you are in requires you to work.', 
+				action: 'You spend your entire day in prison making products that you recognize from popular brands. In payment for your day of work, you earn $1. You count yourself as pretty lucky - although you’ve heard stories of some people being paid up to $1.75 for their labor in prison, you know that it is far more common for prisoners to earn much less, if anything.', 
+				effect: (() => {var self=this; return function(p){
+					// store what activity this player is experiencing
+					p.activity = self.prisonCards[0];
+					decisionUI.show();
+					
+					p.money += 1;
+					
+					decisionUI.info(p);
+				}})(),
+				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.'
+			}, 
+
+			{	type: 'prison',
+				name: 'You get sick.', 
+				action: 'You begin to feel sick after spending a significant amount of time in close proximity to other inmates who have all been sick recently. Unfortunately, in order to maximize profits, the private prison in which you are incarcerated has cut many medical treatments and services available to you. You put up with your sickness, knowing that treatment is readily and easily available at any pharmacy outside of the prison.', 
+				effect: (() => {var self=this; return function(p){
+					// store what activity this player is experiencing
+					p.activity = self.prisonCards[1];
+					decisionUI.show();
+					
+					decisionUI.info(p);
+				}})(),
+				detail: 'Under the Eighth Amendment directive against cruel and unusual punishment, prisoners are guaranteed adequate health care. But managing prisoners’ health care is difficult. Infectious disease, mental illness and addiction are common problems for inmates, according to the Center for Prisoner Health and Human Rights. Furthermore, a January report by Human Rights Watch detailed the growing number of aging inmates, who incur costs that are nine times as high as those for younger inmates.'
+			}, 
+
+			{	type: 'prison',
+				name: 'You get into trouble in prison.', 
+				action: 'One of the staff at the private prison where you are starts an altercation with a group of inmates as you look on. After breaking up the altercation, another staff member unjustly blames you for the incident and puts you in solitary confinement.', 
+				effect: (() => {var self=this; return function(p){
+					// store what activity this player is experiencing
+					p.activity = self.prisonCards[2];
+					decisionUI.show();
+					
+					decisionUI.info(p);
+				}})(),
+				detail: 'In an effort to cut costs and maximize profits, many private prisons hire unqualified and inexperienced staff members and don’t give them adequate training. This has led to an increased likelihood of conflicts between staff and inmates. In fact, assaults on staff in private prisons are about 2x that of assaults on staff in public facilities, despite the fact that private prisons can choose who they incarcerate and often only select prisoners that they deem "docile."'
+			}, 
+
+			{	type: 'prison',
+				name: 'The prison you are in requires you to work.', 
+				action: 'You spend your entire day in prison making products that you recognize from popular brands that you recognize. In payment for your day of work, you earn $0.5. You understand that this is pretty typical - although you’ve heard stories of some people being paid up to $1.75 for their labor in prison, you know that it is far more common for prisoners to earn much less, if anything.', 
+				effect: (() => {var self=this; return function(p){
+					// store what activity this player is experiencing
+					p.activity = self.prisonCards[3];
+					decisionUI.show();
+
+					p.money += 0.5
+					
+					decisionUI.info(p);
+				}})(),
+				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.'
+			}, 
+
+			{	type: 'prison',
+				name: 'The prison you are in requires you to work.', 
+				action: 'You spend your entire day in prison making products that you recognize from popular brands that you recognize. Despite all the time you spent working, you aren’t paid. You aren’t surprised - although you’ve heard stories of some people being paid up to $1.75 for their labor in prison, you know that it is far more common for prisoners to earn much less than that, if anything.', 
+				effect: (() => {var self=this; return function(p){
+					// store what activity this player is experiencing
+					p.activity = self.prisonCards[4];
+					decisionUI.show();
+
+					p.money += 0.5
+					
+					decisionUI.info(p);
+				}})(),
+				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.'
+			}, 
+
+		];
+	}
+
+	getRandomPrisonCard(){
+		// Just gets a random event
+		let idx = getRandomInt(this.prisonCards.length - 1);
+		return this.prisonCards[idx];
+	}
+}
+
 class Chance{
 
 	// TODO: for chance, you want the other players to display nothing on their view

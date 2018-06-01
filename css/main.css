@@ -60,10 +60,6 @@ body{
   background-color: #33ff33;
 }
 
-.start_circle {
-  background-color: white;
-}
-
 .jail{
   position: absolute;
   border-radius: 50%;
