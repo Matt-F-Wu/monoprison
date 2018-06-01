@@ -75,7 +75,7 @@ class Player {
 		}
 	}else{
 		self.in_prison = turns;
-		self.activity.decision += ('Decided to NOT go on trail, go to prison for ' + turns + ' turns');
+		self.activity.decision += ('Decided to NOT go on trial, go to prison for ' + turns + ' turns');
 		self.strike++;
 	}
   }
@@ -254,7 +254,7 @@ class GEvent{
 						// This is no decision to be made for this event
 						p.activity.decision = '';
 						if(p.minority){
-							p.p_increment += 1;
+							p.p_increment += 1.0/6;
 						}
 					});
 					// Don't forget to display the information to screen
@@ -301,7 +301,7 @@ class GEvent{
 							p.money += 100;
 						}
 						if(p.minority){
-							p.p_increment += 1;
+							p.p_increment += 1.0/6;
 						}
 					});
 					// Don't forget to display the information to screen
@@ -464,6 +464,7 @@ class Chance{
 					decisionUI.info(p);
 				}})(),
 			},
+
 			{
 				type: 'chance',
 				detail: 'You are buying drugs. If you are Peter Panda, there is a 1 in 6 chance that you will get caught. If caught, you will serve 1 turn in jail. Otherwise, you have a 3 in 6 chance of getting caught and would serve 2 turns.',
@@ -492,6 +493,260 @@ class Chance{
 					decisionUI.info();
 				}})(),
 			},
+
+			{
+				type: 'chance',
+				detail: 'You get into an altercation at home and the police are called over due to a noise complaint. If you are with Peter Panda, you are charged a $100 fine. Otherwise, you have a 4 in 6 chance of paying a $200 fine and serving 1 turn in jail.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[0];
+					if(p.minority){
+						if(p.jailProbability(4.0/6.0)){
+							// arrested by police, decision time
+							p.activity.decision = 'You must pay a $200 fine and got arrested => ';
+							p.spendMoney(200);
+							p.jailDecision(1);
+						} else {
+							p.activity.decision = 'Lucky you! You did not get caught!'
+						}
+					}else{
+						p.spendMoney(100);
+						p.activity.decision = 'Got a $100 fine.'
+					}
+					
+					decisionUI.show();
+					decisionUI.info();
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'You apply for a Pell Grant to go to college. If you have no strikes on your criminal record, you receive the Pell Grant and go back to school. After becoming a college graduate, your salary increases by $20. If you do have a strike on your criminal record, you are not eligible to receive the Pell Grant.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[0];
+					if(p.strike == 0) {
+						p.salary += 20;
+						p.activity.decision = 'You got the grant and got a salary increase of $20.'
+					} else {
+						p.activity.decision = 'Due to the strike on your criminal record, you do not get the grant.'
+					}
+					
+					decisionUI.show();
+					decisionUI.info();
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'During a rough period in your life, you resort to selling drugs. If you are Peter Panda, there is a 1 in 6 chance that you will be caught. If caught, you are charged to serve for 1 turn. Otherwise, there is a 4 in 6 chance that you will be caught and charged to serve for 3 turns.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[0];
+					if(p.minority) {
+						if(p.jailProbability(4.0/6)) {
+							p.activity.decision = 'You got arrested =>'
+							p.jailDecision(3)
+						} else {
+							p.activity.decision = 'You got away with it!'
+						}
+					} else {
+						if(p.jailProbability(1.0/6)) {
+							p.activity.decision = 'You got arrested =>'
+							p.jailDecision(1)
+						} else {
+							p.activity.decision = 'You got away with it!'
+						}
+					}
+					
+					decisionUI.show();
+					decisionUI.info();
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'You are behind on a $50 payment. If you can’t pay it now, serve one turn in prison.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[0];
+					if(p.money >= 50) {
+						p.activity.decision = 'You must pay $50.';
+						p.spendMoney(50);
+					} else {
+						p.activity.decision = 'You got arrested => ';
+						p.jailDecision(1);
+					}
+					
+					decisionUI.show();
+					decisionUI.info();
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'You made a bad investment. Lose $100.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[0];
+					p.activity.decision = 'You lose $100.';
+					p.spendMoney(100);
+					
+					decisionUI.show();
+					decisionUI.info();
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'Your boss has given you a raise! Increase your salary by $20.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[0];
+					p.salary += 20
+					p.activity.decision = 'Your salary has now increased to ' + p.salary;
+					
+					decisionUI.show();
+					decisionUI.info();
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'You’ve been doing great at work and earned a bonus equal to your current salary.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[0];
+					p.money += p.salary
+					p.activity.decision = 'You just got a bonus of ' + p.salary;
+					
+					decisionUI.show();
+					decisionUI.info();
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'You made a great investment and earned $50.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[0];
+					p.activity.decision = 'You earned $50.';
+					p.money += 50;
+					
+					decisionUI.show();
+					decisionUI.info();
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'Your boss does a surprise background check. If she finds that you have a criminal record, you are fired and the only job you can find has a salary that is half of your current salary.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[0];
+					if(p.strike == 0) {
+						p.activity.decision = 'Your boss does not find anything on your record.'
+					} else {
+						p.salary /= 2.;
+						p.activity.decision = 'Due to the strike(s) on your criminal record, you now have a salary of ' + p.salary;
+					}
+					
+					decisionUI.show();
+					decisionUI.info();
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'You have an accident and must go to the hospital. If you have a criminal record, this means that unfortunately you do not have Medicaid. Lose $200 to pay for the medical bill.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[0];
+					if(p.strike == 0) {
+						p.activity.decision = 'Medicaid covers your hospital bill.'
+					} else {
+						p.spendMoney(200);
+						p.activity.decision = 'Due to the strike(s) on your criminal record, lose $200.';
+					}
+					
+					decisionUI.show();
+					decisionUI.info();
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'You need to find an apartment. If you have a criminal record, you are do not qualify for public housing. Lose $100 to pay for your more expensive apartment.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[0];
+					if(p.strike == 0) {
+						p.activity.decision = 'You have public housing. You don\'t lose any money'
+					} else {
+						p.spendMoney(100);
+						p.activity.decision = 'Due to the strike(s) on your criminal record, lose $100.';
+					}
+					
+					decisionUI.show();
+					decisionUI.info();
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'Trisha Meili was running in central park when she was attacked and raped. Despite your DNA not matching the DNA from the crime scene, the public strongly believes that you were involved in the attack. If you are not Peter Panda, you must go straight to jail and serve 2 turns.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[0];
+					if(p.minority) {
+						p.activity.decision = 'You got arrested => ';
+						p.jailDecision(2);
+					} else {
+						p.activity.decision = "You are not a suspect. Nothing happens to you."
+					}
+					
+					decisionUI.show();
+					decisionUI.info();
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'You are sitting in a coffee house waiting for a friend. The store owner is upset at you for staying in the coffee house despite not buying anything. If you are  Mandy Monkey, Penelope Pig, or Zachary Zebra, you have a 1 in 6 chance of the owner calling the police on you. The police arrest you for declining to leave the premises and you must serve 1 turn.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[0];
+					if(p.minority) {
+						if(p.jailProbability(4.0/6.0)){
+							p.activity.decision = 'You got arrested => ';
+							p.jailDecision(1);
+						} else {
+							p.activity.decision = "Nothing happens to you."
+						}
+					} else {
+						p.activity.decision = "Nothing happens to you."
+					}
+					
+					decisionUI.show();
+					decisionUI.info();
+				}})(),
+			},
+
+
 		];
 	}
 

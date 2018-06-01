@@ -349,7 +349,7 @@ function selectPlayer(idx){
 	character1.human = false;
 	players[idx].human = true;
 	human.human = true;
-	openModal("You selected: " + human.pname, "Your salary is: $" + human.salary + " per payday");
+	openModal("You selected: " + human.pname, "Your salary is $" + human.salary + " per payday");
 	decisionUI.yesButton = document.getElementsByClassName('yes')[idx];
 	decisionUI.noButton = document.getElementsByClassName('no')[idx];
 	decisionUI.info();
