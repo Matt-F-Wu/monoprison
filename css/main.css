@@ -74,14 +74,14 @@ body{
 
 .pop_up_card{
   position:absolute;
-  height: 300px;
-  width: 600px;
+  height: 200px;
+  width: 400px;
 }
 
 .pop_up_card_resource{
   position:absolute;
-  height: 300px;
-  width: 600px;
+  height: 200px;
+  width: 400px;
 }
 #start{
   background-color: orange;
