@@ -347,7 +347,8 @@ colorLint = function(start, end, p){
 	var r = Math.round(lerp(start.r, end.r, p));
     var g = Math.round(lerp(start.g, end.g, p));
     var b = Math.round(lerp(start.b, end.b, p));
-    var a = start.a? Math.round(lerp(start.a, end.a, p)) : 1.0;
+    var a = 1.0;
+    if(start.a && end.a) {a = lerp(start.a, end.a, p);}
     return {r: r, g: g, b: b, a: a};
 }
 
