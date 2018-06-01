@@ -54,7 +54,12 @@
 			</script>
 			<div class="btnpure" style="position: absolute; top: 0%; margin-left: 70%; z-index: 30" onclick="toggleInfo()" id="toggleBtn">...</div>
 			<div class="column" style="height: 100%; width: 70%;">
-				<div id="pop_up_card" class="card" style="z-index: 25"></div>
+				<div class="row">
+					<div id="pop_up_card" class="card" style="z-index: 25"></div>
+				</div>
+				<div class="row">
+					<div id="pop_up_card_resource" class="card" style="z-index: 25"></div>
+				</div>
 				<div style="display: none;">
 					<div id="info" style="height: 100%; width: 110%; padding: 5%; margin-left: 10%; z-index: 20; visibility: hidden;">
 						<div class="row" style="flex:1; height: 50%">
@@ -144,8 +149,7 @@
 					</div>
 
 				</div>
-				<div id="resource" style="height: 35%">
-				</div>
+				<div id="resource" style="height: 35%"></div>
 				<div id="threejscanvas" style="height: 30%"></div>
 
 				<script src="./js/three.min.js"></script>

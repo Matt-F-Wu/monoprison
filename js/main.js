@@ -139,7 +139,7 @@ class Player {
   	});
   	
   	decisionUI.show();
-	decisionUI.info(this);
+	decisionUI.info();
   }
 
   /*Roll a event*/
@@ -738,7 +738,6 @@ class Chance{
 
 	getRandomChance(){
 		// Just gets a random event
-		console.log("NUM CHANCES " + this.chances.length)
 		let idx = getRandomInt(this.chances.length - 1);
 		return this.chances[idx];
 	}
@@ -771,12 +770,6 @@ class DecisionUI{
 	info(ext_p){
 
 		//loop through all players and display their status
-<<<<<<< HEAD
-		// console.log(ext_p);
-=======
-		console.log("EXT_P: " + ext_p);
->>>>>>> bf5f379ff362190296dd33fb434c83c64cd6fc5f
-
 		this.players.forEach((p, idx, arr) => {
 
 			if(ext_p && ext_p != p){

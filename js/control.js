@@ -111,7 +111,8 @@ function playTurn(){
 }
 
 function tossDice(){
-	document.getElementById('pop_up_card').innerHTML = '';
+	document.getElementById("pop_up_card").innerHTML = "";
+	document.getElementById("pop_up_card_resource").innerHTML = "";
 	rest = false;
 	toss = frames;
 	document.getElementById('num_step').innerHTML = 'x';
@@ -161,7 +162,19 @@ function moveOthers(){
 function displayQuadCard(cur_player) {
 	console.log("Curr player: ", cur_player);
 	console.log(decisionUI.quads[cur_player].outerHTML);
-	document.getElementById("pop_up_card").innerHTML = decisionUI.quads[cur_player].outerHTML;
+	document.getElementById("pop_up_card").innerHTML = decisionUI.quads[cur_player].outerHTML;	
+	let resource_text = document.getElementById("resource").innerHTML;
+	console.log("Original resource text: ", resource_text);
+	console.log(resource_text.length);
+
+	if (resource_text.length > 0) {
+		document.getElementById("pop_up_card_resource").innerHTML = "<div class=\"quad class\"> <h4 style=\"align: center\">Historical Context</h4>" +  resource_text + "</div>";
+	} else {
+		document.getElementById("pop_up_card_resource").innerHTML = "";
+	}
+
+	document.getElementById("resource").innerHTML = "";		
+	console.log(document.getElementById("resource").innerHTML);
 }
 
 function init() {
