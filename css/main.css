@@ -72,6 +72,12 @@ body{
   line-height: 100px;
 }
 
+.card{
+  position:absolute;
+  height: 300px;
+  width: 600px;
+}
+
 #start{
   background-color: orange;
 }

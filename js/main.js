@@ -139,7 +139,7 @@ class Player {
   	});
   	
   	decisionUI.show();
-	decisionUI.info();
+	decisionUI.info(this);
   }
 
   /*Roll a event*/
@@ -216,7 +216,7 @@ class GEvent{
 					});
 					// Don't forget to display the information to screen
 					decisionUI.show();
-					decisionUI.info(p);		
+					decisionUI.info(this);		
 				};})(),
 				detail: 'The War on Drugs, started in the Nixon era, disproportionately penalized communities of color. Black and Latino people got sent to prison more often and for longer sentences when it comes to drug related crimes. For instance, despite being the same substance, crack cocaine dealers were punished more heavily than powdered cocaine dealers. Crack cocaine is especially prevalent in poor communities of color due to its cheap price while powdered cocaine is prevalent in black communities.'
 			}, 
@@ -239,7 +239,7 @@ class GEvent{
 					});
 					// Don't forget to display the information to screen
 					decisionUI.show();
-					decisionUI.info(p);		
+					decisionUI.info(this);		
 				};})(),
 				detail: 'One of the cases the sparked the Three-strikes law was the murder of Polly Klaas, a 12 year-old girl who was kidnapped from her home. The Three-strikes law was passed under the Clinton administration in 1994. This law served to drastically increase the punishment for crimes. According to this law, a person who has committed a violent crime plus two other felonies would serve a mandatory life sentence in prison.'
 			}, 
@@ -260,7 +260,7 @@ class GEvent{
 					});
 					// Don't forget to display the information to screen
 					decisionUI.show();
-					decisionUI.info(p);		
+					decisionUI.info(this);		
 				};})(),
 				detail: 'The 1994 Crime Bill, officially known as the Violent Crime Control and Law Enforcement Act was a lengthy crime control bill that was put together over the course of six years and signed into law by President Bill Clinton. It created a new “three strikes” mandatory life sentence for repeat offenders, money to hire 100,000 new police officers, $9.7bn in funding for prisons, and an expansion of death penalty-eligible offences. It also dedicated $6.1bn to prevention programmes "designed with significant input from experienced police officers", however, the bulk of the funds were dedicated to measures that are seen as punitive rather than rehabilitative or preventative. Ultimately, it lead to an exponential increase in the prison population.'
 			}, 
@@ -283,7 +283,7 @@ class GEvent{
 					});
 					// Don't forget to display the information to screen
 					decisionUI.show();
-					decisionUI.info(p);		
+					decisionUI.info(this);		
 				};})(),
 				detail: 'Mandatory minimum sentencing laws force a judge to hand down a minimum, often long, prison sentence based on a prosecutor\'s choice of charges brought against a defendant. Mandatory sentences have the effect of transferring sentencing power from judges to prosecutors. Prosecutors frequently threaten to bring charges carrying long mandatory minimum sentences and longer guidelines sentences to scare a defendant to plead guilty in exchange for a reduced sentence and give up every factual and legal basis for a defense. As a result, at least 95 percent of federal drug defendants plead guilty.'
 			}, 
@@ -307,7 +307,7 @@ class GEvent{
 					});
 					// Don't forget to display the information to screen
 					decisionUI.show();
-					decisionUI.info(p);		
+					decisionUI.info(this);		
 				};})(),
 				detail: 'In many states, states are contractually obligated to fill prison beds. In fact, most contracts require that at least 90% of prison beds are filled. This strongly incentivizes local governments to place and keep people in jail. In particular, people of color are more strongly targeted and imprisoned to fill these quotas.'
 			},
@@ -331,7 +331,7 @@ class GEvent{
 					});
 					// Don't forget to display the information to screen
 					decisionUI.show();
-					decisionUI.info(p);		
+					decisionUI.info(this);		
 				};})(),
 				detail: 'After the end of the Civil War and the abolishing of slavery, the South’s economy was left in dire condition. Tensions rose between the North and the South, and the peace that was just achieved was under threat. To help the South revive their economy, the government started putting recently-freed black slaves into prison for petty crimes like idling or homelessness, so that they could serve as free labor in prison due to the loophole in the 13th amendment. That loophole is as follows: “Neither slavery nor involuntary servitude, except as a punishment for crime whereof the party shall have been duly convicted, shall exist within the United States, or any place subject to their jurisdiction.”'
 			},
@@ -354,7 +354,7 @@ class GEvent{
 					});
 					// Don't forget to display the information to screen
 					decisionUI.show();
-					decisionUI.info(p);		
+					decisionUI.info(this);		
 				};})(),
 				detail: 'ALEC is an organization that connects companies with politicians to make right-wing policies. Some of their largest backers include CCA (Corrections Corporation of America), who are in the business of private prisons and profit heavily off of keeping people incarcerated. ALEC drafts builds on a variety of conservative topics, making it easier for lawmakers around the country to personalize the exact bill to pass in their respective districts.'
 			},
@@ -383,7 +383,7 @@ class GEvent{
 					});
 					// Don't forget to display the information to screen
 					decisionUI.show();
-					decisionUI.info(p);		
+					decisionUI.info(this);		
 				};})(),
 				detail: 'Beginning in the 1960s, the United States faced a surge in criminal violence: Across the decade, the murder rate rose by 44 percent, and per capita rates of forcible rape and robbery more than doubled. Nixon knew he had to address this problem - in a diary entry from 1969, White House chief of staff H.R. Haldeman paraphrased Nixon’s thinking: “You have to face the fact that the whole problem is really the blacks. The key is to devise a system that recognizes this while not appearing to.” During the campaign Nixon’s team tackled this challenge by adopting a strategy of “law and order”—by playing to racist fears, they could cloak divisive rhetoric in an unobjectionable demand for security during a chaotic era.'
 			},
@@ -413,7 +413,7 @@ class GEvent{
 					});
 					// Don't forget to display the information to screen
 					decisionUI.show();
-					decisionUI.info(p);		
+					decisionUI.info(this);		
 				};})(),
 				detail: 'Private prisons often stress that they are saving taxpayer dollars, but in truth they are often more costly in many ways. For one, they are costly to build. Furthermore, in order to increase profits, they cut costs by hiring less staff with less experience and cutting medical and other treatments. This often leads to expensive lawsuits due to the lack of medical care, safety incidents, and altercations with staff. In fact, it has been shown that assaults on staff in private prisons are about double those of assaults of staff in public facilities, despite private prisons only selecting to incarcerate inmates they deem “docile.” However, private prisons are still popular alternatives to building state and federal prisons, despite these flaws and findings that private prisons are not actually shown to increase public safety.'
 			},
@@ -786,10 +786,10 @@ class DecisionUI{
 	info(ext_p){
 
 		//loop through all players and display their status
-		console.log(ext_p);
+		// console.log(ext_p);
 
 		this.players.forEach((p, idx, arr) => {
-			console.log("EXT_P: " + ext_p);
+
 			if(ext_p && ext_p != p){
 				//Do nothing
 			}else{

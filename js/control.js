@@ -111,6 +111,7 @@ function playTurn(){
 }
 
 function tossDice(){
+	document.getElementById('pop_up_card').innerHTML = '';
 	rest = false;
 	toss = frames;
 	document.getElementById('num_step').innerHTML = 'x';
@@ -153,7 +154,14 @@ function moveOthers(){
 		//blank spot, do nothing
 	}
 
+	displayQuadCard(cur_player);
 	fade(decisionUI.quads[cur_player], 'background-color', trans_orange, trans_gray, 1000);
+}
+
+function displayQuadCard(cur_player) {
+	console.log("Curr player: ", cur_player);
+	console.log(decisionUI.quads[cur_player].outerHTML);
+	document.getElementById("pop_up_card").innerHTML = decisionUI.quads[cur_player].outerHTML;
 }
 
 function init() {
@@ -292,6 +300,7 @@ function animate() {
 				}else{
 					//blank spot, do nothing
 				}
+				displayQuadCard(human_idx);
 				fade(decisionUI.quads[human_idx], 'background-color', trans_orange, trans_gray, 1000);
 			}, 800);
 
