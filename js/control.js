@@ -42,6 +42,7 @@ decisionUI.setupDOM(players, document.getElementById('info'),
 
 function initBoard(){
 	circs = document.getElementsByClassName("circle");
+	jail = document.getElementsByClassName("jail");
 	character1 = new Player(document.getElementById("character1"), false, true, 100, 'Peter Panda');
 	character2 = new Player(document.getElementById("character2"), true, false, 80, 'Penelope Pig');
 	character3 = new Player(document.getElementById("character3"), true, false, 90, 'Mandy Monkey');
@@ -57,6 +58,7 @@ function createBoard(){
 	let board = document.getElementById("board");
 	let c_x = board.clientWidth / 2.0;
 	let c_y = board.clientHeight / 2.0;
+
 	// The smallest one is used as radius
 	let r = Math.min(c_x, c_y) * boardAdjust;
 	c_y *= boardAdjust;
@@ -83,6 +85,11 @@ function createBoard(){
 		}
 		
 	}
+	// TODO: Get rid of magic numbers
+	jail[0].style.left=(c_x - r+100) + 'px';
+	jail[0].style.top=(c_y-r+100)+'px';
+
+
 	circs[state].style.backgroundColor = "orange";
 }
 
@@ -249,9 +256,10 @@ function animate() {
 			// Reset old state color to normal
 			//circs[state].style.backgroundColor = "#3cb0fd";
 			for(let s = 0; s <= steps; s++){
-				let s_color = colorLint(orange, blue, 1.0 - s/steps);
+				let original_color = circs[(state + s) % num_state].style.backgroundColor;
+				let s_color = colorLint(orange, original_color, 1.0 - s/steps);
 				// Fade from some mix of blue & orange to just blue
-				fade(circs[(state + s) % num_state], 'background-color', s_color, blue, 1000);
+				fade(circs[(state + s) % num_state], 'background-color', s_color, original_color, 1000);
 			}
 			state = (state + steps) % num_state;
 			// Move the character to current location
