@@ -227,7 +227,7 @@ class GEvent{
 				effect: (() => {var self=this; return function(ps){
 					ps.forEach((p) => {
 						// store what activity this player is experiencing
-						p.activity = self.events[0];
+						p.activity = self.events[1];
 						// This is no decision to be made for this event
 						p.activity.decision = '';
 						if(p.alec_investor){
@@ -250,7 +250,7 @@ class GEvent{
 				effect: (() => {var self=this; return function(ps){
 					ps.forEach((p) => {
 						// store what activity this player is experiencing
-						p.activity = self.events[0];
+						p.activity = self.events[2];
 						// This is no decision to be made for this event
 						p.activity.decision = '';
 						if(p.minority){
@@ -271,7 +271,7 @@ class GEvent{
 				effect: (() => {var self=this; return function(ps){
 					ps.forEach((p) => {
 						// store what activity this player is experiencing
-						p.activity = self.events[0];
+						p.activity = self.events[3];
 						// This is no decision to be made for this event
 						p.activity.decision = '';
 						if(p.alec_investor){
@@ -294,7 +294,7 @@ class GEvent{
 				effect: (() => {var self=this; return function(ps){
 					ps.forEach((p) => {
 						// store what activity this player is experiencing
-						p.activity = self.events[0];
+						p.activity = self.events[4];
 						// This is no decision to be made for this event
 						p.activity.decision = '';
 						if(p.alec_investor){
@@ -318,7 +318,7 @@ class GEvent{
 				effect: (() => {var self=this; return function(ps){
 					ps.forEach((p) => {
 						// store what activity this player is experiencing
-						p.activity = self.events[0];
+						p.activity = self.events[5];
 						// This is no decision to be made for this event
 						p.activity.decision = '';
 						if(p.alec_investor){
@@ -343,7 +343,7 @@ class GEvent{
 				effect: (() => {var self=this; return function(ps){
 					ps.forEach((p) => {
 						// store what activity this player is experiencing
-						p.activity = self.events[0];
+						p.activity = self.events[6];
 						// This is no decision to be made for this event
 						p.activity.decision = '';
 
@@ -365,7 +365,7 @@ class GEvent{
 				effect: (() => {var self=this; return function(ps){
 					ps.forEach((p) => {
 						// store what activity this player is experiencing
-						p.activity = self.events[0];
+						p.activity = self.events[7];
 						// This is no decision to be made for this event
 						p.activity.decision = '';
 
@@ -394,7 +394,7 @@ class GEvent{
 				effect: (() => {var self=this; return function(ps){
 					ps.forEach((p) => {
 						// store what activity this player is experiencing
-						p.activity = self.events[0];
+						p.activity = self.events[8];
 						// This is no decision to be made for this event
 						p.activity.decision = '';
 
@@ -423,6 +423,7 @@ class GEvent{
 	getRandomEvent(){
 		// Just gets a random event
 		let available_events = this.events.filter(ev => !ev.happened);
+		console.log(available_events)
 		if(available_events.length === 0){
 			// No event left, TODO: end game?
 			return null;
@@ -430,6 +431,7 @@ class GEvent{
 		let idx = getRandomInt(available_events.length - 1);
 		// This event is no longer available
 		available_events[idx].happened = true;
+		
 		return available_events[idx];
 	}
 }
