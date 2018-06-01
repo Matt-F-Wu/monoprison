@@ -450,7 +450,7 @@ class Chance{
 					if(p.minority){
 						if(p.jailProbability(2.0/6.0)){
 							// arrested by police, decision time
-							p.activity.decision = 'Got arrected => Go on Trial? ';
+							p.activity.decision = 'Got arrested => Go on Trial? ';
 							p.jailDecision(1);
 						}else{
 							p.spendMoney(20);

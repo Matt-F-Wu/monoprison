@@ -31,8 +31,6 @@ var boardAdjust = 0.75;
 var camera, scene, renderer;
 var mesh;
 
-// element handlers
-var tossButton, nextButton;
 
 init();
 animate();
@@ -95,31 +93,29 @@ function createBoard(){
 	circs[state].style.backgroundColor = "orange";
 }
 
-
-function tossDice(){
-	if(cur_player != human_idx){
-		// the player is not human, should be handled by moveOthers()
-		openModal('Wait!', "It's the other players' turn, click next to see how they play!");
-		return;
+function playTurn(){
+	if(cur_player == human_idx) {
+		tossDice();
+	} else {
+		moveOthers();
 	}
 	cur_player = (cur_player + 1) % 4;
+	
+	if (cur_player == human_idx) {
+		document.getElementById('playButton').innerHTML = 'TOSS';
+	} else {
+		document.getElementById('playButton').innerHTML = 'NEXT';
+	}
+
+}
+
+function tossDice(){
 	rest = false;
 	toss = frames;
 	document.getElementById('num_step').innerHTML = 'x';
-	tossButton.classList.remove("btnpure");
-	tossButton.classList.add("btngray");
-
-	nextButton.classList.remove("btngray");
-	nextButton.classList.add("btnpure");
 }
 
 function moveOthers(){
-	if(cur_player === human_idx){
-		// If human, shouldn't be handled by this function
-		openModal('Wait', "It's your turn, please toss the dice!");
-		return;
-	}
-
 	let step = players[cur_player].randomStep();
 
 	states[cur_player] = (states[cur_player] + step) % num_state;
@@ -129,13 +125,11 @@ function moveOthers(){
 	let x = parseInt(circs[states[cur_player]].style.left.slice(0, -2))
 	let y = parseInt(circs[states[cur_player]].style.top.slice(0, -2))
 
-	// TODO: change this logic, logic assumed that human was cur_player 0
-	if(cur_player === 1){
-		x += 50;
-	}else if(cur_player === 2){
-		y += 50;
-	}else{
-		x += 50;
+	if(cur_player === 1 || cur_player ===3){
+		x +=50;
+	}
+
+	if(cur_player === 2 || cur_player === 3){
 		y += 50;
 	}
 
@@ -159,16 +153,6 @@ function moveOthers(){
 	}
 
 	fade(decisionUI.quads[cur_player], 'background-color', trans_orange, trans_gray, 1000);
-
-	cur_player = (cur_player + 1) % 4;
-
-	if(cur_player === human_idx){
-		tossButton.classList.remove("btngray");
-		tossButton.classList.add("btnpure");
-
-		nextButton.classList.remove("btnpure");
-		nextButton.classList.add("btngray");
-	}
 }
 
 function init() {
