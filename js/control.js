@@ -86,8 +86,11 @@ function createBoard(){
 		
 	}
 	// TODO: Get rid of magic numbers
-	jail[0].style.left=(c_x - r + 100) + 'px';
-	jail[0].style.top=(c_y - r + 100)+'px';
+	jail[0].style.left=(c_x - r+100) + 'px';
+	jail[0].style.top=(c_y-r+100)+'px';
+	jail[0].style.height=(2*r-100)+'px';
+	jail[0].style.width=(2*r-100)+'px';
+
 	circs[state].style.backgroundColor = "orange";
 }
 
@@ -355,7 +358,7 @@ function selectPlayer(idx){
 	character1.human = false;
 	players[idx].human = true;
 	human.human = true;
-	openModal("You selected: " + human.pname, "Your salary is: $" + human.salary + " per payday");
+	openModal("You selected: " + human.pname, "Your salary is $" + human.salary + " per payday");
 	decisionUI.yesButton = document.getElementsByClassName('yes')[idx];
 	decisionUI.noButton = document.getElementsByClassName('no')[idx];
 	decisionUI.info();
