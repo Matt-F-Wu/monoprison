@@ -441,14 +441,110 @@ class GEvent{
 	getRandomEvent(){
 		// Just gets a random event
 		let available_events = this.events.filter(ev => !ev.happened);
+		console.log(available_events)
 		if(available_events.length === 0){
 			// No event left, TODO: end game?
 			return null;
+		} 
+
+		// if first event, return ALEC voting
+		if(available_events.length === 8){
+			available_events[4].happened = true
+			return available_events[4]
 		}
+
 		let idx = getRandomInt(available_events.length - 1);
 		// This event is no longer available
 		available_events[idx].happened = true;
+		
 		return available_events[idx];
+	}
+}
+
+class LifeInPrison{
+	constructor(){
+		/*TODO: code up the events details and its effects on different players.
+		this.events is an array of event dictionaries, each following the format below
+		One example of a event dictionary is provided below: */
+		this.prisonCards = [
+			{	type: 'prison',
+				name: 'The prison you are in requires you to work.', 
+				action: 'You spend your entire day in prison making products that you recognize from popular brands. In payment for your day of work, you earn $1. You count yourself as pretty lucky - although you’ve heard stories of some people being paid up to $1.75 for their labor in prison, you know that it is far more common for prisoners to earn much less, if anything.', 
+				effect: (() => {var self=this; return function(p){
+					// store what activity this player is experiencing
+					p.activity = self.prisonCards[0];
+					decisionUI.show();
+					
+					p.money += 1;
+					
+					decisionUI.info(p);
+				}})(),
+				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.'
+			}, 
+
+			{	type: 'prison',
+				name: 'You get sick.', 
+				action: 'You begin to feel sick after spending a significant amount of time in close proximity to other inmates who have all been sick recently. Unfortunately, in order to maximize profits, the private prison in which you are incarcerated has cut many medical treatments and services available to you. You put up with your sickness, knowing that treatment is readily and easily available at any pharmacy outside of the prison.', 
+				effect: (() => {var self=this; return function(p){
+					// store what activity this player is experiencing
+					p.activity = self.prisonCards[1];
+					decisionUI.show();
+					
+					decisionUI.info(p);
+				}})(),
+				detail: 'Under the Eighth Amendment directive against cruel and unusual punishment, prisoners are guaranteed adequate health care. But managing prisoners’ health care is difficult. Infectious disease, mental illness and addiction are common problems for inmates, according to the Center for Prisoner Health and Human Rights. Furthermore, a January report by Human Rights Watch detailed the growing number of aging inmates, who incur costs that are nine times as high as those for younger inmates.'
+			}, 
+
+			{	type: 'prison',
+				name: 'You get into trouble in prison.', 
+				action: 'One of the staff at the private prison where you are starts an altercation with a group of inmates as you look on. After breaking up the altercation, another staff member unjustly blames you for the incident and puts you in solitary confinement.', 
+				effect: (() => {var self=this; return function(p){
+					// store what activity this player is experiencing
+					p.activity = self.prisonCards[2];
+					decisionUI.show();
+					
+					decisionUI.info(p);
+				}})(),
+				detail: 'In an effort to cut costs and maximize profits, many private prisons hire unqualified and inexperienced staff members and don’t give them adequate training. This has led to an increased likelihood of conflicts between staff and inmates. In fact, assaults on staff in private prisons are about 2x that of assaults on staff in public facilities, despite the fact that private prisons can choose who they incarcerate and often only select prisoners that they deem "docile."'
+			}, 
+
+			{	type: 'prison',
+				name: 'The prison you are in requires you to work.', 
+				action: 'You spend your entire day in prison making products that you recognize from popular brands that you recognize. In payment for your day of work, you earn $0.5. You understand that this is pretty typical - although you’ve heard stories of some people being paid up to $1.75 for their labor in prison, you know that it is far more common for prisoners to earn much less, if anything.', 
+				effect: (() => {var self=this; return function(p){
+					// store what activity this player is experiencing
+					p.activity = self.prisonCards[3];
+					decisionUI.show();
+
+					p.money += 0.5
+					
+					decisionUI.info(p);
+				}})(),
+				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.'
+			}, 
+
+			{	type: 'prison',
+				name: 'The prison you are in requires you to work.', 
+				action: 'You spend your entire day in prison making products that you recognize from popular brands that you recognize. Despite all the time you spent working, you aren’t paid. You aren’t surprised - although you’ve heard stories of some people being paid up to $1.75 for their labor in prison, you know that it is far more common for prisoners to earn much less than that, if anything.', 
+				effect: (() => {var self=this; return function(p){
+					// store what activity this player is experiencing
+					p.activity = self.prisonCards[4];
+					decisionUI.show();
+
+					p.money += 0.5
+					
+					decisionUI.info(p);
+				}})(),
+				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.'
+			}, 
+
+		];
+	}
+
+	getRandomPrisonCard(){
+		// Just gets a random event
+		let idx = getRandomInt(this.prisonCards.length - 1);
+		return this.prisonCards[idx];
 	}
 }
 
@@ -483,6 +579,7 @@ class Chance{
 					
 				}})(),
 			},
+
 			{
 				type: 'chance',
 				detail: 'You are buying drugs. If you are Peter Panda, there is a 1 in 6 chance that you will get caught. If caught, you will serve 1 turn in jail. Otherwise, you have a 3 in 6 chance of getting caught and would serve 2 turns.',
@@ -509,16 +606,270 @@ class Chance{
 							decisionUI.info(p);
 						}
 					}
-					
+					decisionUI.show();
+					decisionUI.info(p);
 				}})(),
 			},
+
+			{
+				type: 'chance',
+				detail: 'You get into an altercation at home and the police are called over due to a noise complaint. If you are with Peter Panda, you are charged a $100 fine. Otherwise, you have a 4 in 6 chance of paying a $200 fine and serving 1 turn in jail.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[2];
+					if(p.minority){
+						if(p.jailProbability(4.0/6.0)){
+							// arrested by police, decision time
+							p.activity.decision = 'You must pay a $200 fine and got arrested => ';
+							p.spendMoney(200);
+							p.jailDecision(1);
+						} else {
+							p.activity.decision = 'Lucky you! You did not get caught!'
+						}
+					}else{
+						p.spendMoney(100);
+						p.activity.decision = 'Got a $100 fine.'
+					}
+					
+					decisionUI.show();
+					decisionUI.info(p);
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'You apply for a Pell Grant to go to college. If you have no strikes on your criminal record, you receive the Pell Grant and go back to school. After becoming a college graduate, your salary increases by $20. If you do have a strike on your criminal record, you are not eligible to receive the Pell Grant.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[3];
+					if(p.strike == 0) {
+						p.salary += 20;
+						p.activity.decision = 'You got the grant! Your salary in now increased to ' + p.salary;
+					} else {
+						p.activity.decision = 'Due to the strike on your criminal record, you do not get the grant.'
+					}
+					
+					decisionUI.show();
+					decisionUI.info(p);
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'During a rough period in your life, you resort to selling drugs. If you are Peter Panda, there is a 1 in 6 chance that you will be caught. If caught, you are charged to serve for 1 turn. Otherwise, there is a 4 in 6 chance that you will be caught and charged to serve for 3 turns.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[4];
+					if(p.minority) {
+						if(p.jailProbability(4.0/6)) {
+							p.activity.decision = 'You got arrested =>'
+							p.jailDecision(3)
+						} else {
+							p.activity.decision = 'You got away with it!'
+						}
+					} else {
+						if(p.jailProbability(1.0/6)) {
+							p.activity.decision = 'You got arrested =>'
+							p.jailDecision(1)
+						} else {
+							p.activity.decision = 'You got away with it!'
+						}
+					}
+					
+					decisionUI.show();
+					decisionUI.info(p);
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'You are behind on a $50 payment. If you can’t pay it now, serve one turn in prison.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[5];
+					if(p.money >= 50) {
+						p.activity.decision = 'You must pay $50.';
+						p.spendMoney(50);
+					} else {
+						p.activity.decision = 'You got arrested => ';
+						p.jailDecision(1);
+					}
+					
+					decisionUI.show();
+					decisionUI.info(p);
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'You made a bad investment. Lose $100.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[6];
+					p.activity.decision = 'You lose $100.';
+					p.spendMoney(100);
+					
+					decisionUI.show();
+					decisionUI.info(p);
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'Your boss has given you a raise! Increase your salary by $20.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[7];
+					p.salary += 20
+					p.activity.decision = 'Your salary has now increased to ' + p.salary;
+					
+					decisionUI.show();
+					decisionUI.info(p);
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'You’ve been doing great at work and earned a bonus equal to your current salary.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[8];
+					p.money += p.salary
+					p.activity.decision = 'You just got a bonus of ' + p.salary;
+					
+					decisionUI.show();
+					decisionUI.info(p);
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'You made a great investment and earned $50.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[9];
+					p.activity.decision = 'You earned $50.';
+					p.money += 50;
+					
+					decisionUI.show();
+					decisionUI.info(p);
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'Your boss does a surprise background check. If she finds that you have a criminal record, you are fired and the only job you can find has a salary that is half of your current salary.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[10];
+					if(p.strike == 0) {
+						p.activity.decision = 'Your boss does not find anything on your record.'
+					} else {
+						p.salary /= 2.;
+						p.activity.decision = 'Due to the strike(s) on your criminal record, you now have a salary of ' + p.salary;
+					}
+					
+					decisionUI.show();
+					decisionUI.info(p);
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'You have an accident and must go to the hospital. If you have a criminal record, this means that unfortunately you do not have Medicaid. Lose $200 to pay for the medical bill.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[11];
+					if(p.strike == 0) {
+						p.activity.decision = 'Medicaid covers your hospital bill.'
+					} else {
+						p.spendMoney(200);
+						p.activity.decision = 'Due to the strike(s) on your criminal record, lose $200.';
+					}
+					
+					decisionUI.show();
+					decisionUI.info(p);
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'You need to find an apartment. If you have a criminal record, you are do not qualify for public housing. Lose $100 to pay for your more expensive apartment.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[12];
+					if(p.strike == 0) {
+						p.activity.decision = 'You have public housing. You don\'t lose any money'
+					} else {
+						p.spendMoney(100);
+						p.activity.decision = 'Due to the strike(s) on your criminal record, lose $100.';
+					}
+					
+					decisionUI.show();
+					decisionUI.info(p);
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'Trisha Meili was running in central park when she was attacked and raped. Despite your DNA not matching the DNA from the crime scene, the public strongly believes that you were involved in the attack. If you are not Peter Panda, you must go straight to jail and serve 2 turns.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[13];
+					if(p.minority) {
+						p.activity.decision = 'You got arrested => ';
+						p.jailDecision(2);
+					} else {
+						p.activity.decision = "You are not a suspect. Nothing happens to you."
+					}
+					
+					decisionUI.show();
+					decisionUI.info(p);
+				}})(),
+			},
+
+			{
+				type: 'chance',
+				detail: 'You are sitting in a coffee house waiting for a friend. The store owner is upset at you for staying in the coffee house despite not buying anything. If you are  Mandy Monkey, Penelope Pig, or Zachary Zebra, you have a 1 in 6 chance of the owner calling the police on you. The police arrest you for declining to leave the premises and you must serve 1 turn.',
+				effect: (() => {var self=this; return function(p){
+					
+					// store what activity this player is experiencing
+					p.activity = self.chances[14];
+					if(p.minority) {
+						if(p.jailProbability(4.0/6.0)){
+							p.activity.decision = 'You got arrested => ';
+							p.jailDecision(1);
+						} else {
+							p.activity.decision = "Nothing happens to you."
+						}
+					} else {
+						p.activity.decision = "Nothing happens to you."
+					}
+					
+					decisionUI.show();
+					decisionUI.info(p);
+				}})(),
+			},
+
+
 		];
 	}
 
 	getRandomChance(){
 		// Just gets a random event
 		let idx = getRandomInt(this.chances.length - 1);
-		console.log(idx);
 		return this.chances[idx];
 	}
 }
@@ -549,6 +900,8 @@ class DecisionUI{
 
 	info(ext_p){
 		//loop through all players and display their status
+		console.log("EXT_P: " + ext_p);
+
 		this.players.forEach((p, idx, arr) => {
 			if(ext_p && ext_p != p){
 				//Do nothing
@@ -575,10 +928,10 @@ class DecisionUI{
 						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
 					}
 				}
-				let sta = '$' + p.money + ' strike: ' + p.strike;
+				let sta = 'Money: $' + p.money + '<br>' + 'Strikes: ' + p.strike + '<br>';
 				var p_sta = document.getElementById(this.scoreBoard).children[idx];
 				if(p.human){
-					sta += ' (you)';
+					// sta += ' (you)';
 					p_sta.style.backgroundColor= "white";
 				}else{
 					p_sta.style.backgroundColor= "transparent";

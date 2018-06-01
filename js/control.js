@@ -31,8 +31,6 @@ var boardAdjust = 0.75;
 var camera, scene, renderer;
 var mesh;
 
-// element handlers
-var tossButton, nextButton;
 
 init();
 animate();
@@ -44,6 +42,7 @@ decisionUI.setupDOM(players, document.getElementById('info'),
 
 function initBoard(){
 	circs = document.getElementsByClassName("circle");
+	jail = document.getElementsByClassName("jail");
 	character1 = new Player(document.getElementById("character1"), false, true, 100, 'Peter Panda');
 	character2 = new Player(document.getElementById("character2"), true, false, 80, 'Penelope Pig');
 	character3 = new Player(document.getElementById("character3"), true, false, 90, 'Mandy Monkey');
@@ -59,6 +58,7 @@ function createBoard(){
 	let board = document.getElementById("board");
 	let c_x = board.clientWidth / 2.0;
 	let c_y = board.clientHeight / 2.0;
+
 	// The smallest one is used as radius
 	let r = Math.min(c_x, c_y) * boardAdjust;
 	c_y *= boardAdjust;
@@ -85,34 +85,38 @@ function createBoard(){
 		}
 		
 	}
+	// TODO: Get rid of magic numbers
+	jail[0].style.left=(c_x - r+100) + 'px';
+	jail[0].style.top=(c_y-r+100)+'px';
+	jail[0].style.height=(2*r-100)+'px';
+	jail[0].style.width=(2*r-100)+'px';
+
 	circs[state].style.backgroundColor = "orange";
 }
 
-
-function tossDice(){
-	if(cur_player != human_idx){
-		// the player is not human, should be handled by moveOthers()
-		openModal('Wait!', "It's the other players' turn, click next to see how they play!");
-		return;
+function playTurn(){
+	if(cur_player == human_idx) {
+		tossDice();
+	} else {
+		moveOthers();
 	}
 	cur_player = (cur_player + 1) % 4;
+	
+	if (cur_player == human_idx) {
+		document.getElementById('playButton').innerHTML = 'TOSS';
+	} else {
+		document.getElementById('playButton').innerHTML = 'NEXT';
+	}
+
+}
+
+function tossDice(){
 	rest = false;
 	toss = frames;
 	document.getElementById('num_step').innerHTML = 'x';
-	tossButton.classList.remove("btnpure");
-	tossButton.classList.add("btngray");
-
-	nextButton.classList.remove("btngray");
-	nextButton.classList.add("btnpure");
 }
 
 function moveOthers(){
-	if(cur_player === human_idx){
-		// If human, shouldn't be handled by this function
-		openModal('Wait', "It's your turn, please toss the dice!");
-		return;
-	}
-
 	let step = players[cur_player].randomStep();
 
 	states[cur_player] = (states[cur_player] + step) % num_state;
@@ -122,13 +126,11 @@ function moveOthers(){
 	let x = parseInt(circs[states[cur_player]].style.left.slice(0, -2))
 	let y = parseInt(circs[states[cur_player]].style.top.slice(0, -2))
 
-	// TODO: change this logic, logic assumed that human was cur_player 0
-	if(cur_player === 1){
-		x += 50;
-	}else if(cur_player === 2){
-		y += 50;
-	}else{
-		x += 50;
+	if(cur_player === 1 || cur_player ===3){
+		x +=50;
+	}
+
+	if(cur_player === 2 || cur_player === 3){
 		y += 50;
 	}
 
@@ -152,16 +154,6 @@ function moveOthers(){
 	}
 
 	fade(decisionUI.quads[cur_player], 'background-color', trans_orange, trans_gray, 1000);
-
-	cur_player = (cur_player + 1) % 4;
-
-	if(cur_player === human_idx){
-		tossButton.classList.remove("btngray");
-		tossButton.classList.add("btnpure");
-
-		nextButton.classList.remove("btnpure");
-		nextButton.classList.add("btngray");
-	}
 }
 
 function init() {
@@ -265,9 +257,10 @@ function animate() {
 			// Reset old state color to normal
 			//circs[state].style.backgroundColor = "#3cb0fd";
 			for(let s = 0; s <= steps; s++){
-				let s_color = colorLint(orange, blue, 1.0 - s/steps);
+				let original_color = circs[(state + s) % num_state].style.backgroundColor;
+				let s_color = colorLint(orange, original_color, 1.0 - s/steps);
 				// Fade from some mix of blue & orange to just blue
-				fade(circs[(state + s) % num_state], 'background-color', s_color, blue, 1000);
+				fade(circs[(state + s) % num_state], 'background-color', s_color, original_color, 1000);
 			}
 			state = (state + steps) % num_state;
 			// Move the character to current location
@@ -366,7 +359,7 @@ function selectPlayer(idx){
 	character1.human = false;
 	players[idx].human = true;
 	human.human = true;
-	openModal("You selected: " + human.pname, "Your salary is: $" + human.salary + " per payday");
+	openModal("You selected: " + human.pname, "Your salary is $" + human.salary + " per payday");
 	decisionUI.yesButton = document.getElementsByClassName('yes')[idx];
 	decisionUI.noButton = document.getElementsByClassName('no')[idx];
 	decisionUI.info();
