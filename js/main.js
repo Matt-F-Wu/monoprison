@@ -786,6 +786,7 @@ class DecisionUI{
 
 	info(ext_p){
 		//loop through all players and display their status
+		console.log(ext_p);
 
 		this.players.forEach((p, idx, arr) => {
 			if(ext_p && ext_p != p){
