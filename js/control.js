@@ -88,6 +88,8 @@ function createBoard(){
 	// TODO: Get rid of magic numbers
 	jail[0].style.left=(c_x - r+100) + 'px';
 	jail[0].style.top=(c_y-r+100)+'px';
+	jail[0].style.height=(2*r-100)+'px';
+	jail[0].style.width=(2*r-100)+'px';
 
 
 	circs[state].style.backgroundColor = "orange";
