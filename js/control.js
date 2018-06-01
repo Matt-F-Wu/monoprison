@@ -31,8 +31,6 @@ var boardAdjust = 0.75;
 var camera, scene, renderer;
 var mesh;
 
-// element handlers
-var tossButton, nextButton;
 
 init();
 animate();
@@ -88,6 +86,21 @@ function createBoard(){
 	circs[state].style.backgroundColor = "orange";
 }
 
+function playTurn(){
+	if(cur_player == human_idx) {
+		tossDice();
+	} else {
+		moveOthers();
+	}
+	cur_player = (cur_player + 1) % 4;
+	
+	if (cur_player == human_idx) {
+		document.getElementById('playButton').innerHTML = 'TOSS';
+	} else {
+		document.getElementById('playButton').innerHTML = 'NEXT';
+	}
+
+}
 
 function tossDice(){
 	if(cur_player != human_idx){
@@ -95,15 +108,9 @@ function tossDice(){
 		openModal('Wait!', "It's the other players' turn, click next to see how they play!");
 		return;
 	}
-	cur_player = (cur_player + 1) % 4;
 	rest = false;
 	toss = frames;
 	document.getElementById('num_step').innerHTML = 'x';
-	tossButton.classList.remove("btnpure");
-	tossButton.classList.add("btngray");
-
-	nextButton.classList.remove("btngray");
-	nextButton.classList.add("btnpure");
 }
 
 function moveOthers(){
@@ -152,16 +159,6 @@ function moveOthers(){
 	}
 
 	fade(decisionUI.quads[cur_player], 'background-color', trans_orange, trans_gray, 1000);
-
-	cur_player = (cur_player + 1) % 4;
-
-	if(cur_player === human_idx){
-		tossButton.classList.remove("btngray");
-		tossButton.classList.add("btnpure");
-
-		nextButton.classList.remove("btnpure");
-		nextButton.classList.add("btngray");
-	}
 }
 
 function init() {

@@ -142,11 +142,8 @@
 				<div id="control" style="height: 20%" class="column">
 					<div style="font-family: Arial; color: white; font-style: bold; margin-bottom: 5%; font-size: 18pt;">move <u id="num_step">x</u> steps</div>
 					<div style="display: flex; flex-direction: row;">
-						<div id="tossBtn" class="btnpure" onclick="tossDice()" style="flex: 1">TOSS</div>
-						<div id="nextBtn" class="btngray" onclick="moveOthers()" style="flex: 1">Next</div>
+						<div id="playButton" class="btnpure" onclick="playTurn()" style="flex: 1">TOSS</div>
 						<script>
-							tossButton = document.getElementById('tossBtn');
-							nextButton = document.getElementById('nextBtn');
 							decisionUI.info();
 						</script>
 					</div>
