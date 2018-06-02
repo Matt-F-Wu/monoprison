@@ -50,7 +50,7 @@ function initBoard(){
 	players = [character1, character2, character3, character4];
 	num_state = circs.length;
 	// default player
-	// human = character1;
+	human = character1;
 }
 
 function createBoard(){
@@ -90,8 +90,6 @@ function createBoard(){
 	jail[0].style.top=(c_y-r+100)+'px';
 	jail[0].style.height=(2*r-100)+'px';
 	jail[0].style.width=(2*r-100)+'px';
-
-	circs[state].style.backgroundColor = "orange";
 }
 
 function playTurn(){
@@ -160,12 +158,46 @@ function moveOthers(){
 }
 
 function displayQuadCard(cur_player) {
-	document.getElementById("pop_up_card").innerHTML = decisionUI.quads[cur_player].outerHTML;	
+	if(decisionUI.display_four){
+		// Don't do anything, displaying 4 boards instead
+		return;
+	}
+	let pop_up_card = document.getElementById("pop_up_card");
+	let pop_up_card_resource = document.getElementById("pop_up_card_resource");
+	pop_up_card.style.display = "flex";
+
+	pop_up_card.innerHTML = decisionUI.quads[cur_player].outerHTML;
+	pop_up_card.firstChild.style.margin = "0px";
+	/*Add the close button*/
+	let close = document.createElement("div");
+	close.appendChild(document.createTextNode("x"));
+	pop_up_card.appendChild(close);
+	close.classList.add('btnpure');
+	close.addEventListener('click', function(ev){
+		pop_up_card.style.display = "none";
+	});
+	close.style.right = "0px";
+	close.style.position = "absolute";
+
 	let resource_text = document.getElementById("resource").innerHTML;
 	if (resource_text.length > 0) {
-		document.getElementById("pop_up_card_resource").innerHTML = "<div class=\"quad column\"> <h4>Historical Context</h4>" +  resource_text + "</div>";
+		pop_up_card_resource.style.display = "flex";
+		pop_up_card_resource.innerHTML = "<div class=\"quad column\"> <h4>Historical Context</h4>" +  resource_text + "</div>";
+
+		/*Attach close button*/
+		pop_up_card_resource.firstChild.style.margin = "0px";
+		let close = document.createElement("div");
+		close.appendChild(document.createTextNode("x"));
+		pop_up_card_resource.appendChild(close);
+		close.classList.add('btnpure');
+		close.addEventListener('click', function(ev){
+			pop_up_card_resource.style.display = "none";
+		});
+		close.style.right = "0px";
+		close.style.position = "absolute";
+
 	} else {
-		document.getElementById("pop_up_card_resource").innerHTML = "";
+		pop_up_card_resource.innerHTML = "";
 	}
 	document.getElementById("resource").innerHTML = "";		
 }
@@ -271,10 +303,10 @@ function animate() {
 			// Reset old state color to normal
 			//circs[state].style.backgroundColor = "#3cb0fd";
 			for(let s = 0; s <= steps; s++){
-				let original_color = circs[(state + s) % num_state].style.backgroundColor;
-				let s_color = colorLint(orange, original_color, 1.0 - s/steps);
+				let original_color = parseColor( getStyle(circs[(state + s) % num_state], "backgroundColor") );
+				let s_color = colorLint(black, original_color, 1.0 - s/steps);
 				// Fade from some mix of blue & orange to just blue
-				fade(circs[(state + s) % num_state], 'background-color', s_color, original_color, 1000);
+				fade(circs[(state + s) % num_state], 'background-color', s_color, original_color, 2000);
 			}
 			state = (state + steps) % num_state;
 			// Move the character to current location
@@ -328,6 +360,7 @@ function animate() {
 }
 
 var orange = {r: 255, g: 165, b: 0};
+var black = {r: 0, g: 0, b: 0};
 var blue = {r: 60, g: 176, b: 253};
 var trans_gray = {r: 0, g: 0, b: 0, a: 0.5};
 var trans_orange = {r: 255, g: 165, b: 0, a: 0.5};
@@ -343,6 +376,35 @@ colorLint = function(start, end, p){
     var a = 1.0;
     if(start.a && end.a) {a = lerp(start.a, end.a, p);}
     return {r: r, g: g, b: b, a: a};
+}
+
+/*Hao: get computed style, enable reading css in-file styles*/
+function getStyle(el,styleProp)
+{
+    if (el.currentStyle)
+        return el.currentStyle[styleProp];
+
+    return document.defaultView.getComputedStyle(el,null)[styleProp];
+}
+
+/*Hao: Parse what ever css color format is and return a {r, g, b, a} dictionary*/
+function parseColor(input) {
+    if (input.substr(0,1)=="#") {
+		var collen=(input.length-1)/3;
+		var fact=[17,1,0.062272][collen-1];
+		return {
+		    r: Math.round(parseInt(input.substr(1,collen),16)*fact),
+		    g: Math.round(parseInt(input.substr(1+collen,collen),16)*fact),
+		    b: Math.round(parseInt(input.substr(1+2*collen,collen),16)*fact),
+		    a: 1.0,
+		};
+    }
+    else {
+    	console.log("Hello ", input.split("("), " $$$ ", input);
+    	let rgba = input.split("(")[1].split(")")[0].split(",").map(Math.round);
+
+    	return {r: rgba[0], g: rgba[1], b: rgba[2], a: (rgba.length > 3 && rgba[3]) || 1.0  };
+    }
 }
 
 fade = function(element, property, start, end, duration) {

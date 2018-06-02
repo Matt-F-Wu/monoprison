@@ -49,15 +49,15 @@ body{
 }
 
 .chance_circle {
-  background-color: #3cb0fd;
+  background-color: #55c7ed;
 }
 
 .event_circle {
-  background-color: purple;
+  background-color: #edd152;
 }
 
 .payday_circle {
-  background-color: #33ff33;
+  background-color: #ed528b;
 }
 
 .jail{
@@ -97,6 +97,10 @@ body{
   line-height: 50px;
 }
 
+.player:hover{
+  cursor: pointer;
+}
+
 #character1{
   background-color: red;
 }
@@ -114,7 +118,7 @@ body{
 }
 
 #info{
-
+  display: none;
 }
 
 #resource{

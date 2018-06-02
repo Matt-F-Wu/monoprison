@@ -94,7 +94,7 @@ class Player {
   	turns = turns + this.sentence_increment;
   	if(this.human){
   		// If this is a human player, show some graphics
-  		decisionUI.show();
+  		decisionUI.display_four && decisionUI.show();
   		decisionUI.info(this);
   		console.log("Show button...");
   		decisionUI.showDecisionButton("Go on trial", "Take plea deal");
@@ -151,7 +151,7 @@ class Player {
 	  	}
   	});
   	
-  	decisionUI.show();
+  	decisionUI.display_four && decisionUI.show();
 	decisionUI.info();
   }
 
@@ -228,7 +228,7 @@ class GEvent{
 						}
 					});
 					// Don't forget to display the information to screen
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info();		
 				};})(),
 				detail: 'The War on Drugs, started in the Nixon era, disproportionately penalized communities of color. Black and Latino people got sent to prison more often and for longer sentences when it comes to drug related crimes. For instance, despite being the same substance, crack cocaine dealers were punished more heavily than powdered cocaine dealers. Crack cocaine is especially prevalent in poor communities of color due to its cheap price while powdered cocaine is prevalent in black communities.',
@@ -252,7 +252,7 @@ class GEvent{
 						three_strike = true;
 					});
 					// Don't forget to display the information to screen
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info();		
 				};})(),
 				detail: 'One of the cases the sparked the Three-strikes law was the murder of Polly Klaas, a 12 year-old girl who was kidnapped from her home. The Three-strikes law was passed under the Clinton administration in 1994. This law served to drastically increase the punishment for crimes. According to this law, a person who has committed a violent crime plus two other felonies would serve a mandatory life sentence in prison.',
@@ -274,7 +274,7 @@ class GEvent{
 						}
 					});
 					// Don't forget to display the information to screen
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info();		
 				};})(),
 				detail: 'The 1994 Crime Bill, officially known as the Violent Crime Control and Law Enforcement Act was a lengthy crime control bill that was put together over the course of six years and signed into law by President Bill Clinton. It created a new “three strikes” mandatory life sentence for repeat offenders, money to hire 100,000 new police officers, $9.7bn in funding for prisons, and an expansion of death penalty-eligible offences. It also dedicated $6.1bn to prevention programmes "designed with significant input from experienced police officers", however, the bulk of the funds were dedicated to measures that are seen as punitive rather than rehabilitative or preventative. Ultimately, it lead to an exponential increase in the prison population.',
@@ -305,7 +305,7 @@ class GEvent{
 
 					});
 					// Don't forget to display the information to screen
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info();		
 				};})(),
 				detail: 'Private prisons often stress that they are saving taxpayer dollars, but in truth they are often more costly in many ways. For one, they are costly to build. Furthermore, in order to increase profits, they cut costs by hiring less staff with less experience and cutting medical and other treatments. This often leads to expensive lawsuits due to the lack of medical care, safety incidents, and altercations with staff. In fact, it has been shown that assaults on staff in private prisons are about double those of assaults of staff in public facilities, despite private prisons only selecting to incarcerate inmates they deem “docile.” However, private prisons are still popular alternatives to building state and federal prisons, despite these flaws and findings that private prisons are not actually shown to increase public safety.',
@@ -330,7 +330,7 @@ class GEvent{
 						}
 					});
 					// Don't forget to display the information to screen
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info();		
 				};})(),
 				detail: 'In many states, states are contractually obligated to fill prison beds. In fact, most contracts require that at least 90% of prison beds are filled. This strongly incentivizes local governments to place and keep people in jail. In particular, people of color are more strongly targeted and imprisoned to fill these quotas.',
@@ -355,7 +355,7 @@ class GEvent{
 						}
 					});
 					// Don't forget to display the information to screen
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info();		
 				};})(),
 				detail: 'After the end of the Civil War and the abolishing of slavery, the South’s economy was left in dire condition. Tensions rose between the North and the South, and the peace that was just achieved was under threat. To help the South revive their economy, the government started putting recently-freed black slaves into prison for petty crimes like idling or homelessness, so that they could serve as free labor in prison due to the loophole in the 13th amendment. That loophole is as follows: “Neither slavery nor involuntary servitude, except as a punishment for crime whereof the party shall have been duly convicted, shall exist within the United States, or any place subject to their jurisdiction.”',
@@ -368,7 +368,7 @@ class GEvent{
 				name: 'The American Legislative Exchange Council (ALEC) has started', 
 				action: 'You have a chance to invest! If you want to invest in ALEC you will get $100 for every policy that ALEC passes.', 
 				effect: (() => {var self=this; return function(ps){
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					ps.forEach((p) => {
 						// store what activity this player is experiencing
 						p.activity = self.events[6];
@@ -437,7 +437,7 @@ class GEvent{
 
 					});
 					// Don't forget to display the information to screen
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info();		
 				};})(),
 				detail: 'Beginning in the 1960s, the United States faced a surge in criminal violence: Across the decade, the murder rate rose by 44 percent, and per capita rates of forcible rape and robbery more than doubled. Nixon knew he had to address this problem - in a diary entry from 1969, White House chief of staff H.R. Haldeman paraphrased Nixon’s thinking: “You have to face the fact that the whole problem is really the blacks. The key is to devise a system that recognizes this while not appearing to.” During the campaign Nixon’s team tackled this challenge by adopting a strategy of “law and order”—by playing to racist fears, they could cloak divisive rhetoric in an unobjectionable demand for security during a chaotic era.',
@@ -481,7 +481,7 @@ class LifeInPrison{
 				effect: (() => {var self=this; return function(p){
 					// store what activity this player is experiencing
 					p.activity = self.prisonCards[0];
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					
 					p.money += 1;
 					
@@ -496,7 +496,7 @@ class LifeInPrison{
 				effect: (() => {var self=this; return function(p){
 					// store what activity this player is experiencing
 					p.activity = self.prisonCards[1];
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					
 					decisionUI.info(p);
 				}})(),
@@ -509,7 +509,7 @@ class LifeInPrison{
 				effect: (() => {var self=this; return function(p){
 					// store what activity this player is experiencing
 					p.activity = self.prisonCards[2];
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					
 					decisionUI.info(p);
 				}})(),
@@ -522,7 +522,7 @@ class LifeInPrison{
 				effect: (() => {var self=this; return function(p){
 					// store what activity this player is experiencing
 					p.activity = self.prisonCards[3];
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 
 					p.money += 0.5
 					
@@ -537,7 +537,7 @@ class LifeInPrison{
 				effect: (() => {var self=this; return function(p){
 					// store what activity this player is experiencing
 					p.activity = self.prisonCards[4];
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 
 					p.money += 0.5
 					
@@ -568,7 +568,7 @@ class Chance{
 					
 					// store what activity this player is experiencing
 					p.activity = self.chances[0];
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					if(p.minority){
 						if(p.jailProbability(2.0/6.0)){
 							// arrested by police, decision time
@@ -595,7 +595,7 @@ class Chance{
 					
 					// store what activity this player is experiencing
 					p.activity = self.chances[1];
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					if(p.minority){
 						if(p.jailProbability(3.0/6.0)){
 							// arrested by police, decision time
@@ -614,7 +614,7 @@ class Chance{
 							decisionUI.info(p);
 						}
 					}
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -640,7 +640,7 @@ class Chance{
 						p.activity.decision = 'Got a $100 fine.'
 					}
 					
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -659,7 +659,7 @@ class Chance{
 						p.activity.decision = 'Due to the strike on your criminal record, you do not get the grant.'
 					}
 					
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -687,7 +687,7 @@ class Chance{
 						}
 					}
 					
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -707,7 +707,7 @@ class Chance{
 						p.jailDecision(1);
 					}
 					
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -722,7 +722,7 @@ class Chance{
 					p.activity.decision = 'You lose $100.';
 					p.spendMoney(100);
 					
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -737,7 +737,7 @@ class Chance{
 					p.salary += 20
 					p.activity.decision = 'Your salary has now increased to ' + p.salary;
 					
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -752,7 +752,7 @@ class Chance{
 					p.money += p.salary
 					p.activity.decision = 'You just got a bonus of ' + p.salary;
 					
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -767,7 +767,7 @@ class Chance{
 					p.activity.decision = 'You earned $50.';
 					p.money += 50;
 					
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -786,7 +786,7 @@ class Chance{
 						p.activity.decision = 'Due to the strike(s) on your criminal record, you now have a salary of ' + p.salary;
 					}
 					
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -805,7 +805,7 @@ class Chance{
 						p.activity.decision = 'Due to the strike(s) on your criminal record, lose $200.';
 					}
 					
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -824,7 +824,7 @@ class Chance{
 						p.activity.decision = 'Due to the strike(s) on your criminal record, lose $100.';
 					}
 					
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -843,7 +843,7 @@ class Chance{
 						p.activity.decision = "You are not a suspect. Nothing happens to you."
 					}
 					
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -866,7 +866,7 @@ class Chance{
 						p.activity.decision = "Nothing happens to you."
 					}
 					
-					decisionUI.show();
+					decisionUI.display_four && decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -889,6 +889,8 @@ class DecisionUI{
 		this.yesButton = null;
 		this.noButton = null;
 		this.quads = [];
+		this.in_animation = false;
+		this.display_four = false;
 	}
 
 	setupDOM(players, element, yb, nb, quad_class_name, h_c_n, c_c_n, d_c_n, context_board, toggleBtn='toggleBtn', scoreBoard='scoreBoard'){
@@ -953,16 +955,22 @@ class DecisionUI{
 	}
 
 	show(){
+		if(this.in_animation){
+			// push this operation to queue is the best way
+			// but let's just hack it
+			window.setTimeout(this.show, 100);
+		}
 		// make element visible
-		if(this.element.style.visibility === "visible"){
+		if(this.element.style.display === "block"){
 			// Already visible, do nothing but hide buttons
 			//console.log("no change...");
 			this.yesButton.style.visibility = "hidden";
 			this.noButton.style.visibility = "hidden";
 			return;
 		}
-		this.element.style.visibility = "visible";
+		this.element.style.display = "block";
 		let divStyler = styler(this.element);
+		this.in_animation = true;
 		tween({
 		  from: 0.0,
 		  to: { opacity: 1.0 },
@@ -972,12 +980,12 @@ class DecisionUI{
 		  // elapsed: 500,
 		  // loop: 5,
 		  // yoyo: 5
-		}).start(divStyler.set);
+		}).start({update: divStyler.set, complete: () => { this.in_animation = false;} });
 		this.yesButton.style.visibility = "hidden";
 		this.noButton.style.visibility = "hidden";
 		let btn = document.getElementById(this.toggleBtn);
 		if(btn){
-			btn.innerHTML = 'x';
+			btn.innerHTML = 'See One';
 		}
 	}
 
@@ -995,8 +1003,12 @@ class DecisionUI{
 
 	hide(){
 		// hide element
-		console.log("Called...2");
+		if(this.in_animation){
+			// Hao: simple hack
+			setTimeout(this.hide, 100);
+		}
 		let divStyler = styler(this.element);
+		this.in_animation = true;
 		tween({
 		  from: 1.0,
 		  to: { opacity: 0.0 },
@@ -1006,15 +1018,15 @@ class DecisionUI{
 		  // elapsed: 500,
 		  // loop: 5,
 		  // yoyo: 5
-		}).start({update: divStyler.set, complete: ()=>this.element.style.visibility = "hidden"});
+		}).start({update: divStyler.set, complete: ()=>{this.element.style.display = "none"; this.in_animation = false;} });
 			
 	}
 
 	toggle(){
-		if(this.element.style.visibility === "hidden"){
-			this.show();
-		}else{
+		if(this.element.style.display === "block"){
 			this.hide();
+		}else{
+			this.show();
 		}
 	}
 }
