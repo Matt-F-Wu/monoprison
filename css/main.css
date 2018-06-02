@@ -236,3 +236,7 @@ button {
   border-radius: 50%;
 }
 
+#threejscanvas:hover{
+  cursor: pointer;
+}
+

@@ -92,7 +92,11 @@ function createBoard(){
 	jail[0].style.width=(2*r-100)+'px';
 }
 
-function playTurn(){
+function playTurn(dice){
+	if(dice && cur_player != human_idx){
+		openModal("Wait!", "It's not your turn, click NEXT to see how others play!");
+		return;
+	}
 	if(cur_player == human_idx) {
 		tossDice();
 	} else {
@@ -108,15 +112,37 @@ function playTurn(){
 
 }
 
+function disableActionButton(){
+	let b = document.getElementById('playButton');
+	b.classList.remove('btnpure');
+	b.classList.add('btngray');
+
+}
+
+function enableActionButton(){
+	let b = document.getElementById('playButton');
+	b.classList.remove('btngray');
+	b.classList.add('btnpure');
+}
+
 function tossDice(){
+	if(!rest){
+		//Tossing in progress, don't allow clicking
+		return;
+	}
 	document.getElementById("pop_up_card").innerHTML = "";
 	document.getElementById("pop_up_card_resource").innerHTML = "";
 	rest = false;
+	disableActionButton();
 	toss = frames;
 	document.getElementById('num_step').innerHTML = 'x';
 }
 
 function moveOthers(){
+	if(!rest){
+		//Tossing in progress, don't allow clicking
+		return;
+	}
 	let step = players[cur_player].randomStep();
 
 	states[cur_player] = (states[cur_player] + step) % num_state;
@@ -352,6 +378,7 @@ function animate() {
 			toss--;
 		}else{
 			rest = true;
+			enableActionButton();
 		}
 	}
 	
