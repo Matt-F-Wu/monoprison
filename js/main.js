@@ -943,9 +943,9 @@ class DecisionUI{
 				var p_sta = document.getElementById(this.scoreBoard).children[idx];
 				if(p.human){
 					// sta += ' (you)';
-					p_sta.style.backgroundColor= "white";
+					p_sta.style.border= "5px dotted white";
 				}else{
-					p_sta.style.backgroundColor= "transparent";
+					p_sta.style.border= "0px";
 				}
 				p_sta.getElementsByClassName('p_status')[0].innerHTML = sta;
 				// clear the activity for next round
