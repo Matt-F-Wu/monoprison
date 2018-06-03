@@ -16,6 +16,9 @@ var states = [state, 0, 0, 0];
 
 var circs;
 
+// The jail object, manages everything related to jail
+var jail = {};
+
 // The characters
 var character1, character2, character3, character4, human, human_idx = 0;
 var players;
@@ -31,7 +34,6 @@ var boardAdjust = 0.75;
 var camera, scene, renderer;
 var mesh;
 
-
 init();
 animate();
 initBoard();
@@ -42,7 +44,7 @@ decisionUI.setupDOM(players, document.getElementById('info'),
 
 function initBoard(){
 	circs = document.getElementsByClassName("circle");
-	jail = document.getElementsByClassName("jail");
+	jail.domElement = document.getElementById("jail");
 	character1 = new Player(document.getElementById("character1"), false, true, 100, 'Peter Panda');
 	character2 = new Player(document.getElementById("character2"), true, false, 80, 'Penelope Pig');
 	character3 = new Player(document.getElementById("character3"), true, false, 90, 'Mandy Monkey');
@@ -86,10 +88,12 @@ function createBoard(){
 		
 	}
 	// TODO: Get rid of magic numbers
-	jail[0].style.left=(c_x - r+100) + 'px';
-	jail[0].style.top=(c_y-r+100)+'px';
-	jail[0].style.height=(2*r-100)+'px';
-	jail[0].style.width=(2*r-100)+'px';
+	jail.c_x = c_x;
+	jail.c_y = c_y;
+	jail.domElement.style.left=(c_x - r+100) + 'px';
+	jail.domElement.style.top=(c_y-r+100)+'px';
+	jail.domElement.style.height=(2*r-100)+'px';
+	jail.domElement.style.width=(2*r-100)+'px';
 }
 
 function playTurn(dice){
@@ -125,12 +129,36 @@ function enableActionButton(){
 	b.classList.add('btnpure');
 }
 
+function waitingTrial(p){
+	// TODO: what should a player do while waiting for trial
+	openModal(p.pname + " is still waiting for trail...", "They can't move for this turn");
+}
+
+function inPrison(p){
+	// TODO: what should a player do while in prison
+	openModal(p.pname + " is currently in prison...", "They can't move for this turn");
+}
+
 function tossDice(){
 	if(!rest){
 		//Tossing in progress, don't allow clicking
 		return;
 	}
-	document.getElementById("pop_up_card").innerHTML = "";
+
+	// Player is in trial, cannot do anything
+	if(players[cur_player].in_trial > 0){
+  		players[cur_player].in_trial--;
+  		waitingTrial(players[cur_player]);
+  		return;
+  	}
+
+  	// Player is in prison, cannot do anything
+  	if(players[cur_player].in_prison > 0){
+  		players[cur_player].in_prison--;
+  		inPrison(players[cur_player]);
+  		return;
+  	}
+
 	document.getElementById("pop_up_card_resource").innerHTML = "";
 	rest = false;
 	disableActionButton();
@@ -143,6 +171,21 @@ function moveOthers(){
 		//Tossing in progress, don't allow clicking
 		return;
 	}
+
+	// Player is in trial, cannot do anything
+	if(players[cur_player].in_trial > 0){
+  		players[cur_player].in_trial--;
+  		waitingTrial(players[cur_player]);
+  		return;
+  	}
+
+  	// Player is in prison, cannot do anything
+  	if(players[cur_player].in_prison > 0){
+  		players[cur_player].in_prison--;
+  		inPrison(players[cur_player]);
+  		return;
+  	}
+
 	let step = players[cur_player].randomStep();
 
 	states[cur_player] = (states[cur_player] + step) % num_state;
@@ -183,28 +226,42 @@ function moveOthers(){
 	fade(decisionUI.quads[cur_player], 'background-color', trans_orange, trans_gray, 1000);
 }
 
-function displayQuadCard(cur_player) {
+function displayQuadCard(c, need_show) {
+	if(need_show){
+		decisionUI.show();
+	}
+	let c_p = c === undefined? cur_player : c;
 	if(decisionUI.display_four){
+		Array.from(decisionUI.quads).forEach((q) => {
+			q.style.display = "block";
+		});
 		// Don't do anything, displaying 4 boards instead
 		return;
 	}
-	let pop_up_card = document.getElementById("pop_up_card");
-	let pop_up_card_resource = document.getElementById("pop_up_card_resource");
-	pop_up_card.style.display = "flex";
-
-	pop_up_card.innerHTML = decisionUI.quads[cur_player].outerHTML;
-	pop_up_card.firstChild.style.margin = "0px";
-	/*Add the close button*/
-	let close = document.createElement("div");
-	close.appendChild(document.createTextNode("x"));
-	pop_up_card.appendChild(close);
-	close.classList.add('btnpure');
-	close.addEventListener('click', function(ev){
-		pop_up_card.style.display = "none";
+	Array.from(decisionUI.quads).forEach((q, i) => {
+		if(i != c_p){
+			q.style.display = "none";		
+		}else{
+			q.style.display = "block";
+		}
 	});
-	close.style.right = "0px";
-	close.style.position = "absolute";
-
+	/*If close button doesn't exist, add it! Add the close button*/
+	if(decisionUI.quads[c_p].getElementsByClassName('closebtn').length === 0){
+		let close = document.createElement("div");
+		close.appendChild(document.createTextNode("x"));
+		decisionUI.quads[c_p].appendChild(close);
+		close.classList.add('btnpure');
+		close.classList.add('closebtn');
+		close.addEventListener('click', function(ev){
+			decisionUI.quads[c_p].style.display = "none";
+			decisionUI.hide();
+		});
+		close.style.right = "0px";
+		close.style.top = "0px";
+		close.style.position = "absolute";
+	}
+	// Deal with resource/context
+	let pop_up_card_resource = document.getElementById("pop_up_card_resource");
 	let resource_text = document.getElementById("resource").innerHTML;
 	if (resource_text.length > 0) {
 		pop_up_card_resource.style.display = "flex";

@@ -50,19 +50,18 @@
 						btn.innerHTML = 'See One';
 					}
 					decisionUI.display_four = !decisionUI.display_four;
-					decisionUI.toggle();
+					displayQuadCard();
 				}
 			</script>
 			<div class="btnpure" style="position: absolute; top: 0%; margin-left: 0%; z-index: 30" onclick="toggleInfo()" id="toggleBtn">See All</div>
 			<div class="column" style="height: 100%; width: 70%;">
 				
 				<!--Pop up cards where data is shown-->
-				<div id="pop_up_card" class="row" style="z-index: 25; display: none; position: relative;"></div>
-			
-			
+				<!-- Hao Wu: pop up card's decision buttons are messed up. 
+					Using a new mechanism instead  -->
+				<!--<div id="pop_up_card" class="row" style="z-index: 25; display: none; position: relative;"></div>-->
 				<div id="pop_up_card_resource" class="row" style="z-index: 25; display: none; position: relative;"></div>
-				
-				<div id="info" style="height: 100%; width: 110%; padding: 5%; margin-left: 10%; z-index: 20;">
+				<div id="info" style="width: 110%; padding: 5%; margin-left: 10%; z-index: 20;">
 					<div class="row" style="flex:1; height: 50%">
 						<div class="quad column">
 							<h4>Peter Panda<img width="50" height="50" src="./textures/panda.png" style="display: inline;"></h4>
@@ -110,10 +109,10 @@
 				</div>
 				
 				<div id="board" style="position: absolute; height: 100%; width: 80%; margin-top: 2%">
-					<div class="player" id="character1" onclick="displayQuadCard(0)"><img width="100%" height="100%" src="./textures/panda.png"></div>
-					<div class="player" id="character2" onclick="displayQuadCard(1)"><img width="100%" height="100%" src="./textures/pig.png"></div>
-					<div class="player" id="character3" onclick="displayQuadCard(2)"><img width="100%" height="100%" src="./textures/monkey.png"></div>
-					<div class="player" id="character4" onclick="displayQuadCard(3)"><img width="100%" height="100%" src="./textures/zebra.png"></div>
+					<div class="player" id="character1" onclick="displayQuadCard(0, true)"><img width="100%" height="100%" src="./textures/panda.png"></div>
+					<div class="player" id="character2" onclick="displayQuadCard(1, true)"><img width="100%" height="100%" src="./textures/pig.png"></div>
+					<div class="player" id="character3" onclick="displayQuadCard(2, true)"><img width="100%" height="100%" src="./textures/monkey.png"></div>
+					<div class="player" id="character4" onclick="displayQuadCard(3, true)"><img width="100%" height="100%" src="./textures/zebra.png"></div>
 					<div class="circle" style="background-color: #44e38e">Start</div>
 					<div class="circle chance_circle">Chance</div>
 					<div class="circle chance_circle">Chance</div>
@@ -131,7 +130,7 @@
 					<div class="circle chance_circle">Chance</div>
 					<div class="circle chance_circle">Chance</div>
 					<div class="circle event_circle">Event</div>
-					<div class="jail">Jail</div>
+					<div id="jail">Jail</div>
 				</div>
 			</div>
 			<div class="column" style="height: 100%; width: 30%">

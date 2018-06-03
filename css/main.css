@@ -72,10 +72,10 @@ body{
   line-height: 100px;
 }
 
-#pop_up_card{
+/*#pop_up_card{
   height: 300px;
   width: 600px;
-}
+}*/
 
 #pop_up_card_resource{
   height: 300px;
@@ -139,6 +139,11 @@ body{
   border: 5px dotted white;
   padding: 15px;
   margin: 10px;
+  position: relative;
+}
+
+.quadCard{
+  z-index: 25;
 }
 
 .q_header{
@@ -146,7 +151,7 @@ body{
 }
 
 .q_content{
-  height: 60%;
+  max-height: 60%;
 }
 
 .q_decision{
