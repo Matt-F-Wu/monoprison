@@ -1,5 +1,5 @@
 const { timeline, listen } = popmotion;
-
+var clickCancel, clickOkay;
 const cancelModalButton = document.querySelector('.modal-cancel');
 const okModalButton = document.querySelector('.modal-ok');
 const modalHeader = document.querySelector('#modalHeader');
@@ -77,7 +77,7 @@ const cancelModal = () => {
     { track: 'shade', from: 1, to: 0, ease: easing.linear, duration: 200 }
   ]).start({
     update: setStylers,
-    complete: hideContainers
+    complete: () => {hideContainers(); clickCancel();}
   });
 }
 
@@ -94,7 +94,7 @@ const okModal = () => {
     { track: 'shade', from: 1, to: 0, ease: easing.linear, duration: 300 }
   ]).start({
     update: setStylers,
-    complete: hideContainers
+    complete: () => {hideContainers(); clickOkay();}
   });
 }
 

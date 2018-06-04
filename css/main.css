@@ -262,3 +262,21 @@ button {
   font-weight: bold; 
   font-family: Arial;
 }
+
+.spaced{
+  margin-bottom: 10px;
+}
+
+.orangeBack{
+  background-color: orange;
+  color: white;
+  font-weight: bold;
+  padding: 5px;
+}
+
+.grayBack{
+  background-color: #999999;
+  color: white;
+  font-weight: bold;
+  padding: 5px;
+}

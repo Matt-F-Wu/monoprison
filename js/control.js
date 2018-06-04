@@ -1,5 +1,5 @@
 // TODO: Hao: window resize will cause bug, postpone fixing because running out of time
-
+var not_simulating = true;
 // Hao: The dice starts with a resting state
 var rest = true;
 // Hao: dice rotation speed-multiple when tossed
@@ -101,14 +101,14 @@ function playTurn(dice){
 		openModal("Wait!", "It's not your turn, click NEXT to see how others play!");
 		return;
 	}
-	if(cur_player == human_idx) {
+	if(cur_player === human_idx) {
 		tossDice();
 	} else {
 		moveOthers();
 	}
 	cur_player = (cur_player + 1) % 4;
 	
-	if (cur_player == human_idx) {
+	if (cur_player === human_idx) {
 		document.getElementById('playButton').innerHTML = 'TOSS';
 	} else {
 		document.getElementById('playButton').innerHTML = 'NEXT';
@@ -168,6 +168,23 @@ function tossDice(){
 	document.getElementById('num_step').innerHTML = 'x';
 }
 
+function simulate(){
+	// No one is human this time
+	human_idx = 5;
+	not_simulating = false;
+	var score_slots = document.getElementsByClassName('sim_score');
+	var scores = [0, 0, 0, 0];
+
+	for(let i=0; i<100; i++){
+		while(playTurn()){}
+		var idx = findWinner().idx;
+		scores[idx] = scores[idx] + 1;
+		score_slots[idx].innerHTML = scores[idx];
+	}
+
+	not_simulating = true;
+}
+
 function moveOthers(){
 	if(!rest){
 		//Tossing in progress, don't allow clicking
@@ -177,7 +194,7 @@ function moveOthers(){
 	// Player is in trial, cannot do anything
 	if(players[cur_player].in_trial > 0){
   		players[cur_player].in_trial--;
-  		waitingTrial(players[cur_player]);
+  		not_simulating && waitingTrial(players[cur_player]);
   		return;
   	}
 
@@ -185,7 +202,7 @@ function moveOthers(){
   	if(players[cur_player].in_prison > 0){
   		players[cur_player].in_prison--;
   		inPrison(players[cur_player]);
-  		displayQuadCard(cur_player);
+  		not_simulating && displayQuadCard(cur_player);
   		return;
   	}
 
@@ -219,14 +236,20 @@ function moveOthers(){
 		if(!success){
 			//TODO: signal Game has ended lead to a new interface
 			// right now that interface is just a white board with text
-			gameEnd();
+			if(not_simulating){
+				gameEnd();
+			}else{
+				return false;
+			} 
 		}
 	}else{
 		//blank spot, do nothing
 	}
 
-	displayQuadCard(cur_player);
-	fade(decisionUI.quads[cur_player], 'background-color', trans_orange, trans_gray, 1000);
+	not_simulating && displayQuadCard(cur_player);
+	not_simulating && fade(decisionUI.quads[cur_player], 'background-color', trans_orange, trans_gray, 1000);
+
+	return true;
 }
 
 function displayQuadCard(c, need_show) {
@@ -511,9 +534,28 @@ fade = function(element, property, start, end, duration) {
     }, interval);
 };
 
+function findWinner(){
+	var maxMoney = 0;
+	var winner;
+	var winner_idx;
+	players.forEach((p, i) => {
+		if(p.money > maxMoney){
+			maxMoney = p.money;
+			winner = p;
+			winner_idx = i;
+		}
+	});
+	return {w: winner, idx: winner_idx};
+}
+
 function gameEnd(){
-	//TODO: maybe need to do something fancy here
-	document.getElementById('postGame').style.display = "flex";
+	var winner = findWinner().w;
+	openModal('Game Ended!', "The winner is <span class='orangeBold'>" + winner.pname + "with $" + winner.money + "</span><br><br><b>BUT, you probably noticed something funny here!</b>", false, 'Find Out More')
+	
+	clickOkay = () => {
+		//console.log("Okay button clicked...");
+		document.getElementById('postGame').style.display = "flex";
+	}
 }
 
 function selectPlayer(idx){
@@ -529,3 +571,7 @@ function selectPlayer(idx){
 	decisionUI.bailButton = document.getElementsByClassName('bail')[idx];
 	decisionUI.info();
 }
+
+// Code purely for testing purposes
+// ##################
+setTimeout(gameEnd, 2000);

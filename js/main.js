@@ -84,28 +84,28 @@ class Player {
 		if(Math.random() <= self.innocent){
 			// 1/6 chance go free, not in prison
 			self.in_prison = 0;
-			self.activity.decision += (orange_span_s + 'You decided to go on trial, and found innocent.' + orange_span_e);
+			self.activity.decision += (orange_span_s + 'You decided to go on trial, and found innocent. &#x1F60F;' + orange_span_e);
 		}else{
 			self.in_prison = turns;
-			self.activity.decision += (orange_span_s + 'You decided to go on trial, and found guilty, go to prison for ' + turns + ' turns' + orange_span_e);
+			self.activity.decision += (orange_span_s + 'You decided to go on trial, and found guilty, go to prison for ' + turns + ' turns &#x1F62D;' + orange_span_e);
 			self.strike++;
 			self.moveToJail();
 			if(three_strike && self.strike === 3){
 				// life sentence, put in prison forever
 				self.in_prison = Number.MAX_SAFE_INTEGER;
-				self.activity.decision += ("<br>" + orange_span_s + "BUT because " + self.pname + " had 3 strikes, he/she is put away forever" + orange_span_e);
+				self.activity.decision += ("<br>" + orange_span_s + "BUT because " + self.pname + " had 3 strikes, he/she is put away forever &#x1F62D;" + orange_span_e);
 				self.moveToJail();
 			}
 		}
 	}else{
 		// Took a Plea deal
 		self.in_prison = Math.ceil(turns / 2.0);
-		self.activity.decision += (orange_span_s + 'You decided to NOT go on trial, go to prison for ' + turns + ' turns' + orange_span_e);
+		self.activity.decision += (orange_span_s + 'You decided to NOT go on trial, go to prison for ' + turns + ' turns &#x1F62D;' + orange_span_e);
 		self.strike++;
 		self.moveToJail();
 		if(three_strike && self.strike === 3){
 			self.in_prison = Number.MAX_SAFE_INTEGER;
-			self.activity.decision += ("<br>" + orange_span_s + "BUT because " + self.pname + " had 3 strikes, he/she is put away forever" + orange_span_e);
+			self.activity.decision += ("<br>" + orange_span_s + "BUT because " + self.pname + " had 3 strikes, he/she is put away forever &#x1F62D;" + orange_span_e);
 			self.moveToJail();
 		}
 	}
