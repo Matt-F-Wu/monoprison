@@ -757,61 +757,61 @@ class Chance{
 				}})(),
 			},
 
-			{
-				type: 'chance',
-				detail: 'You made a bad investment. Lose $100.',
-				effect: (() => {var self=this; return function(p){
-					decisionUI.show();
-					// store what activity this player is experiencing
-					p.activity = self.chances[6];
-					p.activity.decision = 'You lose $100.';
-					p.spendMoney(100);
+			// {
+			// 	type: 'chance',
+			// 	detail: 'You made a bad investment. Lose $100.',
+			// 	effect: (() => {var self=this; return function(p){
+			// 		decisionUI.show();
+			// 		// store what activity this player is experiencing
+			// 		p.activity = self.chances[6];
+			// 		p.activity.decision = 'You lose $100.';
+			// 		p.spendMoney(100);
 					
-					decisionUI.info(p);
-				}})(),
-			},
+			// 		decisionUI.info(p);
+			// 	}})(),
+			// },
 
-			{
-				type: 'chance',
-				detail: 'Your boss has given you a raise! Increase your salary by $20.',
-				effect: (() => {var self=this; return function(p){
-					decisionUI.show();
-					// store what activity this player is experiencing
-					p.activity = self.chances[7];
-					p.salary += 20
-					p.activity.decision = 'Your salary has now increased to $' + p.salary;
+			// {
+			// 	type: 'chance',
+			// 	detail: 'Your boss has given you a raise! Increase your salary by $20.',
+			// 	effect: (() => {var self=this; return function(p){
+			// 		decisionUI.show();
+			// 		// store what activity this player is experiencing
+			// 		p.activity = self.chances[7];
+			// 		p.salary += 20
+			// 		p.activity.decision = 'Your salary has now increased to $' + p.salary;
 					
-					decisionUI.info(p);
-				}})(),
-			},
+			// 		decisionUI.info(p);
+			// 	}})(),
+			// },
 
-			{
-				type: 'chance',
-				detail: 'You’ve been doing great at work and earned a bonus equal to your current salary.',
-				effect: (() => {var self=this; return function(p){
-					decisionUI.show();
-					// store what activity this player is experiencing
-					p.activity = self.chances[8];
-					p.money += p.salary
-					p.activity.decision = 'You just got a bonus of $' + p.salary;
+			// {
+			// 	type: 'chance',
+			// 	detail: 'You’ve been doing great at work and earned a bonus equal to your current salary.',
+			// 	effect: (() => {var self=this; return function(p){
+			// 		decisionUI.show();
+			// 		// store what activity this player is experiencing
+			// 		p.activity = self.chances[8];
+			// 		p.money += p.salary
+			// 		p.activity.decision = 'You just got a bonus of $' + p.salary;
 					
-					decisionUI.info(p);
-				}})(),
-			},
+			// 		decisionUI.info(p);
+			// 	}})(),
+			// },
 
-			{
-				type: 'chance',
-				detail: 'You made a great investment and earned $50.',
-				effect: (() => {var self=this; return function(p){
-					decisionUI.show();
-					// store what activity this player is experiencing
-					p.activity = self.chances[9];
-					p.activity.decision = 'You earned $50.';
-					p.money += 50;
+			// {
+			// 	type: 'chance',
+			// 	detail: 'You made a great investment and earned $50.',
+			// 	effect: (() => {var self=this; return function(p){
+			// 		decisionUI.show();
+			// 		// store what activity this player is experiencing
+			// 		p.activity = self.chances[9];
+			// 		p.activity.decision = 'You earned $50.';
+			// 		p.money += 50;
 					
-					decisionUI.info(p);
-				}})(),
-			},
+			// 		decisionUI.info(p);
+			// 	}})(),
+			// },
 
 			{
 				type: 'chance',
@@ -819,7 +819,7 @@ class Chance{
 				effect: (() => {var self=this; return function(p){
 					
 					// store what activity this player is experiencing
-					p.activity = self.chances[10];
+					p.activity = self.chances[6];
 					if(p.strike == 0) {
 						p.activity.decision = 'Your boss does not find anything on your record.'
 					} else {
@@ -838,7 +838,7 @@ class Chance{
 				effect: (() => {var self=this; return function(p){
 					
 					// store what activity this player is experiencing
-					p.activity = self.chances[11];
+					p.activity = self.chances[7];
 					if(p.strike == 0) {
 						p.activity.decision = 'Medicaid covers your hospital bill.'
 					} else {
@@ -857,7 +857,7 @@ class Chance{
 				effect: (() => {var self=this; return function(p){
 					
 					// store what activity this player is experiencing
-					p.activity = self.chances[12];
+					p.activity = self.chances[8];
 					if(p.strike == 0) {
 						p.activity.decision = 'You have public housing. You don\'t lose any money'
 					} else {
@@ -876,7 +876,7 @@ class Chance{
 				effect: (() => {var self=this; return function(p){
 					decisionUI.show();
 					// store what activity this player is experiencing
-					p.activity = self.chances[13];
+					p.activity = self.chances[9];
 					if(p.minority) {
 						p.activity.decision = 'You got arrested! <br>';
 						p.jailDecision(2);
@@ -894,7 +894,7 @@ class Chance{
 				effect: (() => {var self=this; return function(p){
 					decisionUI.show();
 					// store what activity this player is experiencing
-					p.activity = self.chances[14];
+					p.activity = self.chances[10];
 					if(p.minority) {
 						if(p.jailProbability(4.0/6.0)){
 							p.activity.decision = 'You got arrested! <br>';

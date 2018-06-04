@@ -161,6 +161,7 @@ function tossDice(){
   		return;
   	}
 
+
 	document.getElementById("pop_up_card_resource").innerHTML = "";
 	rest = false;
 	disableActionButton();
