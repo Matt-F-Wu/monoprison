@@ -16,6 +16,9 @@ var states = [state, 0, 0, 0];
 
 var circs;
 
+// The jail object, manages everything related to jail
+var jail = {};
+
 // The characters
 var character1, character2, character3, character4, human, human_idx = 0;
 var players;
@@ -31,18 +34,17 @@ var boardAdjust = 0.75;
 var camera, scene, renderer;
 var mesh;
 
-
 init();
 animate();
 initBoard();
 createBoard();
 decisionUI.setupDOM(players, document.getElementById('info'), 
-	document.getElementsByClassName('yes')[0], document.getElementsByClassName('no')[0],
+	document.getElementsByClassName('yes')[0], document.getElementsByClassName('no')[0], document.getElementsByClassName('bail')[0],
 	'quad', 'q_header', 'q_content', 'q_decision', 'resource');
 
 function initBoard(){
 	circs = document.getElementsByClassName("circle");
-	jail = document.getElementsByClassName("jail");
+	jail.domElement = document.getElementById("jail");
 	character1 = new Player(document.getElementById("character1"), false, true, 100, 'Peter Panda');
 	character2 = new Player(document.getElementById("character2"), true, false, 80, 'Penelope Pig');
 	character3 = new Player(document.getElementById("character3"), true, false, 90, 'Mandy Monkey');
@@ -50,7 +52,7 @@ function initBoard(){
 	players = [character1, character2, character3, character4];
 	num_state = circs.length;
 	// default player
-	// human = character1;
+	human = character1;
 }
 
 function createBoard(){
@@ -86,15 +88,19 @@ function createBoard(){
 		
 	}
 	// TODO: Get rid of magic numbers
-	jail[0].style.left=(c_x - r+100) + 'px';
-	jail[0].style.top=(c_y-r+100)+'px';
-	jail[0].style.height=(2*r-100)+'px';
-	jail[0].style.width=(2*r-100)+'px';
-
-	circs[state].style.backgroundColor = "orange";
+	jail.c_x = c_x;
+	jail.c_y = c_y;
+	jail.domElement.style.left=(c_x - r+100) + 'px';
+	jail.domElement.style.top=(c_y-r+100)+'px';
+	jail.domElement.style.height=(2*r-100)+'px';
+	jail.domElement.style.width=(2*r-100)+'px';
 }
 
-function playTurn(){
+function playTurn(dice){
+	if(dice && cur_player != human_idx){
+		openModal("Wait!", "It's not your turn, click NEXT to see how others play!");
+		return;
+	}
 	if(cur_player == human_idx) {
 		tossDice();
 	} else {
@@ -110,15 +116,79 @@ function playTurn(){
 
 }
 
+function disableActionButton(){
+	let b = document.getElementById('playButton');
+	b.classList.remove('btnpure');
+	b.classList.add('btngray');
+
+}
+
+function enableActionButton(){
+	let b = document.getElementById('playButton');
+	b.classList.remove('btngray');
+	b.classList.add('btnpure');
+}
+
+function waitingTrial(p){
+	// TODO: what should a player do while waiting for trial
+	openModal(p.pname + " is still waiting for trail...", "They can't move for this turn");
+}
+
+function inPrison(p){
+	// TODO: what should a player do while in prison
+	// openModal(p.pname + " is currently in prison...", "They can't move for this turn");
+	p.lip();
+}
+
 function tossDice(){
-	document.getElementById("pop_up_card").innerHTML = "";
+	if(!rest){
+		//Tossing in progress, don't allow clicking
+		return;
+	}
+
+	// Player is in trial, cannot do anything
+	if(players[cur_player].in_trial > 0){
+  		players[cur_player].in_trial--;
+  		waitingTrial(players[cur_player]);
+  		return;
+  	}
+
+  	// Player is in prison, cannot do anything
+  	if(players[cur_player].in_prison > 0){
+  		players[cur_player].in_prison--;
+  		inPrison(players[cur_player]);
+  		displayQuadCard(cur_player);
+  		return;
+  	}
+
 	document.getElementById("pop_up_card_resource").innerHTML = "";
 	rest = false;
+	disableActionButton();
 	toss = frames;
 	document.getElementById('num_step').innerHTML = 'x';
 }
 
 function moveOthers(){
+	if(!rest){
+		//Tossing in progress, don't allow clicking
+		return;
+	}
+
+	// Player is in trial, cannot do anything
+	if(players[cur_player].in_trial > 0){
+  		players[cur_player].in_trial--;
+  		waitingTrial(players[cur_player]);
+  		return;
+  	}
+
+  	// Player is in prison, cannot do anything
+  	if(players[cur_player].in_prison > 0){
+  		players[cur_player].in_prison--;
+  		inPrison(players[cur_player]);
+  		displayQuadCard(cur_player);
+  		return;
+  	}
+
 	let step = players[cur_player].randomStep();
 
 	states[cur_player] = (states[cur_player] + step) % num_state;
@@ -159,22 +229,63 @@ function moveOthers(){
 	fade(decisionUI.quads[cur_player], 'background-color', trans_orange, trans_gray, 1000);
 }
 
-function displayQuadCard(cur_player) {
-	console.log("Curr player: ", cur_player);
-	console.log(decisionUI.quads[cur_player].outerHTML);
-	document.getElementById("pop_up_card").innerHTML = decisionUI.quads[cur_player].outerHTML;	
-	let resource_text = document.getElementById("resource").innerHTML;
-	console.log("Original resource text: ", resource_text);
-	console.log(resource_text.length);
-
-	if (resource_text.length > 0) {
-		document.getElementById("pop_up_card_resource").innerHTML = "<div class=\"quad class\"> <h4 style=\"align: center\">Historical Context</h4>" +  resource_text + "</div>";
-	} else {
-		document.getElementById("pop_up_card_resource").innerHTML = "";
+function displayQuadCard(c, need_show) {
+	if(need_show){
+		decisionUI.show();
 	}
+	let c_p = c === undefined? cur_player : c;
+	if(decisionUI.display_four){
+		Array.from(decisionUI.quads).forEach((q) => {
+			q.style.display = "flex";
+		});
+		// Don't do anything, displaying 4 boards instead
+		return;
+	}
+	Array.from(decisionUI.quads).forEach((q, i) => {
+		if(i != c_p){
+			q.style.display = "none";		
+		}else{
+			q.style.display = "flex";
+		}
+	});
+	/*If close button doesn't exist, add it! Add the close button*/
+	if(decisionUI.quads[c_p].getElementsByClassName('closebtn').length === 0){
+		let close = document.createElement("div");
+		close.appendChild(document.createTextNode("x"));
+		decisionUI.quads[c_p].appendChild(close);
+		close.classList.add('btnpure');
+		close.classList.add('closebtn');
+		close.addEventListener('click', function(ev){
+			decisionUI.quads[c_p].style.display = "none";
+			decisionUI.hide();
+		});
+		close.style.right = "0px";
+		close.style.top = "0px";
+		close.style.position = "absolute";
+	}
+	// Deal with resource/context
+	let pop_up_card_resource = document.getElementById("pop_up_card_resource");
+	let resource_text = document.getElementById("resource").innerHTML;
+	if (resource_text.length > 0) {
+		pop_up_card_resource.style.display = "flex";
+		pop_up_card_resource.innerHTML = "<div class=\"quad column\"> <h4>Historical Context</h4>" +  resource_text + "</div>";
 
+		/*Attach close button*/
+		pop_up_card_resource.firstChild.style.margin = "0px";
+		let close = document.createElement("div");
+		close.appendChild(document.createTextNode("x"));
+		pop_up_card_resource.appendChild(close);
+		close.classList.add('btnpure');
+		close.addEventListener('click', function(ev){
+			pop_up_card_resource.style.display = "none";
+		});
+		close.style.right = "0px";
+		close.style.position = "absolute";
+
+	} else {
+		pop_up_card_resource.innerHTML = "";
+	}
 	document.getElementById("resource").innerHTML = "";		
-	console.log(document.getElementById("resource").innerHTML);
 }
 
 function init() {
@@ -278,10 +389,10 @@ function animate() {
 			// Reset old state color to normal
 			//circs[state].style.backgroundColor = "#3cb0fd";
 			for(let s = 0; s <= steps; s++){
-				let original_color = circs[(state + s) % num_state].style.backgroundColor;
-				let s_color = colorLint(orange, original_color, 1.0 - s/steps);
+				let original_color = parseColor( getStyle(circs[(state + s) % num_state], "backgroundColor") );
+				let s_color = colorLint(black, original_color, 1.0 - s/steps);
 				// Fade from some mix of blue & orange to just blue
-				fade(circs[(state + s) % num_state], 'background-color', s_color, original_color, 1000);
+				fade(circs[(state + s) % num_state], 'background-color', s_color, original_color, 2000);
 			}
 			state = (state + steps) % num_state;
 			// Move the character to current location
@@ -327,6 +438,7 @@ function animate() {
 			toss--;
 		}else{
 			rest = true;
+			enableActionButton();
 		}
 	}
 	
@@ -335,9 +447,10 @@ function animate() {
 }
 
 var orange = {r: 255, g: 165, b: 0};
+var black = {r: 0, g: 0, b: 0};
 var blue = {r: 60, g: 176, b: 253};
-var trans_gray = {r: 0, g: 0, b: 0, a: 0.5};
-var trans_orange = {r: 255, g: 165, b: 0, a: 0.5};
+var trans_gray = {r: 0, g: 0, b: 0, a: 0.85};
+var trans_orange = {r: 255, g: 165, b: 0, a: 0.85};
 
 lerp = function(a, b, u) {
     return (1 - u) * a + u * b;
@@ -350,6 +463,35 @@ colorLint = function(start, end, p){
     var a = 1.0;
     if(start.a && end.a) {a = lerp(start.a, end.a, p);}
     return {r: r, g: g, b: b, a: a};
+}
+
+/*Hao: get computed style, enable reading css in-file styles*/
+function getStyle(el,styleProp)
+{
+    if (el.currentStyle)
+        return el.currentStyle[styleProp];
+
+    return document.defaultView.getComputedStyle(el,null)[styleProp];
+}
+
+/*Hao: Parse what ever css color format is and return a {r, g, b, a} dictionary*/
+function parseColor(input) {
+    if (input.substr(0,1)=="#") {
+		var collen=(input.length-1)/3;
+		var fact=[17,1,0.062272][collen-1];
+		return {
+		    r: Math.round(parseInt(input.substr(1,collen),16)*fact),
+		    g: Math.round(parseInt(input.substr(1+collen,collen),16)*fact),
+		    b: Math.round(parseInt(input.substr(1+2*collen,collen),16)*fact),
+		    a: 1.0,
+		};
+    }
+    else {
+    	console.log("Hello ", input.split("("), " $$$ ", input);
+    	let rgba = input.split("(")[1].split(")")[0].split(",").map(Math.round);
+
+    	return {r: rgba[0], g: rgba[1], b: rgba[2], a: (rgba.length > 3 && rgba[3]) || 1.0  };
+    }
 }
 
 fade = function(element, property, start, end, duration) {
@@ -384,5 +526,6 @@ function selectPlayer(idx){
 	openModal("You selected: " + human.pname, "Your salary is $" + human.salary + " per payday");
 	decisionUI.yesButton = document.getElementsByClassName('yes')[idx];
 	decisionUI.noButton = document.getElementsByClassName('no')[idx];
+	decisionUI.bailButton = document.getElementsByClassName('bail')[idx];
 	decisionUI.info();
 }

@@ -59,6 +59,23 @@ class Player {
   	return (Math.random() <= p + this.p_increment);
   }
 
+  moveToJail(){
+  	let x = jail.c_x;
+  	let y = jail.c_y;
+  	let idx = players.indexOf(this);
+
+  	if(idx === 1 || idx ===3){
+		x +=50;
+	}
+
+	if(idx === 2 || idx === 3){
+		y += 50;
+	}
+  	this.element.style.left = x + 'px';
+  	this.element.style.top = y + 'px';
+  	/*TODO: add some cool animation here!*/
+  }
+
   jailDecisionHelper(want_trial, turns, self){
   	//console.log(self);
   	if(want_trial){
@@ -67,25 +84,29 @@ class Player {
 		if(Math.random() <= self.innocent){
 			// 1/6 chance go free, not in prison
 			self.in_prison = 0;
-			self.activity.decision += (orange_span_s + 'Decided to go on trial, and found innocent.' + orange_span_e);
+			self.activity.decision += (orange_span_s + 'You decided to go on trial, and found innocent.' + orange_span_e);
 		}else{
 			self.in_prison = turns;
-			self.activity.decision += (orange_span_s + 'Decided to go on trial, and found guilty, go to prison for ' + turns + ' turns' + orange_span_e);
+			self.activity.decision += (orange_span_s + 'You decided to go on trial, and found guilty, go to prison for ' + turns + ' turns' + orange_span_e);
 			self.strike++;
+			self.moveToJail();
 			if(three_strike && self.strike === 3){
 				// life sentence, put in prison forever
 				self.in_prison = Number.MAX_SAFE_INTEGER;
 				self.activity.decision += ("<br>" + orange_span_s + "BUT because " + self.pname + " had 3 strikes, he/she is put away forever" + orange_span_e);
+				self.moveToJail();
 			}
 		}
 	}else{
 		// Took a Plea deal
 		self.in_prison = Math.ceil(turns / 2.0);
-		self.activity.decision += (orange_span_s + 'Decided to NOT go on trial, go to prison for ' + turns + ' turns' + orange_span_e);
+		self.activity.decision += (orange_span_s + 'You decided to NOT go on trial, go to prison for ' + turns + ' turns' + orange_span_e);
 		self.strike++;
+		self.moveToJail();
 		if(three_strike && self.strike === 3){
 			self.in_prison = Number.MAX_SAFE_INTEGER;
 			self.activity.decision += ("<br>" + orange_span_s + "BUT because " + self.pname + " had 3 strikes, he/she is put away forever" + orange_span_e);
+			self.moveToJail();
 		}
 	}
   }
@@ -97,7 +118,7 @@ class Player {
   		decisionUI.show();
   		decisionUI.info(this);
   		console.log("Show button...");
-  		decisionUI.showDecisionButton("Go on trial", "Take plea deal");
+  		decisionUI.showDecisionButton("Go on trial", "Take plea deal", "Pay $400 Bail");
   		var self = this;
   		decisionUI.yesButton.onclick = (() => { 
   			return function(){
@@ -115,9 +136,27 @@ class Player {
 	  			decisionUI.hideDecisionButton();
   			}
   		})();
+  		decisionUI.bailButton.onclick = (() => { 
+  			return function(){
+	  			if(self.money >= 400){
+	  				self.activity.decision += (orange_span_s + 'You decided to pay bail, Lose $400' + orange_span_e);
+	  				decisionUI.hideDecisionButton();
+	  			}else{
+	  				openModal("Don't have enough money!", "Oops, guess you can't afford paying bail.");
+	  			}
+	  			// show all player's decisions and their status
+	  			decisionUI.info(self);
+	  			
+  			}
+  		})();
   	}else{
-  		// this is just our computer program, just do things
-  		this.jailDecisionHelper(Math.random() <= 0.5, turns, this);
+  		// Computer Generated characters will default to choose bail if they have enough money
+  		if(this.money >= 400){
+			this.activity.decision += (orange_span_s + 'You decided to pay bail, Lose $400' + orange_span_e);
+		}else{
+	  		// this is just our computer program, just do things
+	  		this.jailDecisionHelper(Math.random() <= 0.5, turns, this);
+  		}
   		decisionUI.info(this);
   	}
   }
@@ -197,6 +236,12 @@ class Player {
   	c.effect(this);
   }
 
+  /*Life in prison*/
+  lip(){
+  	let l = lifeInPrison.getRandomPrisonCard();
+  	l.effect(this);
+  }
+
   /*Should only be invoked on computer-players, not humans*/
   randomStep(){
   	return getRandomInt(5) + 1;
@@ -231,7 +276,8 @@ class GEvent{
 					decisionUI.show();
 					decisionUI.info();		
 				};})(),
-				detail: 'The War on Drugs, started in the Nixon era, disproportionately penalized communities of color. Black and Latino people got sent to prison more often and for longer sentences when it comes to drug related crimes. For instance, despite being the same substance, crack cocaine dealers were punished more heavily than powdered cocaine dealers. Crack cocaine is especially prevalent in poor communities of color due to its cheap price while powdered cocaine is prevalent in black communities.'
+				detail: 'The War on Drugs, started in the Nixon era, disproportionately penalized communities of color. Black and Latino people got sent to prison more often and for longer sentences when it comes to drug related crimes. For instance, despite being the same substance, crack cocaine dealers were punished more heavily than powdered cocaine dealers. Crack cocaine is especially prevalent in poor communities of color due to its cheap price while powdered cocaine is prevalent in black communities.',
+				link: 'https://www.forbes.com/sites/eriksherman/2016/03/23/nixons-drug-war-an-excuse-to-lock-up-blacks-and-protesters-continues/#44a70cd942c8'
 			}, 
 
 			{	type: 'event',
@@ -254,7 +300,8 @@ class GEvent{
 					decisionUI.show();
 					decisionUI.info();		
 				};})(),
-				detail: 'One of the cases the sparked the Three-strikes law was the murder of Polly Klaas, a 12 year-old girl who was kidnapped from her home. The Three-strikes law was passed under the Clinton administration in 1994. This law served to drastically increase the punishment for crimes. According to this law, a person who has committed a violent crime plus two other felonies would serve a mandatory life sentence in prison.'
+				detail: 'One of the cases the sparked the Three-strikes law was the murder of Polly Klaas, a 12 year-old girl who was kidnapped from her home. The Three-strikes law was passed under the Clinton administration in 1994. This law served to drastically increase the punishment for crimes. According to this law, a person who has committed a violent crime plus two other felonies would serve a mandatory life sentence in prison.',
+				link: 'https://www.aclu.org/other/10-reasons-oppose-3-strikes-youre-out'
 			}, 
 
 			{	type: 'event',
@@ -275,7 +322,8 @@ class GEvent{
 					decisionUI.show();
 					decisionUI.info();		
 				};})(),
-				detail: 'The 1994 Crime Bill, officially known as the Violent Crime Control and Law Enforcement Act was a lengthy crime control bill that was put together over the course of six years and signed into law by President Bill Clinton. It created a new “three strikes” mandatory life sentence for repeat offenders, money to hire 100,000 new police officers, $9.7bn in funding for prisons, and an expansion of death penalty-eligible offences. It also dedicated $6.1bn to prevention programmes "designed with significant input from experienced police officers", however, the bulk of the funds were dedicated to measures that are seen as punitive rather than rehabilitative or preventative. Ultimately, it lead to an exponential increase in the prison population.'
+				detail: 'The 1994 Crime Bill, officially known as the Violent Crime Control and Law Enforcement Act was a lengthy crime control bill that was put together over the course of six years and signed into law by President Bill Clinton. It created a new “three strikes” mandatory life sentence for repeat offenders, money to hire 100,000 new police officers, $9.7bn in funding for prisons, and an expansion of death penalty-eligible offences. It also dedicated $6.1bn to prevention programmes "designed with significant input from experienced police officers", however, the bulk of the funds were dedicated to measures that are seen as punitive rather than rehabilitative or preventative. Ultimately, it lead to an exponential increase in the prison population.',
+				link: 'http://www.bbc.com/news/world-us-canada-36020717'
 			}, 
 
 			{	type: 'event',
@@ -305,7 +353,8 @@ class GEvent{
 					decisionUI.show();
 					decisionUI.info();		
 				};})(),
-				detail: 'Private prisons often stress that they are saving taxpayer dollars, but in truth they are often more costly in many ways. For one, they are costly to build. Furthermore, in order to increase profits, they cut costs by hiring less staff with less experience and cutting medical and other treatments. This often leads to expensive lawsuits due to the lack of medical care, safety incidents, and altercations with staff. In fact, it has been shown that assaults on staff in private prisons are about double those of assaults of staff in public facilities, despite private prisons only selecting to incarcerate inmates they deem “docile.” However, private prisons are still popular alternatives to building state and federal prisons, despite these flaws and findings that private prisons are not actually shown to increase public safety.'
+				detail: 'Private prisons often stress that they are saving taxpayer dollars, but in truth they are often more costly in many ways. For one, they are costly to build. Furthermore, in order to increase profits, they cut costs by hiring less staff with less experience and cutting medical and other treatments. This often leads to expensive lawsuits due to the lack of medical care, safety incidents, and altercations with staff. In fact, it has been shown that assaults on staff in private prisons are about double those of assaults of staff in public facilities, despite private prisons only selecting to incarcerate inmates they deem “docile.” However, private prisons are still popular alternatives to building state and federal prisons, despite these flaws and findings that private prisons are not actually shown to increase public safety.',
+				link: 'http://www.justicepolicy.org/uploads/justicepolicy/documents/gaming_the_system.pdf'
 			},
 
 			{	type: 'event',
@@ -329,7 +378,8 @@ class GEvent{
 					decisionUI.show();
 					decisionUI.info();		
 				};})(),
-				detail: 'In many states, states are contractually obligated to fill prison beds. In fact, most contracts require that at least 90% of prison beds are filled. This strongly incentivizes local governments to place and keep people in jail. In particular, people of color are more strongly targeted and imprisoned to fill these quotas.'
+				detail: 'In many states, states are contractually obligated to fill prison beds. In fact, most contracts require that at least 90% of prison beds are filled. This strongly incentivizes local governments to place and keep people in jail. In particular, people of color are more strongly targeted and imprisoned to fill these quotas.',
+				link: 'https://www.huffingtonpost.com/2013/09/19/private-prison-quotas_n_3953483.html'
 			},
 
 			{	type: 'event',
@@ -353,7 +403,8 @@ class GEvent{
 					decisionUI.show();
 					decisionUI.info();		
 				};})(),
-				detail: 'After the end of the Civil War and the abolishing of slavery, the South’s economy was left in dire condition. Tensions rose between the North and the South, and the peace that was just achieved was under threat. To help the South revive their economy, the government started putting recently-freed black slaves into prison for petty crimes like idling or homelessness, so that they could serve as free labor in prison due to the loophole in the 13th amendment. That loophole is as follows: “Neither slavery nor involuntary servitude, except as a punishment for crime whereof the party shall have been duly convicted, shall exist within the United States, or any place subject to their jurisdiction.”'
+				detail: 'After the end of the Civil War and the abolishing of slavery, the South’s economy was left in dire condition. Tensions rose between the North and the South, and the peace that was just achieved was under threat. To help the South revive their economy, the government started putting recently-freed black slaves into prison for petty crimes like idling or homelessness, so that they could serve as free labor in prison due to the loophole in the 13th amendment. That loophole is as follows: “Neither slavery nor involuntary servitude, except as a punishment for crime whereof the party shall have been duly convicted, shall exist within the United States, or any place subject to their jurisdiction.”',
+				link: 'https://www.npr.org/templates/story/story.php?storyId=89051115'
 			},
 
 			// TODO: WANT THIS EVENT TO ALWAYS BE FIRST
@@ -404,7 +455,8 @@ class GEvent{
 					});
 					// Don't forget to display the information to screen	
 				};})(),
-				detail: 'ALEC is an organization that connects companies with politicians to make right-wing policies. Some of their largest backers include CCA (Corrections Corporation of America), who are in the business of private prisons and profit heavily off of keeping people incarcerated. ALEC drafts builds on a variety of conservative topics, making it easier for lawmakers around the country to personalize the exact bill to pass in their respective districts.'
+				detail: 'ALEC is an organization that connects companies with politicians to make right-wing policies. Some of their largest backers include CCA (Corrections Corporation of America), who are in the business of private prisons and profit heavily off of keeping people incarcerated. ALEC drafts builds on a variety of conservative topics, making it easier for lawmakers around the country to personalize the exact bill to pass in their respective districts.',
+				link: 'https://www.thenation.com/article/hidden-history-alec-and-prison-labor/'
 			},
 
 			{	type: 'event',
@@ -433,7 +485,8 @@ class GEvent{
 					decisionUI.show();
 					decisionUI.info();		
 				};})(),
-				detail: 'Beginning in the 1960s, the United States faced a surge in criminal violence: Across the decade, the murder rate rose by 44 percent, and per capita rates of forcible rape and robbery more than doubled. Nixon knew he had to address this problem - in a diary entry from 1969, White House chief of staff H.R. Haldeman paraphrased Nixon’s thinking: “You have to face the fact that the whole problem is really the blacks. The key is to devise a system that recognizes this while not appearing to.” During the campaign Nixon’s team tackled this challenge by adopting a strategy of “law and order”—by playing to racist fears, they could cloak divisive rhetoric in an unobjectionable demand for security during a chaotic era.'
+				detail: 'Beginning in the 1960s, the United States faced a surge in criminal violence: Across the decade, the murder rate rose by 44 percent, and per capita rates of forcible rape and robbery more than doubled. Nixon knew he had to address this problem - in a diary entry from 1969, White House chief of staff H.R. Haldeman paraphrased Nixon’s thinking: “You have to face the fact that the whole problem is really the blacks. The key is to devise a system that recognizes this while not appearing to.” During the campaign Nixon’s team tackled this challenge by adopting a strategy of “law and order”—by playing to racist fears, they could cloak divisive rhetoric in an unobjectionable demand for security during a chaotic era.',
+				link: 'https://longreads.com/2017/04/06/the-bitter-history-of-law-and-order-in-america/'
 			},
 
 		];
@@ -564,7 +617,7 @@ class Chance{
 					if(p.minority){
 						if(p.jailProbability(2.0/6.0)){
 							// arrested by police, decision time
-							p.activity.decision = 'Got arrected => Go on trial?<br>';
+							p.activity.decision = 'You got arrested! <br>';
 							p.jailDecision(1);
 						}else{
 							p.spendMoney(20);
@@ -591,7 +644,7 @@ class Chance{
 					if(p.minority){
 						if(p.jailProbability(3.0/6.0)){
 							// arrested by police, decision time
-							p.activity.decision = 'Got arrested => Go on trial?<br>';
+							p.activity.decision = 'You got arrested! <br>';
 							p.jailDecision(2);
 						} else {
 							p.activity.decision = 'Lucky you! You did not get caught!'
@@ -599,14 +652,13 @@ class Chance{
 						}
 					}else{
 						if(p.jailProbability(1.0/6.0)){
-							p.activity.decision = 'Got arrested => Go on trial?<br>';
+							p.activity.decision = 'You got arrested! <br>';
 							p.jailDecision(2);
 						} else {
 							p.activity.decision = 'Lucky you! You did not get caught!'
 							decisionUI.info(p);
 						}
 					}
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -615,7 +667,7 @@ class Chance{
 				type: 'chance',
 				detail: 'You get into an altercation at home and the police are called over due to a noise complaint. If you are with Peter Panda, you are charged a $100 fine. Otherwise, you have a 4 in 6 chance of paying a $200 fine and serving 1 turn in jail.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[2];
 					if(p.minority){
@@ -632,7 +684,6 @@ class Chance{
 						p.activity.decision = 'Got a $100 fine.'
 					}
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -641,7 +692,7 @@ class Chance{
 				type: 'chance',
 				detail: 'You apply for a Pell Grant to go to college. If you have no strikes on your criminal record, you receive the Pell Grant and go back to school. After becoming a college graduate, your salary increases by $20. If you do have a strike on your criminal record, you are not eligible to receive the Pell Grant.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[3];
 					if(p.strike == 0) {
@@ -651,7 +702,6 @@ class Chance{
 						p.activity.decision = 'Due to the strike on your criminal record, you do not get the grant.'
 					}
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -660,26 +710,25 @@ class Chance{
 				type: 'chance',
 				detail: 'During a rough period in your life, you resort to selling drugs. If you are Peter Panda, there is a 1 in 6 chance that you will be caught. If caught, you are charged to serve for 1 turn. Otherwise, there is a 4 in 6 chance that you will be caught and charged to serve for 3 turns.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[4];
 					if(p.minority) {
 						if(p.jailProbability(4.0/6)) {
-							p.activity.decision = 'You got arrested =>'
+							p.activity.decision = 'You got arrested! <br>'
 							p.jailDecision(3)
 						} else {
 							p.activity.decision = 'You got away with it!'
 						}
 					} else {
 						if(p.jailProbability(1.0/6)) {
-							p.activity.decision = 'You got arrested =>'
+							p.activity.decision = 'You got arrested! <br>'
 							p.jailDecision(1)
 						} else {
 							p.activity.decision = 'You got away with it!'
 						}
 					}
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -688,18 +737,17 @@ class Chance{
 				type: 'chance',
 				detail: 'You are behind on a $50 payment. If you can’t pay it now, serve one turn in prison.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[5];
 					if(p.money >= 50) {
 						p.activity.decision = 'You must pay $50.';
 						p.spendMoney(50);
 					} else {
-						p.activity.decision = 'You got arrested => ';
+						p.activity.decision = 'You got arrested! <br>';
 						p.jailDecision(1);
 					}
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -708,13 +756,12 @@ class Chance{
 				type: 'chance',
 				detail: 'You made a bad investment. Lose $100.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[6];
 					p.activity.decision = 'You lose $100.';
 					p.spendMoney(100);
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -723,13 +770,12 @@ class Chance{
 				type: 'chance',
 				detail: 'Your boss has given you a raise! Increase your salary by $20.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[7];
 					p.salary += 20
 					p.activity.decision = 'Your salary has now increased to ' + p.salary;
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -738,13 +784,12 @@ class Chance{
 				type: 'chance',
 				detail: 'You’ve been doing great at work and earned a bonus equal to your current salary.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[8];
 					p.money += p.salary
-					p.activity.decision = 'You just got a bonus of ' + p.salary;
+					p.activity.decision = 'You just got a bonus of $' + p.salary;
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -753,13 +798,12 @@ class Chance{
 				type: 'chance',
 				detail: 'You made a great investment and earned $50.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[9];
 					p.activity.decision = 'You earned $50.';
 					p.money += 50;
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -825,17 +869,16 @@ class Chance{
 				type: 'chance',
 				detail: 'Trisha Meili was running in central park when she was attacked and raped. Despite your DNA not matching the DNA from the crime scene, the public strongly believes that you were involved in the attack. If you are not Peter Panda, you must go straight to jail and serve 2 turns.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[13];
 					if(p.minority) {
-						p.activity.decision = 'You got arrested => ';
+						p.activity.decision = 'You got arrested! <br>';
 						p.jailDecision(2);
 					} else {
 						p.activity.decision = "You are not a suspect. Nothing happens to you."
 					}
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -844,12 +887,12 @@ class Chance{
 				type: 'chance',
 				detail: 'You are sitting in a coffee house waiting for a friend. The store owner is upset at you for staying in the coffee house despite not buying anything. If you are  Mandy Monkey, Penelope Pig, or Zachary Zebra, you have a 1 in 6 chance of the owner calling the police on you. The police arrest you for declining to leave the premises and you must serve 1 turn.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[14];
 					if(p.minority) {
 						if(p.jailProbability(4.0/6.0)){
-							p.activity.decision = 'You got arrested => ';
+							p.activity.decision = 'You got arrested! <br>';
 							p.jailDecision(1);
 						} else {
 							p.activity.decision = "Nothing happens to you."
@@ -858,7 +901,6 @@ class Chance{
 						p.activity.decision = "Nothing happens to you."
 					}
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -881,14 +923,17 @@ class DecisionUI{
 		this.yesButton = null;
 		this.noButton = null;
 		this.quads = [];
+		this.in_animation = false;
+		this.display_four = false;
 	}
 
-	setupDOM(players, element, yb, nb, quad_class_name, h_c_n, c_c_n, d_c_n, context_board, toggleBtn='toggleBtn', scoreBoard='scoreBoard'){
+	setupDOM(players, element, yb, nb, bb, quad_class_name, h_c_n, c_c_n, d_c_n, context_board, toggleBtn='toggleBtn', scoreBoard='scoreBoard'){
 		this.players = players;
 		// element is the overall display board
 		this.element = element;
 		this.yesButton = yb;
 		this.noButton = nb;
+		this.bailButton = bb;
 		this.quads = element.getElementsByClassName(quad_class_name);
 		this.header_class_name = h_c_n;
 		this.content_class_name = c_c_n;
@@ -896,6 +941,18 @@ class DecisionUI{
 		this.context_board = document.getElementById(context_board);
 		this.toggleBtn = toggleBtn;
 		this.scoreBoard = scoreBoard;
+	}
+
+	getInfo(idx){
+		return {
+			header: this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML,
+			content: this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML,
+			decision: this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML,
+		};
+	}
+
+	getContextBoard(idx){
+		return this.context_board.innerHTML;
 	}
 
 	info(ext_p){
@@ -912,16 +969,22 @@ class DecisionUI{
 						//TODO: Event detail is really long, how to display it so it doesn't look ugly?
 						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = p.activity.action;// + '<br>' + p.activity.detail;
 						this.context_board.innerHTML = p.activity.detail;
+						this.context_board.innerHTML +=" <div class=\"btnpure\" onClick=\"window.open('" + p.activity.link + "','_blank');\">Learn More<\/div>";
 						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = p.activity.decision;
 					}else if(p.activity.type === 'chance'){
 						this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Chance: ';
 						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = p.activity.detail;
-						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = "Result: " + p.activity.decision;
+						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = "<span class='orangeBold'>Result:</span> " + p.activity.decision;
 					}else if(p.activity.type === 'payday'){
 						// We are at a payday
 						this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Payday: ';
 						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = 'Getting paid!';
 						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
+					}else if(p.activity.type === 'prison'){
+						this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Life in Prison: ' + p.activity.name;
+						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = p.activity.action;
+						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
+						this.context_board.innerHTML = p.activity.detail;
 					}else{
 						this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Nothing happened';
 						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = '';
@@ -932,9 +995,9 @@ class DecisionUI{
 				var p_sta = document.getElementById(this.scoreBoard).children[idx];
 				if(p.human){
 					// sta += ' (you)';
-					p_sta.style.backgroundColor= "white";
+					p_sta.style.border= "5px dotted white";
 				}else{
-					p_sta.style.backgroundColor= "transparent";
+					p_sta.style.border= "0px";
 				}
 				p_sta.getElementsByClassName('p_status')[0].innerHTML = sta;
 				// clear the activity for next round
@@ -944,16 +1007,22 @@ class DecisionUI{
 	}
 
 	show(){
+		if(this.in_animation){
+			// push this operation to queue is the best way
+			// but let's just hack it
+			window.setTimeout(this.show, 100);
+		}
 		// make element visible
-		if(this.element.style.visibility === "visible"){
+		console.log("UI element" ,this.element);
+		if(this.element.style.display === "block"){
 			// Already visible, do nothing but hide buttons
 			//console.log("no change...");
-			this.yesButton.style.visibility = "hidden";
-			this.noButton.style.visibility = "hidden";
+			this.hideDecisionButton();
 			return;
 		}
-		this.element.style.visibility = "visible";
+		this.element.style.display = "block";
 		let divStyler = styler(this.element);
+		this.in_animation = true;
 		tween({
 		  from: 0.0,
 		  to: { opacity: 1.0 },
@@ -963,31 +1032,40 @@ class DecisionUI{
 		  // elapsed: 500,
 		  // loop: 5,
 		  // yoyo: 5
-		}).start(divStyler.set);
-		this.yesButton.style.visibility = "hidden";
-		this.noButton.style.visibility = "hidden";
-		let btn = document.getElementById(this.toggleBtn);
-		if(btn){
-			btn.innerHTML = 'x';
+		}).start({update: divStyler.set, complete: () => { this.in_animation = false;} });
+		this.hideDecisionButton();
+		// let btn = document.getElementById(this.toggleBtn);
+		// if(btn){
+		// 	btn.innerHTML = 'See One';
+		// }
+	}
+
+	showDecisionButton(y_text='Yes', n_text='No', b_text){
+		this.yesButton.style.display = "block";
+		this.yesButton.innerHTML = y_text;
+		this.noButton.style.display = "block";
+		this.noButton.innerHTML = n_text;
+		if(b_text){
+			// Bail text is provided
+			this.bailButton.style.display = "block";
+			this.bailButton.innerHTML = b_text;
 		}
 	}
 
-	showDecisionButton(y_text='Yes', n_text='No'){
-		this.yesButton.style.visibility = "visible";
-		this.yesButton.innerHTML = y_text;
-		this.noButton.style.visibility = "visible";
-		this.noButton.innerHTML = n_text;
-	}
-
 	hideDecisionButton(){
-		this.yesButton.style.visibility = "hidden";
-		this.noButton.style.visibility = "hidden";	
+		this.yesButton.style.display = "none";
+		this.noButton.style.display = "none";
+		this.bailButton.style.display = "none";
 	}
 
 	hide(){
 		// hide element
-		console.log("Called...2");
+		if(this.in_animation){
+			// Hao: simple hack
+			setTimeout(this.hide, 100);
+		}
 		let divStyler = styler(this.element);
+		this.in_animation = true;
 		tween({
 		  from: 1.0,
 		  to: { opacity: 0.0 },
@@ -997,15 +1075,15 @@ class DecisionUI{
 		  // elapsed: 500,
 		  // loop: 5,
 		  // yoyo: 5
-		}).start({update: divStyler.set, complete: ()=>this.element.style.visibility = "hidden"});
+		}).start({update: divStyler.set, complete: ()=>{this.element.style.display = "none"; this.in_animation = false;} });
 			
 	}
 
 	toggle(){
-		if(this.element.style.visibility === "hidden"){
-			this.show();
-		}else{
+		if(this.element.style.display === "block"){
 			this.hide();
+		}else{
+			this.show();
 		}
 	}
 }
@@ -1013,3 +1091,4 @@ class DecisionUI{
 var decisionUI = new DecisionUI();
 var chance = new Chance();
 var gevent = new GEvent();
+var lifeInPrison = new LifeInPrison();

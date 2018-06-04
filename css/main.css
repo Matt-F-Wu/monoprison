@@ -49,39 +49,37 @@ body{
 }
 
 .chance_circle {
-  background-color: #3cb0fd;
+  background-color: #55c7ed;
 }
 
 .event_circle {
-  background-color: purple;
+  background-color: #edd152;
 }
 
 .payday_circle {
-  background-color: #33ff33;
+  background-color: #ed528b;
 }
 
-.jail{
+#jail{
   position: absolute;
   border-radius: 50%;
   background-color: #ffffff;
   color: black;
   font-family: Arial;
   font-size: 18pt;
-  text-align: center;
-  vertical-align: middle;
-  line-height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.pop_up_card{
-  position:absolute;
-  height: 200px;
-  width: 400px;
-}
+/*#pop_up_card{
+  height: 300px;
+  width: 600px;
+}*/
 
-.pop_up_card_resource{
-  position:absolute;
-  height: 200px;
-  width: 400px;
+#pop_up_card_resource{
+  height: 300px;
+  width: 600px;
 }
 #start{
   background-color: orange;
@@ -97,6 +95,10 @@ body{
   text-align: center;
   vertical-align: middle;
   line-height: 50px;
+}
+
+.player:hover{
+  cursor: pointer;
 }
 
 #character1{
@@ -116,7 +118,7 @@ body{
 }
 
 #info{
-
+  display: none;
 }
 
 #resource{
@@ -130,34 +132,50 @@ body{
 }
 
 .quad{
+  display: flex;
   flex: 1;
+  justify-content: space-around;
   color: white;
   font-family: Arial;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.85);
   border: 5px dotted white;
   padding: 15px;
   margin: 10px;
+  position: relative;
+}
+
+.quadCard{
+  z-index: 25;
 }
 
 .q_header{
   height: 10%;
+  margin: 10px;
+  color: orange;
+  font-weight: bold;
 }
 
 .q_content{
-  height: 60%;
+  max-height: 60%;
 }
 
 .q_decision{
   height: 10%;
+  margin: 10px;
 }
 
 .yes{
-  visibility: hidden;
+  display: none;
   margin-right: 25px;
 }
 
 .no{
-  visibility: hidden;
+  display: none;
+  margin-left: 25px;
+}
+
+.bail{
+  display: none;
   margin-left: 25px;
 }
 
@@ -207,7 +225,8 @@ button {
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 50;  
+  z-index: 50;
+  font-family: Arial; 
 }
 
 .modal {
@@ -234,3 +253,12 @@ button {
   border-radius: 50%;
 }
 
+#threejscanvas:hover{
+  cursor: pointer;
+}
+
+.orangeBold{
+  color: orange;
+  font-weight: bold; 
+  font-family: Arial;
+}

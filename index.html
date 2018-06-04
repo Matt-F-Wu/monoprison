@@ -44,76 +44,80 @@
 				function toggleInfo(){
 					let btn = document.getElementById('toggleBtn');
 					//console.log(btn.innerHTML);
-					if(btn.innerHTML === 'x'){
-						btn.innerHTML = '...';
+					if(btn.innerHTML === 'See One'){
+						btn.innerHTML = 'See All';
 					}else{
-						btn.innerHTML = 'x';
+						btn.innerHTML = 'See One';
 					}
-					decisionUI.toggle();
+					decisionUI.display_four = !decisionUI.display_four;
+					displayQuadCard();
 				}
 			</script>
-			<div class="btnpure" style="position: absolute; top: 0%; margin-left: 70%; z-index: 30" onclick="toggleInfo()" id="toggleBtn">...</div>
+			<div class="btnpure" style="position: absolute; top: 0%; margin-left: 0%; z-index: 30" onclick="toggleInfo()" id="toggleBtn">See All</div>
 			<div class="column" style="height: 100%; width: 70%;">
-				<div class="row">
-					<div id="pop_up_card" class="card" style="z-index: 25"></div>
-				</div>
-				<div class="row">
-					<div id="pop_up_card_resource" class="card" style="z-index: 25"></div>
-				</div>
-				<div style="display: none;">
-					<div id="info" style="height: 100%; width: 110%; padding: 5%; margin-left: 10%; z-index: 20; visibility: hidden;">
-						<div class="row" style="flex:1; height: 50%">
-							<div class="quad column">
-								<h4>Peter Panda<img width="50" height="50" src="./textures/panda.png" style="display: inline;"></h4>
-								<div class="q_header"></div>
-								<div class="q_content"></div>
-								<div class="q_decision"></div>
-								<div class="rowfit" style="margin-bottom: 2%">
-									<div class="btnpure yes">Yes</div>
-									<div class="btnpure no">No</div>
-								</div>
-							</div>
-							<div class="quad column">
-								<h4>Penelope Pig<img width="50" height="50" src="./textures/pig.png"></h4>
-								<div class="q_header"></div>
-								<div class="q_content"></div>
-								<div class="q_decision"></div>
-								<div class="rowfit" style="margin-bottom: 2%">
-									<div class="btnpure yes">Yes</div>
-									<div class="btnpure no">No</div>
-								</div>
+				
+				<!--Pop up cards where data is shown-->
+				<!-- Hao Wu: pop up card's decision buttons are messed up. 
+					Using a new mechanism instead  -->
+				<!--<div id="pop_up_card" class="row" style="z-index: 25; display: none; position: relative;"></div>-->
+				<div id="pop_up_card_resource" class="row" style="z-index: 25; display: none; position: relative;"></div>
+				<div id="info" style="width: 110%; padding: 5%; margin-left: 10%; z-index: 20;">
+					<div class="row" style="flex:1; height: 50%">
+						<div class="column quad">
+							<b>Peter Panda<img width="50" height="50" src="./textures/panda.png" style="display: inline;"></b>
+							<div class="q_header"></div>
+							<div class="q_content"></div>
+							<div class="q_decision"></div>
+							<div class="rowfit" style="margin-bottom: 2%">
+								<div class="btnpure yes">Yes</div>
+								<div class="btnpure no">No</div>
+								<div class="btnpure bail"></div>
 							</div>
 						</div>
-						<div class="row" style="flex:1; height: 50%">
-							<div class="quad column">
-								<h4>Mandy Monkey<img width="50" height="50" src="./textures/monkey.png"></h4>
-								<div class="q_header"></div>
-								<div class="q_content"></div>
-								<div class="q_decision"></div>
-								<div class="rowfit" style="margin-bottom: 2%">
-									<div class="btnpure yes">Yes</div>
-									<div class="btnpure no">No</div>
-								</div>
+						<div class="column quad">
+							<b>Penelope Pig<img width="50" height="50" src="./textures/pig.png"></b>
+							<div class="q_header"></div>
+							<div class="q_content"></div>
+							<div class="q_decision"></div>
+							<div class="rowfit" style="margin-bottom: 2%">
+								<div class="btnpure yes">Yes</div>
+								<div class="btnpure no">No</div>
+								<div class="btnpure bail"></div>
 							</div>
-							<div class="quad column">
-								<h4>Zachary Zebra<img width="50" height="50" src="./textures/zebra.png"></h4>
-								<div class="q_header"></div>
-								<div class="q_content"></div>
-								<div class="q_decision"></div>
-								<div class="rowfit" style="margin-bottom: 2%">
-									<div class="btnpure yes">Yes</div>
-									<div class="btnpure no">No</div>
-								</div>
+						</div>
+					</div>
+					<div class="row" style="flex:1; height: 50%">
+						<div class="column quad">
+							<b>Mandy Monkey<img width="50" height="50" src="./textures/monkey.png"></b>
+							<div class="q_header"></div>
+							<div class="q_content"></div>
+							<div class="q_decision"></div>
+							<div class="rowfit" style="margin-bottom: 2%">
+								<div class="btnpure yes">Yes</div>
+								<div class="btnpure no">No</div>
+								<div class="btnpure bail"></div>
+							</div>
+						</div>
+						<div class="column quad">
+							<b>Zachary Zebra<img width="50" height="50" src="./textures/zebra.png"></b>
+							<div class="q_header"></div>
+							<div class="q_content"></div>
+							<div class="q_decision"></div>
+							<div class="rowfit" style="margin-bottom: 2%">
+								<div class="btnpure yes">Yes</div>
+								<div class="btnpure no">No</div>
+								<div class="btnpure bail"></div>
 							</div>
 						</div>
 					</div>
 				</div>
+				
 				<div id="board" style="position: absolute; height: 100%; width: 80%; margin-top: 2%">
-					<div class="player" id="character1"><img width="100%" height="100%" src="./textures/panda.png"></div>
-					<div class="player" id="character2"><img width="100%" height="100%" src="./textures/pig.png"></div>
-					<div class="player" id="character3"><img width="100%" height="100%" src="./textures/monkey.png"></div>
-					<div class="player" id="character4"><img width="100%" height="100%" src="./textures/zebra.png"></div>
-					<div class="circle">Start</div>
+					<div class="player" id="character1" onclick="displayQuadCard(0, true)"><img width="100%" height="100%" src="./textures/panda.png"></div>
+					<div class="player" id="character2" onclick="displayQuadCard(1, true)"><img width="100%" height="100%" src="./textures/pig.png"></div>
+					<div class="player" id="character3" onclick="displayQuadCard(2, true)"><img width="100%" height="100%" src="./textures/monkey.png"></div>
+					<div class="player" id="character4" onclick="displayQuadCard(3, true)"><img width="100%" height="100%" src="./textures/zebra.png"></div>
+					<div class="circle" style="background-color: #44e38e">Start</div>
 					<div class="circle chance_circle">Chance</div>
 					<div class="circle chance_circle">Chance</div>
 					<div class="circle payday_circle">Payday</div>
@@ -130,27 +134,31 @@
 					<div class="circle chance_circle">Chance</div>
 					<div class="circle chance_circle">Chance</div>
 					<div class="circle event_circle">Event</div>
-					<div class="jail">Jail</div>
+					<div id="jail"><img src="./textures/jailBars.png" width="50%" style="z-index: 15"></div>
 				</div>
 			</div>
 			<div class="column" style="height: 100%; width: 30%">
-				<div id="scoreBoard"  style="height: 15%; font-size:16pt">
-					<div align="center" style="font-size:18pt"><span>Peter Panda: </span>
-						<div style="font-size:12pt"><span class="p_status">init</span></div><br>
+				<div id="scoreBoard" style="height: 15%; font-size:16pt">
+					<div style="font-size:18pt; display: flex; flex-direction: column; justify-content: center; align-items: center;margin: 5px; padding: 5px;">
+						<span style="flex: 1">Peter Panda: </span>
+						<div style="font-size:12pt; flex: 1;"><span class="p_status">init</span></div>
 					</div>
-					<div align="center" style="font-size:18pt"><span>Penelope Pig: </span>
-						<div style="font-size:12pt"><span class="p_status">init</span></div><br>
+					<div style="font-size:18pt; display: flex; flex-direction: column; justify-content: center; align-items: center;margin: 5px; padding: 5px;">
+						<span style="flex: 1">Penelope Pig: </span>
+						<div style="font-size:12pt; flex: 1;"><span class="p_status">init</span></div>
 					</div>
-					<div align="center" style="font-size:18pt"><span>Mandy Monkey: </span>
-						<div style="font-size:12pt"><span class="p_status">init</span></div><br>
+					<div style="font-size:18pt; display: flex; flex-direction: column; justify-content: center; align-items: center;margin: 5px; padding: 5px;">
+						<span style="flex: 1">Mandy Monkey: </span>
+						<div style="font-size:12pt; flex: 1;"><span class="p_status">init</span></div>
 					</div>
-					<div align="center" style="font-size:18pt"><span>Zachary Zebra: </span>
-						<div style="font-size:12pt"><span class="p_status">init</span></div><br>
+					<div style="font-size:18pt; display: flex; flex-direction: column; justify-content: center; align-items: center;margin: 5px; padding: 5px;">
+						<span style="flex: 1">Zachary Zebra: </span>
+						<div style="font-size:12pt; flex: 1;"><span class="p_status">init</span></div>
 					</div>
 
 				</div>
 				<div id="resource" style="height: 35%"></div>
-				<div id="threejscanvas" style="height: 30%"></div>
+				<div id="threejscanvas" style="height: 30%" onclick="playTurn(true)"></div>
 
 				<script src="./js/three.min.js"></script>
 				<script src="./js/main.js"></script>
