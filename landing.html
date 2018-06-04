@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		Monoprison
+	</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="./css/main.css" />
+	<script type="text/javascript" src="./js/popmotion.global.min.js"></script>
+	<style type="text/css">
+		html{
+			height: 100%;
+			width: 100%;
+			padding: 0px;
+		}
+		body{
+			height: 100%;
+			width: 100%;
+			padding: 0px;
+			margin: 0px;
+			background-color: black;
+		}
+		p{
+			margin-top: 10px;
+			margin-bottom: 10px;
+		}
+
+		.mainC{
+			justify-content: space-around; 
+			height: 100%; 
+			color: white; 
+			font-family: Arial;
+		}
+	</style>
+</head>
+<body>
+	<div id="intro" class="column mainC">
+		<div class="row">
+			<div class="column" style="justify-content: center;"><div class="diamond-narrow-a"></div><div class="diamond-narrow-a-after"></div></div>
+			<div class="column" style="justify-content: center;"><div class="diamond-narrow-b"></div><div class="diamond-narrow-b-after"></div></div>
+			<div class="column" style="justify-content: center;"><div class="diamond-narrow-c"></div><div class="diamond-narrow-c-after"></div></div>
+			<div class="column" style="justify-content: center;"><div class="diamond-narrow-d"></div><div class="diamond-narrow-d-after"></div></div>
+			<div class="column" style="justify-content: center;"><div class="diamond-narrow-a"></div><div class="diamond-narrow-a-after"></div></div>
+			<div class="column" style="justify-content: center;"><div class="diamond-narrow-b"></div><div class="diamond-narrow-b-after"></div></div>
+		</div>
+		<div class="column">
+			<p>There are 2 million people behind bars today in the US.</p>
+			<p class="orangeBold">That's a lot right?</p>
+			<p>Do you know that the United States accounts for <span class="orangeBold">5 percent</span> of the world’s population, but <span class="orangeBold">25 percent</span> of its prisoners?</p>
+			<p>Why does the states have so many prisoners?</p>
+			<p class="orangeBold">Let's play a monopoly game to figure this out.</p>
+			<div class="btnpure" style="width: 80px; text-align: center;" onclick="showRules()">Play</div>
+		</div>
+		<div class="row">
+			<div class="column" style="justify-content: center;"><div class="diamond-narrow-a"></div><div class="diamond-narrow-a-after"></div></div>
+			<div class="column" style="justify-content: center;"><div class="diamond-narrow-b"></div><div class="diamond-narrow-b-after"></div></div>
+			<div class="column" style="justify-content: center;"><div class="diamond-narrow-c"></div><div class="diamond-narrow-c-after"></div></div>
+			<div class="column" style="justify-content: center;"><div class="diamond-narrow-d"></div><div class="diamond-narrow-d-after"></div></div>
+			<div class="column" style="justify-content: center;"><div class="diamond-narrow-a"></div><div class="diamond-narrow-a-after"></div></div>
+			<div class="column" style="justify-content: center;"><div class="diamond-narrow-b"></div><div class="diamond-narrow-b-after"></div></div>
+		</div>
+	</div>
+	<div id="rules" class="column mainC" style="justify-content: center; display: none;">
+
+		<!--Player pictures-->
+		<div class="player_r" style="position: absolute; top: 0px; left: 0px;"><img width="150px" height="150px" src="./textures/panda.png"></div>
+		<div class="player_r" style="position: absolute; top: 0px; right: 0px;"><img width="150px" height="150px" src="./textures/pig.png"></div>
+		<div class="player_r" style="position: absolute; bottom: 0px; left: 0px;"><img width="150px" height="150px" src="./textures/monkey.png"></div>
+		<div class="player_r" style="position: absolute; bottom: 0px; right: 0px;"><img width="150px" height="150px" src="./textures/zebra.png"></div>
+
+		<h3 class="orangeBold">RULES</h3>
+		<ol>
+			<li>Every player takes turns rolling the die and moving forward the number of spaces by the roll</li>
+			<li>
+				Different board spaces:
+				<ul>
+					<li>Start: This is where you start, nothing happens if you land here. </li>
+					<li>Payday: everyone (except people in jail) gets paid the amount of their salary.</li>
+					<li>Chance: Pick up a chance card. May require the player to roll a die. This affects just the player that picks up the card.</li>
+					<li>Event: Pick up an event card. May change some of the rules/probabilities of players. This affects all players in the game.</li>
+				</ul>
+			</li>
+			<li>When you are arrested, you can choose 1 of 3 options: Go on trial, Take a plea, or Pay Bail</li>
+			<li>If you are sent to jail, follow the jail rules.</li>
+			<li>The game ends when there are no event cards left to pick. The person with the most money wins!</li>
+		</ol>
+		<h3 class="orangeBold">JAIL RULES</h3>
+		<ol>
+			<li>When you are in jail or waiting for trial, you no longer participate in game flow.</li>
+			<li>While serving your time, you are forced to pick up 1 “Life in Prison” card for every turn you are in jail.</li>
+			<li>You won't pick up a “Life in Prison” card if you are waiting for trial.</li>
+		</ol>
+		<a href="index.html" style="text-decoration: none;"><div class="btnpure" style="width: 80px; text-align: center;">Start</div></a>
+	</div>
+	<script type="text/javascript">
+		function showRules(){
+			document.getElementById("intro").style.display="none";
+			document.getElementById("rules").style.display="flex";
+		}
+
+		const { easing, tween, styler } = popmotion;
+
+		const divStylers = [undefined, undefined, undefined, undefined];
+
+		Array.from(document.getElementsByClassName('player_r')).forEach((p, i) => {
+			let divStyler = styler(p);
+			console.log("Here!");
+			tween({
+			  from: -25,
+			  to: { rotate: 25 },
+			  duration: 1000,
+			  ease: easing.backOut,
+			  flip: Infinity,
+			}).start(divStyler.set);
+		});
+
+	</script>
+</body>
+</html>
