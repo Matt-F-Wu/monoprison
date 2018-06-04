@@ -175,8 +175,17 @@ function simulate(){
 	not_simulating = false;
 	var score_slots = document.getElementsByClassName('sim_score');
 	var scores = [0, 0, 0, 0];
+	for (let i = 0; i <4; i++){
+		score_slots[i].innerHTML = 0;
+	}
 
 	for(let i=0; i<100; i++){
+		character1 = new Player(document.getElementById("character1"), false, true, 100, 'Peter Panda');
+		character2 = new Player(document.getElementById("character2"), true, false, 80, 'Penelope Pig');
+		character3 = new Player(document.getElementById("character3"), true, false, 90, 'Mandy Monkey');
+		character4 = new Player(document.getElementById("character4"), true, false, 70, 'Zachary Zebra');
+		players = [character1, character2, character3, character4];
+
 		while(playTurn()){}
 		var idx = findWinner().idx;
 		scores[idx] = scores[idx] + 1;
