@@ -307,6 +307,7 @@ function displayQuadCard(c, need_show) {
 
 	} else {
 		pop_up_card_resource.innerHTML = "";
+		pop_up_card_resource.style.display = "none";
 	}
 	document.getElementById("resource").innerHTML = "";		
 }
@@ -550,7 +551,7 @@ function findWinner(){
 
 function gameEnd(){
 	var winner = findWinner().w;
-	openModal('Game Ended!', "The winner is <span class='orangeBold'>" + winner.pname + "with $" + winner.money + "</span><br><br><b>BUT, you probably noticed something funny here!</b>", false, 'Find Out More')
+	openModal('Game Ended!', "The winner is <span class='orangeBold'>" + winner.pname + " with $" + winner.money + "</span><br><br><b>BUT, you probably noticed something funny here!</b>", false, 'Find Out More')
 	
 	clickOkay = () => {
 		//console.log("Okay button clicked...");
