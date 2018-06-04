@@ -702,7 +702,7 @@ class Chance{
 					p.activity = self.chances[3];
 					if(p.strike == 0) {
 						p.salary += 20;
-						p.activity.decision = 'You got the grant! Your salary in now increased to ' + p.salary;
+						p.activity.decision = 'You got the grant! Your salary in now increased to $' + p.salary;
 					} else {
 						p.activity.decision = 'Due to the strike on your criminal record, you do not get the grant.'
 					}
@@ -779,7 +779,7 @@ class Chance{
 					// store what activity this player is experiencing
 					p.activity = self.chances[7];
 					p.salary += 20
-					p.activity.decision = 'Your salary has now increased to ' + p.salary;
+					p.activity.decision = 'Your salary has now increased to $' + p.salary;
 					
 					decisionUI.info(p);
 				}})(),
@@ -824,7 +824,7 @@ class Chance{
 						p.activity.decision = 'Your boss does not find anything on your record.'
 					} else {
 						p.salary /= 2.;
-						p.activity.decision = 'Due to the strike(s) on your criminal record, you now have a salary of ' + p.salary;
+						p.activity.decision = 'Due to the strike(s) on your criminal record, you now have a salary of $' + p.salary;
 					}
 					
 					decisionUI.show();
@@ -998,7 +998,7 @@ class DecisionUI{
 						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
 					}
 				}
-				let sta = 'Money: $' + p.money + '<br>' + 'Strikes: ' + p.strike + '<br>';
+				let sta = 'Money: $' + p.money + '<br>' + 'Salary: $' + p.salary + '<br> ' + 'Strikes: ' + p.strike + '<br>';
 				var p_sta = document.getElementById(this.scoreBoard).children[idx];
 				if(p.human){
 					// sta += ' (you)';
