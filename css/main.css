@@ -1,7 +1,26 @@
 body{
   --pink: #FF1C68;
 }
+.full{
+  min-height: 100%;
+  width: 100%;
+  height: 100%;
+}
+.row{
+  display: flex;
+  flex-direction: row;
+}
+.column{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
+.rowfit{
+  display: inline-flex;
+  flex-direction: row;
+}
 .btnpure {
   height: 20px;
   cursor: pointer;
@@ -279,4 +298,101 @@ button {
   color: white;
   font-weight: bold;
   padding: 5px;
+}
+
+/* The animation code */
+@keyframes orange_flash {
+    0%   {border-bottom: 50px solid orange;}
+    50%  {border-bottom: 50px solid rgba(255, 165, 0, 0.5);}
+    100% {border-bottom: 50px solid orange;}
+}
+
+@keyframes orange_flash_after {
+    0%   {border-top: 50px solid orange;}
+    50%  {border-top: 50px solid rgba(255, 165, 0, 0.5);}
+    100% {border-top: 50px solid orange;}
+}
+
+.diamond-narrow-a {
+  width: 0;
+  height: 0;
+  border: 30px solid transparent;
+  position: relative;
+  animation-name: orange_flash;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-delay: -1s;
+}
+
+.diamond-narrow-a-after {
+  position: relative;
+  width: 0;
+  height: 0;
+  border: 30px solid transparent;
+  animation-name: orange_flash_after;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+}
+
+.diamond-narrow-b {
+  width: 0;
+  height: 0;
+  border: 30px solid transparent;
+  position: relative;
+  animation-name: orange_flash;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+}
+
+.diamond-narrow-b-after {
+  position: relative;
+  width: 0;
+  height: 0;
+  border: 30px solid transparent;
+  animation-name: orange_flash_after;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-delay: -1s;
+}
+
+.diamond-narrow-c {
+  width: 0;
+  height: 0;
+  border: 30px solid transparent;
+  position: relative;
+  animation-name: orange_flash;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-delay: -2s;
+}
+
+.diamond-narrow-c-after {
+  position: relative;
+  width: 0;
+  height: 0;
+  border: 30px solid transparent;
+  animation-name: orange_flash_after;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+}
+
+.diamond-narrow-d {
+  width: 0;
+  height: 0;
+  border: 30px solid transparent;
+  position: relative;
+  animation-name: orange_flash;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-delay: -3s;
+}
+
+.diamond-narrow-d-after {
+  position: relative;
+  width: 0;
+  height: 0;
+  border: 30px solid transparent;
+  animation-name: orange_flash_after;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
 }
