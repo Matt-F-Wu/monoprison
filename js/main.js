@@ -532,7 +532,8 @@ class LifeInPrison{
 					
 					decisionUI.info(p);
 				}})(),
-				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.'
+				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.',
+				link: 'https://www.theatlantic.com/business/archive/2015/09/prison-labor-in-america/406177/'
 			}, 
 
 			{	type: 'prison',
@@ -545,7 +546,8 @@ class LifeInPrison{
 					
 					decisionUI.info(p);
 				}})(),
-				detail: 'Under the Eighth Amendment directive against cruel and unusual punishment, prisoners are guaranteed adequate health care. But managing prisoners’ health care is difficult. Infectious disease, mental illness and addiction are common problems for inmates, according to the Center for Prisoner Health and Human Rights. Furthermore, a January report by Human Rights Watch detailed the growing number of aging inmates, who incur costs that are nine times as high as those for younger inmates.'
+				detail: 'Under the Eighth Amendment directive against cruel and unusual punishment, prisoners are guaranteed adequate health care. But managing prisoners’ health care is difficult. Infectious disease, mental illness and addiction are common problems for inmates, according to the Center for Prisoner Health and Human Rights. Furthermore, a January report by Human Rights Watch detailed the growing number of aging inmates, who incur costs that are nine times as high as those for younger inmates.',
+				link: 'https://www.washingtonpost.com/national/health-science/privatized-prison-health-care-scrutinized/2012/07/21/gJQAgsp70W_story.html?noredirect=on&utm_term=.1ffce9b97c5c'
 			}, 
 
 			{	type: 'prison',
@@ -558,7 +560,8 @@ class LifeInPrison{
 					
 					decisionUI.info(p);
 				}})(),
-				detail: 'In an effort to cut costs and maximize profits, many private prisons hire unqualified and inexperienced staff members and don’t give them adequate training. This has led to an increased likelihood of conflicts between staff and inmates. In fact, assaults on staff in private prisons are about 2x that of assaults on staff in public facilities, despite the fact that private prisons can choose who they incarcerate and often only select prisoners that they deem "docile."'
+				detail: 'In an effort to cut costs and maximize profits, many private prisons hire unqualified and inexperienced staff members and don’t give them adequate training. This has led to an increased likelihood of conflicts between staff and inmates. In fact, assaults on staff in private prisons are about 2x that of assaults on staff in public facilities, despite the fact that private prisons can choose who they incarcerate and often only select prisoners that they deem "docile."',
+				link: 'http://www.justicepolicy.org/uploads/justicepolicy/documents/gaming_the_system.pdf'
 			}, 
 
 			{	type: 'prison',
@@ -573,7 +576,8 @@ class LifeInPrison{
 					
 					decisionUI.info(p);
 				}})(),
-				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.'
+				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.',
+				link: 'https://www.theatlantic.com/business/archive/2015/09/prison-labor-in-america/406177/'
 			}, 
 
 			{	type: 'prison',
@@ -588,7 +592,8 @@ class LifeInPrison{
 					
 					decisionUI.info(p);
 				}})(),
-				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.'
+				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.',
+				link: 'https://www.theatlantic.com/business/archive/2015/09/prison-labor-in-america/406177/'
 			}, 
 
 		];
@@ -985,6 +990,8 @@ class DecisionUI{
 						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = p.activity.action;
 						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
 						this.context_board.innerHTML = p.activity.detail;
+						console.log(p.activity.link);
+						this.context_board.innerHTML +=" <div class=\"btnpure\" onClick=\"window.open('" + p.activity.link + "','_blank');\">Learn More<\/div>";
 					}else{
 						this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Nothing happened';
 						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = '';

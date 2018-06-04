@@ -131,7 +131,7 @@ function enableActionButton(){
 
 function waitingTrial(p){
 	// TODO: what should a player do while waiting for trial
-	openModal(p.pname + " is still waiting for trail...", "They can't move for this turn");
+	openModal(p.pname + " is still waiting for trial...", "They can't move for this turn");
 }
 
 function inPrison(p){
