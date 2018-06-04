@@ -132,10 +132,12 @@ body{
 }
 
 .quad{
+  display: flex;
   flex: 1;
+  justify-content: space-around;
   color: white;
   font-family: Arial;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.85);
   border: 5px dotted white;
   padding: 15px;
   margin: 10px;
@@ -148,6 +150,9 @@ body{
 
 .q_header{
   height: 10%;
+  margin: 10px;
+  color: orange;
+  font-weight: bold;
 }
 
 .q_content{
@@ -156,15 +161,21 @@ body{
 
 .q_decision{
   height: 10%;
+  margin: 10px;
 }
 
 .yes{
-  visibility: hidden;
+  display: none;
   margin-right: 25px;
 }
 
 .no{
-  visibility: hidden;
+  display: none;
+  margin-left: 25px;
+}
+
+.bail{
+  display: none;
   margin-left: 25px;
 }
 
@@ -214,7 +225,8 @@ button {
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 50;  
+  z-index: 50;
+  font-family: Arial; 
 }
 
 .modal {
@@ -245,3 +257,8 @@ button {
   cursor: pointer;
 }
 
+.orangeBold{
+  color: orange;
+  font-weight: bold; 
+  font-family: Arial;
+}

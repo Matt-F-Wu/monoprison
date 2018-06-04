@@ -39,7 +39,7 @@ animate();
 initBoard();
 createBoard();
 decisionUI.setupDOM(players, document.getElementById('info'), 
-	document.getElementsByClassName('yes')[0], document.getElementsByClassName('no')[0],
+	document.getElementsByClassName('yes')[0], document.getElementsByClassName('no')[0], document.getElementsByClassName('bail')[0],
 	'quad', 'q_header', 'q_content', 'q_decision', 'resource');
 
 function initBoard(){
@@ -136,7 +136,8 @@ function waitingTrial(p){
 
 function inPrison(p){
 	// TODO: what should a player do while in prison
-	openModal(p.pname + " is currently in prison...", "They can't move for this turn");
+	// openModal(p.pname + " is currently in prison...", "They can't move for this turn");
+	p.lip();
 }
 
 function tossDice(){
@@ -156,6 +157,7 @@ function tossDice(){
   	if(players[cur_player].in_prison > 0){
   		players[cur_player].in_prison--;
   		inPrison(players[cur_player]);
+  		displayQuadCard(cur_player);
   		return;
   	}
 
@@ -183,6 +185,7 @@ function moveOthers(){
   	if(players[cur_player].in_prison > 0){
   		players[cur_player].in_prison--;
   		inPrison(players[cur_player]);
+  		displayQuadCard(cur_player);
   		return;
   	}
 
@@ -233,7 +236,7 @@ function displayQuadCard(c, need_show) {
 	let c_p = c === undefined? cur_player : c;
 	if(decisionUI.display_four){
 		Array.from(decisionUI.quads).forEach((q) => {
-			q.style.display = "block";
+			q.style.display = "flex";
 		});
 		// Don't do anything, displaying 4 boards instead
 		return;
@@ -242,7 +245,7 @@ function displayQuadCard(c, need_show) {
 		if(i != c_p){
 			q.style.display = "none";		
 		}else{
-			q.style.display = "block";
+			q.style.display = "flex";
 		}
 	});
 	/*If close button doesn't exist, add it! Add the close button*/
@@ -446,8 +449,8 @@ function animate() {
 var orange = {r: 255, g: 165, b: 0};
 var black = {r: 0, g: 0, b: 0};
 var blue = {r: 60, g: 176, b: 253};
-var trans_gray = {r: 0, g: 0, b: 0, a: 0.5};
-var trans_orange = {r: 255, g: 165, b: 0, a: 0.5};
+var trans_gray = {r: 0, g: 0, b: 0, a: 0.85};
+var trans_orange = {r: 255, g: 165, b: 0, a: 0.85};
 
 lerp = function(a, b, u) {
     return (1 - u) * a + u * b;
@@ -523,5 +526,6 @@ function selectPlayer(idx){
 	openModal("You selected: " + human.pname, "Your salary is $" + human.salary + " per payday");
 	decisionUI.yesButton = document.getElementsByClassName('yes')[idx];
 	decisionUI.noButton = document.getElementsByClassName('no')[idx];
+	decisionUI.bailButton = document.getElementsByClassName('bail')[idx];
 	decisionUI.info();
 }

@@ -84,10 +84,10 @@ class Player {
 		if(Math.random() <= self.innocent){
 			// 1/6 chance go free, not in prison
 			self.in_prison = 0;
-			self.activity.decision += (orange_span_s + 'Decided to go on trial, and found innocent.' + orange_span_e);
+			self.activity.decision += (orange_span_s + 'You decided to go on trial, and found innocent.' + orange_span_e);
 		}else{
 			self.in_prison = turns;
-			self.activity.decision += (orange_span_s + 'Decided to go on trial, and found guilty, go to prison for ' + turns + ' turns' + orange_span_e);
+			self.activity.decision += (orange_span_s + 'You decided to go on trial, and found guilty, go to prison for ' + turns + ' turns' + orange_span_e);
 			self.strike++;
 			self.moveToJail();
 			if(three_strike && self.strike === 3){
@@ -100,7 +100,7 @@ class Player {
 	}else{
 		// Took a Plea deal
 		self.in_prison = Math.ceil(turns / 2.0);
-		self.activity.decision += (orange_span_s + 'Decided to NOT go on trial, go to prison for ' + turns + ' turns' + orange_span_e);
+		self.activity.decision += (orange_span_s + 'You decided to NOT go on trial, go to prison for ' + turns + ' turns' + orange_span_e);
 		self.strike++;
 		self.moveToJail();
 		if(three_strike && self.strike === 3){
@@ -118,7 +118,7 @@ class Player {
   		decisionUI.show();
   		decisionUI.info(this);
   		console.log("Show button...");
-  		decisionUI.showDecisionButton("Go on trial", "Take plea deal");
+  		decisionUI.showDecisionButton("Go on trial", "Take plea deal", "Pay $400 Bail");
   		var self = this;
   		decisionUI.yesButton.onclick = (() => { 
   			return function(){
@@ -136,9 +136,27 @@ class Player {
 	  			decisionUI.hideDecisionButton();
   			}
   		})();
+  		decisionUI.bailButton.onclick = (() => { 
+  			return function(){
+	  			if(self.money >= 400){
+	  				self.activity.decision += (orange_span_s + 'You decided to pay bail, Lose $400' + orange_span_e);
+	  				decisionUI.hideDecisionButton();
+	  			}else{
+	  				openModal("Don't have enough money!", "Oops, guess you can't afford paying bail.");
+	  			}
+	  			// show all player's decisions and their status
+	  			decisionUI.info(self);
+	  			
+  			}
+  		})();
   	}else{
-  		// this is just our computer program, just do things
-  		this.jailDecisionHelper(Math.random() <= 0.5, turns, this);
+  		// Computer Generated characters will default to choose bail if they have enough money
+  		if(this.money >= 400){
+			this.activity.decision += (orange_span_s + 'You decided to pay bail, Lose $400' + orange_span_e);
+		}else{
+	  		// this is just our computer program, just do things
+	  		this.jailDecisionHelper(Math.random() <= 0.5, turns, this);
+  		}
   		decisionUI.info(this);
   	}
   }
@@ -216,6 +234,12 @@ class Player {
   	}
   	let c = chance.getRandomChance();
   	c.effect(this);
+  }
+
+  /*Life in prison*/
+  lip(){
+  	let l = lifeInPrison.getRandomPrisonCard();
+  	l.effect(this);
   }
 
   /*Should only be invoked on computer-players, not humans*/
@@ -593,7 +617,7 @@ class Chance{
 					if(p.minority){
 						if(p.jailProbability(2.0/6.0)){
 							// arrested by police, decision time
-							p.activity.decision = 'Got arrected => Go on trial?<br>';
+							p.activity.decision = 'You got arrested! <br>';
 							p.jailDecision(1);
 						}else{
 							p.spendMoney(20);
@@ -620,7 +644,7 @@ class Chance{
 					if(p.minority){
 						if(p.jailProbability(3.0/6.0)){
 							// arrested by police, decision time
-							p.activity.decision = 'Got arrested => Go on trial?<br>';
+							p.activity.decision = 'You got arrested! <br>';
 							p.jailDecision(2);
 						} else {
 							p.activity.decision = 'Lucky you! You did not get caught!'
@@ -628,14 +652,13 @@ class Chance{
 						}
 					}else{
 						if(p.jailProbability(1.0/6.0)){
-							p.activity.decision = 'Got arrested => Go on trial?<br>';
+							p.activity.decision = 'You got arrested! <br>';
 							p.jailDecision(2);
 						} else {
 							p.activity.decision = 'Lucky you! You did not get caught!'
 							decisionUI.info(p);
 						}
 					}
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -644,7 +667,7 @@ class Chance{
 				type: 'chance',
 				detail: 'You get into an altercation at home and the police are called over due to a noise complaint. If you are with Peter Panda, you are charged a $100 fine. Otherwise, you have a 4 in 6 chance of paying a $200 fine and serving 1 turn in jail.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[2];
 					if(p.minority){
@@ -661,7 +684,6 @@ class Chance{
 						p.activity.decision = 'Got a $100 fine.'
 					}
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -670,7 +692,7 @@ class Chance{
 				type: 'chance',
 				detail: 'You apply for a Pell Grant to go to college. If you have no strikes on your criminal record, you receive the Pell Grant and go back to school. After becoming a college graduate, your salary increases by $20. If you do have a strike on your criminal record, you are not eligible to receive the Pell Grant.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[3];
 					if(p.strike == 0) {
@@ -680,7 +702,6 @@ class Chance{
 						p.activity.decision = 'Due to the strike on your criminal record, you do not get the grant.'
 					}
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -689,26 +710,25 @@ class Chance{
 				type: 'chance',
 				detail: 'During a rough period in your life, you resort to selling drugs. If you are Peter Panda, there is a 1 in 6 chance that you will be caught. If caught, you are charged to serve for 1 turn. Otherwise, there is a 4 in 6 chance that you will be caught and charged to serve for 3 turns.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[4];
 					if(p.minority) {
 						if(p.jailProbability(4.0/6)) {
-							p.activity.decision = 'You got arrested =>'
+							p.activity.decision = 'You got arrested! <br>'
 							p.jailDecision(3)
 						} else {
 							p.activity.decision = 'You got away with it!'
 						}
 					} else {
 						if(p.jailProbability(1.0/6)) {
-							p.activity.decision = 'You got arrested =>'
+							p.activity.decision = 'You got arrested! <br>'
 							p.jailDecision(1)
 						} else {
 							p.activity.decision = 'You got away with it!'
 						}
 					}
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -717,18 +737,17 @@ class Chance{
 				type: 'chance',
 				detail: 'You are behind on a $50 payment. If you can’t pay it now, serve one turn in prison.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[5];
 					if(p.money >= 50) {
 						p.activity.decision = 'You must pay $50.';
 						p.spendMoney(50);
 					} else {
-						p.activity.decision = 'You got arrested => ';
+						p.activity.decision = 'You got arrested! <br>';
 						p.jailDecision(1);
 					}
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -737,13 +756,12 @@ class Chance{
 				type: 'chance',
 				detail: 'You made a bad investment. Lose $100.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[6];
 					p.activity.decision = 'You lose $100.';
 					p.spendMoney(100);
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -752,13 +770,12 @@ class Chance{
 				type: 'chance',
 				detail: 'Your boss has given you a raise! Increase your salary by $20.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[7];
 					p.salary += 20
 					p.activity.decision = 'Your salary has now increased to ' + p.salary;
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -767,13 +784,12 @@ class Chance{
 				type: 'chance',
 				detail: 'You’ve been doing great at work and earned a bonus equal to your current salary.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[8];
 					p.money += p.salary
-					p.activity.decision = 'You just got a bonus of ' + p.salary;
+					p.activity.decision = 'You just got a bonus of $' + p.salary;
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -782,13 +798,12 @@ class Chance{
 				type: 'chance',
 				detail: 'You made a great investment and earned $50.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[9];
 					p.activity.decision = 'You earned $50.';
 					p.money += 50;
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -854,17 +869,16 @@ class Chance{
 				type: 'chance',
 				detail: 'Trisha Meili was running in central park when she was attacked and raped. Despite your DNA not matching the DNA from the crime scene, the public strongly believes that you were involved in the attack. If you are not Peter Panda, you must go straight to jail and serve 2 turns.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[13];
 					if(p.minority) {
-						p.activity.decision = 'You got arrested => ';
+						p.activity.decision = 'You got arrested! <br>';
 						p.jailDecision(2);
 					} else {
 						p.activity.decision = "You are not a suspect. Nothing happens to you."
 					}
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -873,12 +887,12 @@ class Chance{
 				type: 'chance',
 				detail: 'You are sitting in a coffee house waiting for a friend. The store owner is upset at you for staying in the coffee house despite not buying anything. If you are  Mandy Monkey, Penelope Pig, or Zachary Zebra, you have a 1 in 6 chance of the owner calling the police on you. The police arrest you for declining to leave the premises and you must serve 1 turn.',
 				effect: (() => {var self=this; return function(p){
-					
+					decisionUI.show();
 					// store what activity this player is experiencing
 					p.activity = self.chances[14];
 					if(p.minority) {
 						if(p.jailProbability(4.0/6.0)){
-							p.activity.decision = 'You got arrested => ';
+							p.activity.decision = 'You got arrested! <br>';
 							p.jailDecision(1);
 						} else {
 							p.activity.decision = "Nothing happens to you."
@@ -887,7 +901,6 @@ class Chance{
 						p.activity.decision = "Nothing happens to you."
 					}
 					
-					decisionUI.show();
 					decisionUI.info(p);
 				}})(),
 			},
@@ -914,12 +927,13 @@ class DecisionUI{
 		this.display_four = false;
 	}
 
-	setupDOM(players, element, yb, nb, quad_class_name, h_c_n, c_c_n, d_c_n, context_board, toggleBtn='toggleBtn', scoreBoard='scoreBoard'){
+	setupDOM(players, element, yb, nb, bb, quad_class_name, h_c_n, c_c_n, d_c_n, context_board, toggleBtn='toggleBtn', scoreBoard='scoreBoard'){
 		this.players = players;
 		// element is the overall display board
 		this.element = element;
 		this.yesButton = yb;
 		this.noButton = nb;
+		this.bailButton = bb;
 		this.quads = element.getElementsByClassName(quad_class_name);
 		this.header_class_name = h_c_n;
 		this.content_class_name = c_c_n;
@@ -960,12 +974,17 @@ class DecisionUI{
 					}else if(p.activity.type === 'chance'){
 						this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Chance: ';
 						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = p.activity.detail;
-						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = "Result: " + p.activity.decision;
+						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = "<span class='orangeBold'>Result:</span> " + p.activity.decision;
 					}else if(p.activity.type === 'payday'){
 						// We are at a payday
 						this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Payday: ';
 						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = 'Getting paid!';
 						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
+					}else if(p.activity.type === 'prison'){
+						this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Life in Prison: ' + p.activity.name;
+						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = p.activity.action;
+						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
+						this.context_board.innerHTML = p.activity.detail;
 					}else{
 						this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Nothing happened';
 						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = '';
@@ -994,11 +1013,11 @@ class DecisionUI{
 			window.setTimeout(this.show, 100);
 		}
 		// make element visible
+		console.log("UI element" ,this.element);
 		if(this.element.style.display === "block"){
 			// Already visible, do nothing but hide buttons
 			//console.log("no change...");
-			this.yesButton.style.visibility = "hidden";
-			this.noButton.style.visibility = "hidden";
+			this.hideDecisionButton();
 			return;
 		}
 		this.element.style.display = "block";
@@ -1014,24 +1033,29 @@ class DecisionUI{
 		  // loop: 5,
 		  // yoyo: 5
 		}).start({update: divStyler.set, complete: () => { this.in_animation = false;} });
-		this.yesButton.style.visibility = "hidden";
-		this.noButton.style.visibility = "hidden";
+		this.hideDecisionButton();
 		// let btn = document.getElementById(this.toggleBtn);
 		// if(btn){
 		// 	btn.innerHTML = 'See One';
 		// }
 	}
 
-	showDecisionButton(y_text='Yes', n_text='No'){
-		this.yesButton.style.visibility = "visible";
+	showDecisionButton(y_text='Yes', n_text='No', b_text){
+		this.yesButton.style.display = "block";
 		this.yesButton.innerHTML = y_text;
-		this.noButton.style.visibility = "visible";
+		this.noButton.style.display = "block";
 		this.noButton.innerHTML = n_text;
+		if(b_text){
+			// Bail text is provided
+			this.bailButton.style.display = "block";
+			this.bailButton.innerHTML = b_text;
+		}
 	}
 
 	hideDecisionButton(){
-		this.yesButton.style.visibility = "hidden";
-		this.noButton.style.visibility = "hidden";	
+		this.yesButton.style.display = "none";
+		this.noButton.style.display = "none";
+		this.bailButton.style.display = "none";
 	}
 
 	hide(){
@@ -1067,3 +1091,4 @@ class DecisionUI{
 var decisionUI = new DecisionUI();
 var chance = new Chance();
 var gevent = new GEvent();
+var lifeInPrison = new LifeInPrison();
