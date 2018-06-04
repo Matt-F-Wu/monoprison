@@ -532,7 +532,8 @@ class LifeInPrison{
 					
 					decisionUI.info(p);
 				}})(),
-				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.'
+				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.',
+				link: 'https://www.theatlantic.com/business/archive/2015/09/prison-labor-in-america/406177/'
 			}, 
 
 			{	type: 'prison',
@@ -545,7 +546,8 @@ class LifeInPrison{
 					
 					decisionUI.info(p);
 				}})(),
-				detail: 'Under the Eighth Amendment directive against cruel and unusual punishment, prisoners are guaranteed adequate health care. But managing prisoners’ health care is difficult. Infectious disease, mental illness and addiction are common problems for inmates, according to the Center for Prisoner Health and Human Rights. Furthermore, a January report by Human Rights Watch detailed the growing number of aging inmates, who incur costs that are nine times as high as those for younger inmates.'
+				detail: 'Under the Eighth Amendment directive against cruel and unusual punishment, prisoners are guaranteed adequate health care. But managing prisoners’ health care is difficult. Infectious disease, mental illness and addiction are common problems for inmates, according to the Center for Prisoner Health and Human Rights. Furthermore, a January report by Human Rights Watch detailed the growing number of aging inmates, who incur costs that are nine times as high as those for younger inmates.',
+				link: 'https://www.washingtonpost.com/national/health-science/privatized-prison-health-care-scrutinized/2012/07/21/gJQAgsp70W_story.html?noredirect=on&utm_term=.1ffce9b97c5c'
 			}, 
 
 			{	type: 'prison',
@@ -558,7 +560,8 @@ class LifeInPrison{
 					
 					decisionUI.info(p);
 				}})(),
-				detail: 'In an effort to cut costs and maximize profits, many private prisons hire unqualified and inexperienced staff members and don’t give them adequate training. This has led to an increased likelihood of conflicts between staff and inmates. In fact, assaults on staff in private prisons are about 2x that of assaults on staff in public facilities, despite the fact that private prisons can choose who they incarcerate and often only select prisoners that they deem "docile."'
+				detail: 'In an effort to cut costs and maximize profits, many private prisons hire unqualified and inexperienced staff members and don’t give them adequate training. This has led to an increased likelihood of conflicts between staff and inmates. In fact, assaults on staff in private prisons are about 2x that of assaults on staff in public facilities, despite the fact that private prisons can choose who they incarcerate and often only select prisoners that they deem "docile."',
+				link: 'http://www.justicepolicy.org/uploads/justicepolicy/documents/gaming_the_system.pdf'
 			}, 
 
 			{	type: 'prison',
@@ -573,7 +576,8 @@ class LifeInPrison{
 					
 					decisionUI.info(p);
 				}})(),
-				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.'
+				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.',
+				link: 'https://www.theatlantic.com/business/archive/2015/09/prison-labor-in-america/406177/'
 			}, 
 
 			{	type: 'prison',
@@ -588,7 +592,8 @@ class LifeInPrison{
 					
 					decisionUI.info(p);
 				}})(),
-				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.'
+				detail: 'Once cleared by the prison doctor, Inmates at Angola Prison, Louisiana can be forced to work under threat of punishment as severe as solitary confinement. Legally, this labor may be totally uncompensated; more typically inmates are paid meagerly—as little as two cents per hour—for their full-time work in the fields, manufacturing warehouses, or kitchens.  Due to a loophole in the 13th amendment, incarcerated persons or, more specifically, the “duly convicted,” lack a constitutional right to be free of forced servitude. Further, this forced labor is not checked by many of the protections enjoyed by workers laboring in the exact same jobs on the other side of the 20-foot barbed-wire electric fence.',
+				link: 'https://www.theatlantic.com/business/archive/2015/09/prison-labor-in-america/406177/'
 			}, 
 
 		];
@@ -697,7 +702,7 @@ class Chance{
 					p.activity = self.chances[3];
 					if(p.strike == 0) {
 						p.salary += 20;
-						p.activity.decision = 'You got the grant! Your salary in now increased to ' + p.salary;
+						p.activity.decision = 'You got the grant! Your salary in now increased to $' + p.salary;
 					} else {
 						p.activity.decision = 'Due to the strike on your criminal record, you do not get the grant.'
 					}
@@ -752,61 +757,61 @@ class Chance{
 				}})(),
 			},
 
-			{
-				type: 'chance',
-				detail: 'You made a bad investment. Lose $100.',
-				effect: (() => {var self=this; return function(p){
-					decisionUI.show();
-					// store what activity this player is experiencing
-					p.activity = self.chances[6];
-					p.activity.decision = 'You lose $100.';
-					p.spendMoney(100);
+			// {
+			// 	type: 'chance',
+			// 	detail: 'You made a bad investment. Lose $100.',
+			// 	effect: (() => {var self=this; return function(p){
+			// 		decisionUI.show();
+			// 		// store what activity this player is experiencing
+			// 		p.activity = self.chances[6];
+			// 		p.activity.decision = 'You lose $100.';
+			// 		p.spendMoney(100);
 					
-					decisionUI.info(p);
-				}})(),
-			},
+			// 		decisionUI.info(p);
+			// 	}})(),
+			// },
 
-			{
-				type: 'chance',
-				detail: 'Your boss has given you a raise! Increase your salary by $20.',
-				effect: (() => {var self=this; return function(p){
-					decisionUI.show();
-					// store what activity this player is experiencing
-					p.activity = self.chances[7];
-					p.salary += 20
-					p.activity.decision = 'Your salary has now increased to ' + p.salary;
+			// {
+			// 	type: 'chance',
+			// 	detail: 'Your boss has given you a raise! Increase your salary by $20.',
+			// 	effect: (() => {var self=this; return function(p){
+			// 		decisionUI.show();
+			// 		// store what activity this player is experiencing
+			// 		p.activity = self.chances[7];
+			// 		p.salary += 20
+			// 		p.activity.decision = 'Your salary has now increased to $' + p.salary;
 					
-					decisionUI.info(p);
-				}})(),
-			},
+			// 		decisionUI.info(p);
+			// 	}})(),
+			// },
 
-			{
-				type: 'chance',
-				detail: 'You’ve been doing great at work and earned a bonus equal to your current salary.',
-				effect: (() => {var self=this; return function(p){
-					decisionUI.show();
-					// store what activity this player is experiencing
-					p.activity = self.chances[8];
-					p.money += p.salary
-					p.activity.decision = 'You just got a bonus of $' + p.salary;
+			// {
+			// 	type: 'chance',
+			// 	detail: 'You’ve been doing great at work and earned a bonus equal to your current salary.',
+			// 	effect: (() => {var self=this; return function(p){
+			// 		decisionUI.show();
+			// 		// store what activity this player is experiencing
+			// 		p.activity = self.chances[8];
+			// 		p.money += p.salary
+			// 		p.activity.decision = 'You just got a bonus of $' + p.salary;
 					
-					decisionUI.info(p);
-				}})(),
-			},
+			// 		decisionUI.info(p);
+			// 	}})(),
+			// },
 
-			{
-				type: 'chance',
-				detail: 'You made a great investment and earned $50.',
-				effect: (() => {var self=this; return function(p){
-					decisionUI.show();
-					// store what activity this player is experiencing
-					p.activity = self.chances[9];
-					p.activity.decision = 'You earned $50.';
-					p.money += 50;
+			// {
+			// 	type: 'chance',
+			// 	detail: 'You made a great investment and earned $50.',
+			// 	effect: (() => {var self=this; return function(p){
+			// 		decisionUI.show();
+			// 		// store what activity this player is experiencing
+			// 		p.activity = self.chances[9];
+			// 		p.activity.decision = 'You earned $50.';
+			// 		p.money += 50;
 					
-					decisionUI.info(p);
-				}})(),
-			},
+			// 		decisionUI.info(p);
+			// 	}})(),
+			// },
 
 			{
 				type: 'chance',
@@ -814,12 +819,12 @@ class Chance{
 				effect: (() => {var self=this; return function(p){
 					
 					// store what activity this player is experiencing
-					p.activity = self.chances[10];
+					p.activity = self.chances[6];
 					if(p.strike == 0) {
 						p.activity.decision = 'Your boss does not find anything on your record.'
 					} else {
 						p.salary /= 2.;
-						p.activity.decision = 'Due to the strike(s) on your criminal record, you now have a salary of ' + p.salary;
+						p.activity.decision = 'Due to the strike(s) on your criminal record, you now have a salary of $' + p.salary;
 					}
 					
 					decisionUI.show();
@@ -833,7 +838,7 @@ class Chance{
 				effect: (() => {var self=this; return function(p){
 					
 					// store what activity this player is experiencing
-					p.activity = self.chances[11];
+					p.activity = self.chances[7];
 					if(p.strike == 0) {
 						p.activity.decision = 'Medicaid covers your hospital bill.'
 					} else {
@@ -852,7 +857,7 @@ class Chance{
 				effect: (() => {var self=this; return function(p){
 					
 					// store what activity this player is experiencing
-					p.activity = self.chances[12];
+					p.activity = self.chances[8];
 					if(p.strike == 0) {
 						p.activity.decision = 'You have public housing. You don\'t lose any money'
 					} else {
@@ -871,7 +876,7 @@ class Chance{
 				effect: (() => {var self=this; return function(p){
 					decisionUI.show();
 					// store what activity this player is experiencing
-					p.activity = self.chances[13];
+					p.activity = self.chances[9];
 					if(p.minority) {
 						p.activity.decision = 'You got arrested! <br>';
 						p.jailDecision(2);
@@ -889,7 +894,7 @@ class Chance{
 				effect: (() => {var self=this; return function(p){
 					decisionUI.show();
 					// store what activity this player is experiencing
-					p.activity = self.chances[14];
+					p.activity = self.chances[10];
 					if(p.minority) {
 						if(p.jailProbability(4.0/6.0)){
 							p.activity.decision = 'You got arrested! <br>';
@@ -969,7 +974,7 @@ class DecisionUI{
 						//TODO: Event detail is really long, how to display it so it doesn't look ugly?
 						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = p.activity.action;// + '<br>' + p.activity.detail;
 						this.context_board.innerHTML = p.activity.detail;
-						this.context_board.innerHTML +=" <div class=\"btnpure\" onClick=\"window.open('" + p.activity.link + "','_blank');\">Learn More<\/div>";
+						this.context_board.innerHTML +=" <br><div class=\"btnpure\" onClick=\"window.open('" + p.activity.link + "','_blank');\">Learn More<\/div>";
 						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = p.activity.decision;
 					}else if(p.activity.type === 'chance'){
 						this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Chance: ';
@@ -985,13 +990,15 @@ class DecisionUI{
 						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = p.activity.action;
 						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
 						this.context_board.innerHTML = p.activity.detail;
+						console.log(p.activity.link);
+						this.context_board.innerHTML +=" <br><div class=\"btnpure\" onClick=\"window.open('" + p.activity.link + "','_blank');\">Learn More<\/div>";
 					}else{
 						this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Nothing happened';
 						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = '';
 						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
 					}
 				}
-				let sta = 'Money: $' + p.money + '<br>' + 'Strikes: ' + p.strike + '<br>';
+				let sta = 'Money: $' + p.money + '<br>' + 'Salary: $' + p.salary + '<br> ' + 'Strikes: ' + p.strike + '<br>';
 				var p_sta = document.getElementById(this.scoreBoard).children[idx];
 				if(p.human){
 					// sta += ' (you)';

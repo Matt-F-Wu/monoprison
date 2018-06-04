@@ -34,14 +34,21 @@
 					displayQuadCard();
 				}
 			</script>
-			<div class="btnpure" style="position: absolute; top: 0%; margin-left: 0%; z-index: 30" onclick="toggleInfo()" id="toggleBtn">See All</div>
+			<script>
+				function skipGame(){
+					document.getElementById('postGame').style.display = "flex";
+				}
+			</script>
+			<div class="column" style="height: 20%; width: 15%">
+				<div class="btnpure" style="position: absolute; top: 0%; margin-left: 0%; z-index: 30" onclick="toggleInfo()" id="toggleBtn">See All</div>
+				<div class="btnpure" style="position: absolute; margin-left: 0%; z-index: 30" onclick="skipGame()" id="skipBtn">Skip Game</div>
+			</div>
 			<div class="column" style="height: 100%; width: 70%;">
 				
 				<!--Pop up cards where data is shown-->
 				<!-- Hao Wu: pop up card's decision buttons are messed up. 
 					Using a new mechanism instead  -->
 				<!--<div id="pop_up_card" class="row" style="z-index: 25; display: none; position: relative;"></div>-->
-				<div id="pop_up_card_resource" class="row" style="z-index: 25; display: none; position: relative;"></div>
 				<div id="info" style="width: 110%; padding: 5%; margin-left: 10%; z-index: 20;">
 					<div class="row" style="flex:1; height: 50%">
 						<div class="column quad">
@@ -92,6 +99,8 @@
 						</div>
 					</div>
 				</div>
+				<div id="pop_up_card_resource" class="row" style="z-index: 25; display: none; position: relative;"></div>
+
 				
 				<div id="board" style="position: absolute; height: 100%; width: 80%; margin-top: 2%">
 					<div class="player" id="character1" onclick="displayQuadCard(0, true)"><img width="100%" height="100%" src="./textures/panda.png"></div>
@@ -119,7 +128,7 @@
 				</div>
 			</div>
 			<div class="column" style="height: 100%; width: 30%">
-				<div id="scoreBoard" style="height: 15%; font-size:16pt">
+				<div id="scoreBoard" style="height: 50%; font-size:16pt">
 					<div style="font-size:18pt; display: flex; flex-direction: column; justify-content: center; align-items: center;margin: 5px; padding: 5px;">
 						<span style="flex: 1">Peter Panda: </span>
 						<div style="font-size:12pt; flex: 1;"><span class="p_status">init</span></div>
@@ -138,7 +147,7 @@
 					</div>
 
 				</div>
-				<div id="resource" style="height: 35%"></div>
+				<div id="resource" style="height: 0%"></div>
 				<div id="threejscanvas" style="height: 30%" onclick="playTurn(true)"></div>
 
 				<script src="./js/three.min.js"></script>

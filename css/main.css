@@ -94,11 +94,12 @@ body{
 /*#pop_up_card{
   height: 300px;
   width: 600px;
-}*/
+}
+*/
 
 #pop_up_card_resource{
-  height: 300px;
-  width: 600px;
+  /*height: 600px;
+  width: 800px;*/
 }
 #start{
   background-color: orange;
