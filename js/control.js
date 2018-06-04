@@ -574,4 +574,4 @@ function selectPlayer(idx){
 
 // Code purely for testing purposes
 // ##################
-setTimeout(gameEnd, 2000);
+//setTimeout(gameEnd, 2000);
