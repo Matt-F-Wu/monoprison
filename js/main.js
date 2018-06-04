@@ -974,7 +974,7 @@ class DecisionUI{
 						//TODO: Event detail is really long, how to display it so it doesn't look ugly?
 						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = p.activity.action;// + '<br>' + p.activity.detail;
 						this.context_board.innerHTML = p.activity.detail;
-						this.context_board.innerHTML +=" <div class=\"btnpure\" onClick=\"window.open('" + p.activity.link + "','_blank');\">Learn More<\/div>";
+						this.context_board.innerHTML +=" <br><div class=\"btnpure\" onClick=\"window.open('" + p.activity.link + "','_blank');\">Learn More<\/div>";
 						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = p.activity.decision;
 					}else if(p.activity.type === 'chance'){
 						this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Chance: ';
@@ -991,7 +991,7 @@ class DecisionUI{
 						this.quads[idx].getElementsByClassName(this.decision_class_name)[0].innerHTML = '';
 						this.context_board.innerHTML = p.activity.detail;
 						console.log(p.activity.link);
-						this.context_board.innerHTML +=" <div class=\"btnpure\" onClick=\"window.open('" + p.activity.link + "','_blank');\">Learn More<\/div>";
+						this.context_board.innerHTML +=" <br><div class=\"btnpure\" onClick=\"window.open('" + p.activity.link + "','_blank');\">Learn More<\/div>";
 					}else{
 						this.quads[idx].getElementsByClassName(this.header_class_name)[0].innerHTML = 'Nothing happened';
 						this.quads[idx].getElementsByClassName(this.content_class_name)[0].innerHTML = '';
