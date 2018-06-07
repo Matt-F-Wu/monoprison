@@ -1002,7 +1002,7 @@ class DecisionUI{
 				var p_sta = document.getElementById(this.scoreBoard).children[idx];
 				if(p.human){
 					// sta += ' (you)';
-					p_sta.style.border= "5px dotted white";
+					p_sta.style.border= "3px dashed white";
 				}else{
 					p_sta.style.border= "0px";
 				}

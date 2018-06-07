@@ -301,7 +301,7 @@ function displayQuadCard(c, need_show) {
 	let resource_text = document.getElementById("resource").innerHTML;
 	if (resource_text.length > 0) {
 		pop_up_card_resource.style.display = "flex";
-		pop_up_card_resource.innerHTML = "<div class=\"quad column\"> <h4>Historical Context</h4>" +  resource_text + "</div>";
+		pop_up_card_resource.innerHTML = "<div class=\"resource_card column\"> <h4>Historical Context</h4>" +  resource_text + "</div>";
 
 		/*Attach close button*/
 		pop_up_card_resource.firstChild.style.margin = "0px";

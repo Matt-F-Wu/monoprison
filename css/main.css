@@ -100,6 +100,7 @@ body{
 #pop_up_card_resource{
   /*height: 600px;
   width: 800px;*/
+  font-size: 16pt;
 }
 #start{
   background-color: orange;
@@ -152,13 +153,28 @@ body{
 }
 
 .quad{
+  font-size: 16pt;
   display: flex;
   flex: 1;
   justify-content: space-around;
   color: white;
   font-family: Arial;
-  background-color: rgba(0, 0, 0, 0.85);
-  border: 5px dotted white;
+  background-color: rgba(0, 0, 0, 1.0);
+  border: 3px dashed white;
+  padding: 15px;
+  margin: 10px;
+  position: relative;
+}
+
+.resource_card{
+  font-size: 16pt;
+  display: flex;
+  flex: 1;
+  justify-content: space-around;
+  color: black;
+  font-family: Arial;
+  background-color: white;
+  /*border: 5px dotted white;*/
   padding: 15px;
   margin: 10px;
   position: relative;

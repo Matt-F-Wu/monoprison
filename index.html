@@ -5,6 +5,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<link rel="stylesheet" href="./css/main.css" />
+		<script type="text/javascript" src="./js/data.js"></script>
 		<script type="text/javascript" src="./js/popmotion.global.min.js"></script>
 		<style>
 			html {
@@ -15,6 +16,7 @@
 				background-color: #000000;
 				overflow: hidden;
 				height: 100%;
+				font-size: 16pt;
 			}
 			
 		</style>
@@ -39,9 +41,10 @@
 					document.getElementById('postGame').style.display = "flex";
 				}
 			</script>
-			<div class="column" style="height: 20%; width: 15%; align-items: flex-start;">
-				<div class="btnpure" style="position: absolute; top: 0%; margin-left: 0%; z-index: 30" onclick="toggleInfo()" id="toggleBtn">See All</div>
-				<div class="btnpure" style="position: absolute; margin-left: 0%; z-index: 30" onclick="skipGame()" id="skipBtn">Skip Game</div>
+			<div class="column" style="height: 20%; width: 15%; align-items: flex-start; position: absolute; top: 0%; margin-left: 0%;">
+				<div class="btnpure" style="margin-bottom: 3%; z-index: 30" onclick="toggleInfo()" id="toggleBtn">See All</div>
+				<div class="btnpure" style="margin-bottom: 3%; z-index: 30" onclick="skipGame()" id="skipBtn">Skip Game</div>
+				<div class="btnpure" style="margin-left: 0%; z-index: 30" onclick="openModal('', rules)" id="skipBtn">Review Rules</div>
 			</div>
 			<div class="column" style="height: 100%; width: 70%;">
 				
@@ -49,7 +52,7 @@
 				<!-- Hao Wu: pop up card's decision buttons are messed up. 
 					Using a new mechanism instead  -->
 				<!--<div id="pop_up_card" class="row" style="z-index: 25; display: none; position: relative;"></div>-->
-				<div id="info" style="width: 110%; padding: 5%; margin-left: 10%; z-index: 20;">
+				<div id="info" style="width: 110%; padding: 0%; margin-left: 10%; z-index: 20;">
 					<div class="row" style="flex:1; height: 50%">
 						<div class="column quad">
 							<b>Peter Panda<img width="50" height="50" src="./textures/panda.png" style="display: inline;"></b>
@@ -99,9 +102,8 @@
 						</div>
 					</div>
 				</div>
-				<div id="pop_up_card_resource" class="row" style="z-index: 25; display: none; position: relative;"></div>
+				<div id="pop_up_card_resource" class="row" style="z-index: 25; display: none; margin-left: 10%; width: 110%; position: relative;"></div>
 
-				
 				<div id="board" style="position: absolute; height: 100%; width: 80%; margin-top: 2%">
 					<div class="player" id="character1" onclick="displayQuadCard(0, true)"><img width="100%" height="100%" src="./textures/panda.png"></div>
 					<div class="player" id="character2" onclick="displayQuadCard(1, true)"><img width="100%" height="100%" src="./textures/pig.png"></div>
@@ -128,21 +130,21 @@
 				</div>
 			</div>
 			<div class="column" style="height: 100%; width: 30%">
-				<div id="scoreBoard" style="height: 50%; font-size:16pt">
-					<div style="font-size:18pt; display: flex; flex-direction: column; justify-content: center; align-items: center;margin: 5px; padding: 5px;">
-						<span style="flex: 1">Peter Panda: </span>
+				<div id="scoreBoard" style="height: 55%;">
+					<div style="display: flex; flex-direction: column; justify-content: center; align-items: center;margin: 5px; padding: 5px;">
+						<span style="flex: 1; font-size: 14pt;">Peter Panda: </span>
 						<div style="font-size:12pt; flex: 1;"><span class="p_status">init</span></div>
 					</div>
-					<div style="font-size:18pt; display: flex; flex-direction: column; justify-content: center; align-items: center;margin: 5px; padding: 5px;">
-						<span style="flex: 1">Penelope Pig: </span>
+					<div style="display: flex; flex-direction: column; justify-content: center; align-items: center;margin: 5px; padding: 5px;">
+						<span style="flex: 1; font-size: 14pt;">Penelope Pig: </span>
 						<div style="font-size:12pt; flex: 1;"><span class="p_status">init</span></div>
 					</div>
-					<div style="font-size:18pt; display: flex; flex-direction: column; justify-content: center; align-items: center;margin: 5px; padding: 5px;">
-						<span style="flex: 1">Mandy Monkey: </span>
+					<div style="display: flex; flex-direction: column; justify-content: center; align-items: center;margin: 5px; padding: 5px;">
+						<span style="flex: 1; font-size: 14pt;">Mandy Monkey: </span>
 						<div style="font-size:12pt; flex: 1;"><span class="p_status">init</span></div>
 					</div>
-					<div style="font-size:18pt; display: flex; flex-direction: column; justify-content: center; align-items: center;margin: 5px; padding: 5px;">
-						<span style="flex: 1">Zachary Zebra: </span>
+					<div style="display: flex; flex-direction: column; justify-content: center; align-items: center;margin: 5px; padding: 5px;">
+						<span style="flex: 1; font-size: 14pt;">Zachary Zebra: </span>
 						<div style="font-size:12pt; flex: 1;"><span class="p_status">init</span></div>
 					</div>
 
@@ -154,7 +156,7 @@
 				<script src="./js/main.js"></script>
 				<script src="./js/control.js"></script>
 
-				<div id="control" style="height: 20%" class="column">
+				<div id="control" style="height: 15%" class="column">
 					<div style="font-family: Arial; color: white; font-style: bold; margin-bottom: 5%; font-size: 18pt;">move <u id="num_step">x</u> steps</div>
 					<div style="display: flex; flex-direction: row;">
 						<div id="playButton" class="btnpure" onclick="playTurn()" style="flex: 1">TOSS</div>
@@ -168,6 +170,7 @@
 		<div id="postGame" class="full" style="position: absolute; display: none; background-color: black; z-index: 40; padding: 20px">
 			<div style="display: flex; min-height: 100%; align-items: center; justify-content: center; flex-direction: column; font-family: arial; color: white;">
 				<h3 class="spaced orangeBold">You might have noticed that the odds seem to be in Peter Panda's favour! Like always &#x1F632;!</h3>
+				<p class="spaced" style="margin-right: 20px;">The unfairness of the game is accurately reflecting the real prison system in the U.S today. Yep, this is just reality my friends, Peter Panda represents the white majority and the other players represent Black, and Latino minorities.</p>
 				<p class="spaced">Oh, you don't think so? Then let's <span class="orangeBold">simulate this game for 100 rounds</span>, and see how many times each person wins!</p>
 				<div class="btnpure" style="width: 80px; text-align: center;" onclick="simulate()">Simulate</div>
 				  <div class="row">
@@ -178,7 +181,7 @@
 				  </div>
 				<p class="spaced">That doesn't seem fair at all, right?</p>
 				<h3 class="spaced orangeBold">But!</h3>
-				<p class="spaced" style="font-style: italic; margin-right: 20px;">The unfairness of the game is accurately reflecting the real prison system in the U.S today. Yep, this is just reality my friends, Peter Panda represents the white majority and the other players represent Black, and Latino minorities.</p>
+				
 				<p class="spaced" style="margin-right: 20px;">For decades if not centuries, our justice system has been biased against colored and low-income communities, the privitization of prisons made it worse, biased media depiction didn't help either. So how bad is it really? and what do we need to know?</p>
 				<a href="Post_Game.html" style="text-decoration: none;"><div class="btnpure" style="width: 80px; text-align: center; margin-bottom: 10px;">Next</div></a>
 			</div>
