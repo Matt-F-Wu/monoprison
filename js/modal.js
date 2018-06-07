@@ -1,5 +1,5 @@
 const { timeline, listen } = popmotion;
-var clickCancel, clickOkay;
+var clickCancel = function(){}, clickOkay = function(){};
 const cancelModalButton = document.querySelector('.modal-cancel');
 const okModalButton = document.querySelector('.modal-ok');
 const modalHeader = document.querySelector('#modalHeader');
