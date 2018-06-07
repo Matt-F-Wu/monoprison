@@ -502,8 +502,8 @@ class GEvent{
 
 		// if first event, return ALEC voting
 		if(available_events.length === 8){
-			available_events[4].happened = true
-			return available_events[4]
+			available_events[6].happened = true
+			return available_events[6]
 		}
 
 		let idx = getRandomInt(available_events.length - 1);
