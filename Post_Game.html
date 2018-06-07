@@ -11,32 +11,44 @@
 
 <tw-story></tw-story>
 
-<tw-storydata name="Post Game" startnode="1" creator="Twine" creator-version="2.2.1" ifid="C82895F9-BDCB-4F5F-A936-3DE436533009" zoom="1" format="Harlowe" format-version="2.1.0" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">.enchantment-link, tw-link {
-	color: orange;
-  	font-size: 150%;
-  	position:fixed;
-  	right:20px;
-   	bottom:20px;
-}
-
-.enchantment-link:hover, tw-link:hover {
-	color: #ffd119;
-  	font-size: 150%;
-    position:fixed;
-  	right:20px;
-   	bottom:20px;
-}
-
-body, tw-story
+<tw-storydata name="Post Game" startnode="1" creator="Twine" creator-version="2.2.1" ifid="C82895F9-BDCB-4F5F-A936-3DE436533009" zoom="1" format="Harlowe" format-version="2.1.0" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">body, tw-story
 {
   font-family: Arial;
 }
-</style><script role="script" id="twine-user-script" type="text/twine-javascript">
+
+tw-link.visited {
+color:orange;
+}
+
+tw-link {
+  color:orange;
+  font-size:250%;
+}
+
+tw-link:hover {
+  font-size:250%;
+    color:#ffd119;
+}
+
+tw-icon {
+	opacity: 1;
+  	color: orange;
+}
+
+tw-icon:hover {
+    opacity: 1;
+  color: #ffd119;
+}
+
+.redo {
+  visibility: hidden;
+}</style><script role="script" id="twine-user-script" type="text/twine-javascript">
+
 </script><tw-passagedata pid="1" name="1" tags="" position="412,199" size="100,100">Thanks for playing our game! Did you know that it closely resembles the U.S. Prison System? Read on to find out how! 
 
 (align: &quot;==&gt;&quot;)[[[&gt; -&gt;2]] ]</tw-passagedata><tw-passagedata pid="2" name="2" tags="" position="542,203" size="100,100">In the 1950s, the prison population was about 70% white. However, the demographics of U.S. prisoners have almost inverted since then.
 
-(align: &quot;==&gt;&quot;)[[[&gt; -&gt; 3]]]</tw-passagedata><tw-passagedata pid="3" name=" 3" tags="" position="540,351" size="100,100">&lt;center&gt;&#39;&#39;U.S. Prison Population:&#39;&#39;
+(align: &quot;==&gt;&quot;)[[[&gt; -&gt; 3]]] </tw-passagedata><tw-passagedata pid="3" name=" 3" tags="" position="540,351" size="100,100">&lt;center&gt;&#39;&#39;U.S. Prison Population:&#39;&#39;
 1970
 _________________
 357,292
